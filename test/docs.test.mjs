@@ -80,15 +80,17 @@ test('page content is inserted literally, $ sequences included', () => {
 });
 
 test('the link check accepts real targets and reports missing ones', () => {
-    const known = new Set(['/docs', '/docs/a', '/docs/a/first-page', '/docs/b', '/docs/b/z']);
+    const known = new Set(['/docs', '/docs/', '/docs/a', '/docs/a/', '/docs/a/first-page', '/docs/b', '/docs/b/', '/docs/b/z']);
     const html = [
         '<a href="../b/z">', '<a href="../b/z#install">', '<a href="z?x=1">', '<a href="/docs/b">',
         '<a href="/docs/b/">', '<a href="/releases">', '<a href="mailto:a@b.c">',
         '<a href="https://example.com/docs/nope">', '<a href="https://github.com/x">',
         '<a href="../b/missing">', '<a href="https://tuxblox.net/docs/nope">',
+        // Pages serve <page>.html only, so a page URL with a trailing slash is a 404.
+        '<a href="/docs/b/z/">', '<a href="z/">',
     ].join('');
     const broken = checkDocLinks([{ urlPath: '/docs/b/a', html }], known);
-    assert.deepEqual(broken.map(b => b.href), ['../b/missing', 'https://tuxblox.net/docs/nope']);
+    assert.deepEqual(broken.map(b => b.href), ['../b/missing', 'https://tuxblox.net/docs/nope', '/docs/b/z/', 'z/']);
 });
 
 test('redirect pages point at their target three ways', () => {

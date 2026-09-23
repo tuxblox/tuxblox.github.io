@@ -192,7 +192,9 @@ function unescapeHtml(text) {
 }
 
 // Every link in the rendered content that lands under /docs on this site must
-// name a page or section that exists. Hash and query are ignored.
+// be one of knownPaths, exactly. Hash and query are ignored; a trailing slash
+// is not, because Pages serves a page as <page>.html, so /docs/a/page/ is a 404
+// while /docs/a/ (a section's redirect page) is fine. The caller lists both.
 export function checkDocLinks(rendered, knownPaths) {
     const broken = [];
     for (const { urlPath, html } of rendered) {
@@ -207,9 +209,8 @@ export function checkDocLinks(rendered, knownPaths) {
                 continue;
             }
             if (target.origin !== SITE_ORIGIN) continue;
-            let p = target.pathname;
+            const p = target.pathname;
             if (p !== URL_PREFIX && !p.startsWith(`${URL_PREFIX}/`)) continue;
-            if (p.endsWith('/')) p = p.slice(0, -1);
             if (!knownPaths.has(p)) broken.push({ page: urlPath, href });
         }
     }

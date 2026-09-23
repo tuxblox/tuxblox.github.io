@@ -66,9 +66,12 @@ export function build({ root, out, log = console }) {
         searchIndex.push({ title: page.title, section: page.sectionTitle, urlPath: fullUrl, text: stripMarkdown(markdown) });
     });
 
+    // /docs and each section work with or without a trailing slash (Pages
+    // redirects to the slash form, whose index.html redirects on). Pages only
+    // work without one.
     const known = new Set([
-        '/docs',
-        ...tree.map(s => `/docs/${s.slug}`),
+        '/docs', '/docs/',
+        ...tree.flatMap(s => [`/docs/${s.slug}`, `/docs/${s.slug}/`]),
         ...pages.map(p => getFullUrl(p.urlPath)),
     ]);
     const broken = checkDocLinks(rendered, known);
