@@ -3,7 +3,7 @@
 // Docs search. The build uses stripMarkdown to write docs/search-index.json;
 // include.js loads this file on the first search and runs searchDocs over
 // that index. Scoring, snippets and ordering are the old server's search,
-// unchanged, so results match what /docs/api/search returned.
+// unchanged, so results match what the old server search endpoint returned.
 (function (root) {
   function stripMarkdown(md) {
     return md

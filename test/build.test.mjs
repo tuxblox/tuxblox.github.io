@@ -86,3 +86,15 @@ test('a rebuild removes files a previous build left behind', () => {
     build({ root: ROOT, out, log: quiet });
     assert.ok(!fs.existsSync(path.join(out, 'stale.html')));
 });
+
+test('no built file points at static.tuxblox.net or the old search endpoint', () => {
+    const out = tmp('site-');
+    build({ root: ROOT, out, log: quiet });
+    const offenders = [];
+    for (const f of fs.readdirSync(out, { recursive: true })) {
+        if (!/\.(html|js|css|json|xml)$/.test(f)) continue;
+        const text = fs.readFileSync(path.join(out, f), 'utf8');
+        if (text.includes('https://static.tuxblox.net') || text.includes('/api/search')) offenders.push(f);
+    }
+    assert.deepEqual(offenders, []);
+});

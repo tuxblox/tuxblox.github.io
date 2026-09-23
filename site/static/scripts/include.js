@@ -2,13 +2,23 @@
 
 (function () {
   //const AUTH_URL = 'https://auth.tuxblox.net';
-  const DOCS_URL = 'https://tuxblox.net/docs';
-  const ICON_BASE = 'https://static.tuxblox.net/images/svg';
+  // This file is loaded by tuxblox.net, by preview and local copies of the
+  // site, and by pages on other subdomains through the redirect from the old
+  // static. subdomain. Assets are found relative to this file, so each of those
+  // loads its own. The docs sit next to /static/ when this file is served from
+  // there, and otherwise on tuxblox.net. currentScript is only set while this
+  // file first runs, so it is read here, not later.
+  const SCRIPT_URL = new URL((document.currentScript && document.currentScript.src) ||
+    'https://tuxblox.net/static/scripts/include.js');
+  const ASSET_BASE = new URL('../', SCRIPT_URL).href;
+  const SITE_ORIGIN = SCRIPT_URL.pathname.startsWith('/static/') ? SCRIPT_URL.origin : 'https://tuxblox.net';
+  const DOCS_URL = `${SITE_ORIGIN}/docs`;
+  const ICON_BASE = `${ASSET_BASE}images/svg`;
   const THEME_KEY = 'tuxblox_theme';
   const SEARCH_DEBOUNCE_MS = 250;
 
-  const LOGO_DESKTOP = 'https://static.tuxblox.net/images/banner/tuxblox-banner.png';
-  const LOGO_MOBILE = 'https://static.tuxblox.net/images/svg/tuxblox.svg';
+  const LOGO_DESKTOP = `${ASSET_BASE}images/banner/tuxblox-banner.png`;
+  const LOGO_MOBILE = `${ASSET_BASE}images/svg/tuxblox.svg`;
 
   (function ensureTheme() {
     const root = document.documentElement;
@@ -246,8 +256,27 @@
     if (!inputs.length || !resultsEls.length) return;
 
     let debounceTimer = null;
-    let activeController = null;
     let currentQuery = '';
+    let searchReady = null;
+
+    // The search code and the index load once, on first use. A failure is not
+    // kept, so the next search tries again.
+    function loadSearch() {
+      if (!searchReady) {
+        const script = window.tuxbloxDocsSearch ? Promise.resolve() : new Promise((resolve, reject) => {
+          const s = document.createElement('script');
+          s.src = `${ASSET_BASE}scripts/docs-search.js?v=20260923`;
+          s.onload = resolve;
+          s.onerror = () => reject(new Error('search script failed to load'));
+          document.head.appendChild(s);
+        });
+        const index = fetch(`${DOCS_URL}/search-index.json`)
+          .then(r => r.ok ? r.json() : Promise.reject(new Error('bad response')));
+        searchReady = Promise.all([script, index]).then(([, entries]) => entries);
+        searchReady.catch(() => { searchReady = null; });
+      }
+      return searchReady;
+    }
 
     function closeResults() {
       resultsEls.forEach(el => {
@@ -286,20 +315,17 @@
         return;
       }
 
-      if (activeController) activeController.abort();
-      activeController = new AbortController();
-
       const loadingHtml = `<div class="nav-search-empty">Searching...</div>`;
       resultsEls.forEach(el => {
         el.innerHTML = loadingHtml;
         el.hidden = false;
       });
 
-      fetch(`${DOCS_URL}/api/search?q=${encodeURIComponent(query)}`, { signal: activeController.signal })
-        .then(r => r.ok ? r.json() : Promise.reject(new Error('bad response')))
-        .then(data => renderResults(query, data.results || []))
-        .catch(err => {
-          if (err.name === 'AbortError') return;
+      // renderResults drops answers to a query that is no longer current, which
+      // is all the old request aborting was for.
+      loadSearch()
+        .then(entries => renderResults(query, window.tuxbloxDocsSearch.searchDocs(entries, query.slice(0, 200))))
+        .catch(() => {
           if (query === currentQuery) {
             const errorHtml = `<div class="nav-search-empty">Couldn't reach search right now.</div>`;
             resultsEls.forEach(el => {
@@ -319,6 +345,7 @@
       });
 
       input.addEventListener('focus', () => {
+        loadSearch().catch(() => {});
         if (input.value.trim().length >= 2) runSearch(input.value);
       });
 
