@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TuxBlox - Privacy</title>
+
+    <!-- THEME BOOT. Must be inline and blocking, before first paint.
+         include.js is deferred and cross-origin, so it runs too late to set
+         the theme without a visible flash. Keep in sync across pages. -->
+    <script>
+    (function () {
+        var KEY = 'tuxblox_theme', t;
+        try { t = localStorage.getItem(KEY); } catch (e) {}
+        if (t !== 'light' && t !== 'dark') {
+            t = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        }
+        document.documentElement.setAttribute('data-theme', t);
+        document.documentElement.classList.add('theme-init');
+    })();
+    </script>
+
+    <meta name="description" content="What TuxBlox sends off your machine, what it never sends, and how to turn it off.">
+    <link rel="canonical" href="https://tuxblox.net/privacy">
+
+    <link rel="icon" type="image/x-icon" href="https://tuxblox.net/favicon.ico">
+    <link rel="apple-touch-icon" href="/static/images/icon/tuxblox-icon.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles/style.css?v=20260904">
+
+    <style>
+        :root {
+            --ok:      #22c55e;
+            --ok-soft: rgba(34, 197, 94, 0.12);
+            --no:      #f87171;
+            --no-soft: rgba(248, 113, 113, 0.10);
+        }
+        [data-theme="light"] {
+            --ok:      #15803d;
+            --ok-soft: rgba(21, 128, 61, 0.10);
+            --no:      #dc2626;
+            --no-soft: rgba(220, 38, 38, 0.08);
+        }
+
+        /* ---- header ---- */
+        .pp-hero { padding: 48px 0 0; }
+        .pp-updated {
+            margin-top: 14px;
+            font: 400 13px var(--font-mono);
+            color: var(--text-3);
+        }
+        .pp-lede {
+            margin-top: 22px;
+            font-size: 18px;
+            line-height: 1.7;
+            color: var(--text-2);
+            max-width: 62ch;
+        }
+
+        /* ---- summary tiles ---- */
+        .pp-summary {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            margin: 40px 0 8px;
+        }
+        .pp-tile {
+            border: 1px solid var(--divider);
+            border-radius: var(--radius-card);
+            background: var(--bg-soft);
+            padding: 18px;
+        }
+        .pp-tile h3 {
+            font-family: var(--font-display);
+            font-size: 14.5px;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            margin-bottom: 6px;
+            color: var(--text-1);
+        }
+        .pp-tile p { font-size: 13.5px; line-height: 1.6; color: var(--text-2); }
+
+        /* ---- two-column body with a sticky contents rail ---- */
+        .pp-body {
+            display: grid;
+            grid-template-columns: 190px minmax(0, 1fr);
+            gap: 64px;
+            margin-top: 64px;
+            align-items: start;
+        }
+        .pp-toc { position: sticky; top: calc(var(--nav-h) + 28px); }
+        .pp-toc-title {
+            font-size: 11.5px;
+            font-weight: 600;
+            letter-spacing: .06em;
+            color: var(--text-3);
+            margin-bottom: 12px;
+        }
+        .pp-toc a {
+            display: block;
+            padding: 6px 0 6px 12px;
+            border-left: 2px solid var(--divider);
+            font-size: 13.5px;
+            line-height: 1.45;
+            color: var(--text-3);
+            text-decoration: none;
+            transition: color var(--transition-fast), border-color var(--transition-fast);
+        }
+        .pp-toc a:hover { color: var(--text-1); }
+        .pp-toc a.active {
+            color: var(--text-1);
+            border-left-color: var(--brand);
+            font-weight: 500;
+        }
+
+        .pp-section {
+            /* Anchor links must clear the fixed navbar. */
+            scroll-margin-top: calc(var(--nav-h) + 24px);
+        }
+        .pp-section + .pp-section { margin-top: 52px; }
+        .pp-section h2 {
+            font-family: var(--font-display);
+            font-size: 21px;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            line-height: 1.3;
+            margin-bottom: 12px;
+        }
+        .pp-section p {
+            font-size: 15.5px;
+            line-height: 1.75;
+            color: var(--text-2);
+            max-width: 72ch;
+        }
+        .pp-section p + p { margin-top: 14px; }
+        .pp-section strong { color: var(--text-1); font-weight: 600; }
+        .pp-section a { color: var(--brand); }
+
+        /* ---- data tables ---- */
+        .pp-list { list-style: none; margin-top: 18px; }
+        .pp-list li {
+            display: grid;
+            grid-template-columns: 260px minmax(0, 1fr);
+            gap: 20px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--divider);
+            font-size: 14.5px;
+            line-height: 1.6;
+        }
+        .pp-list li:first-child { border-top: 1px solid var(--divider); }
+        .pp-list .k { color: var(--text-1); font-weight: 500; }
+        .pp-list .v { color: var(--text-3); }
+
+        /* ---- never-sent callout ---- */
+        .pp-never {
+            margin-top: 18px;
+            border: 1px solid var(--divider);
+            border-radius: var(--radius-card);
+            background: var(--bg-soft);
+            padding: 6px 20px;
+        }
+        .pp-never ul { list-style: none; }
+        .pp-never li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 13px 0;
+            font-size: 14.5px;
+            line-height: 1.6;
+            color: var(--text-2);
+            border-bottom: 1px solid var(--divider);
+        }
+        .pp-never li:last-child { border-bottom: 0; }
+        .pp-never svg {
+            width: 15px; height: 15px;
+            flex: 0 0 auto;
+            margin-top: 3px;
+            color: var(--no);
+        }
+
+        /* ---- toggle instruction ---- */
+        .pp-path {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 16px 0 4px;
+            padding: 10px 14px;
+            border: 1px solid var(--divider);
+            border-radius: var(--radius-card);
+            background: var(--bg-alt);
+            font: 500 13.5px var(--font-mono);
+            color: var(--text-1);
+        }
+        .pp-path .sep { color: var(--text-3); }
+
+        /* ---- contact ---- */
+        .pp-contact {
+            margin-top: 18px;
+            border: 1px solid var(--divider);
+            border-radius: var(--radius-card);
+            background: var(--bg-soft);
+            padding: 22px 24px;
+        }
+        .pp-contact p { max-width: none; }
+        .pp-contact p + p { margin-top: 12px; }
+
+        code {
+            font-family: var(--font-mono);
+            font-size: 13px;
+            background-color: var(--bg-alt);
+            border: 1px solid var(--divider);
+            padding: 1px 6px;
+            border-radius: 4px;
+            color: var(--text-1);
+            white-space: nowrap;
+        }
+
+        @media (max-width: 1000px) {
+            .pp-summary { grid-template-columns: repeat(2, 1fr); }
+            .pp-body { grid-template-columns: 1fr; gap: 36px; }
+            .pp-toc { position: static; }
+            .pp-toc-inner {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 6px;
+            }
+            .pp-toc a {
+                border-left: 0;
+                border: 1px solid var(--divider);
+                border-radius: 20px;
+                padding: 5px 12px;
+            }
+            .pp-toc a.active { border-color: var(--brand); }
+        }
+
+        @media (max-width: 780px) {
+            .pp-hero { padding-top: 28px; }
+            .pp-lede { font-size: 16.5px; }
+            .pp-summary { grid-template-columns: 1fr; gap: 10px; }
+            .pp-list li { grid-template-columns: 1fr; gap: 2px; }
+            .pp-section h2 { font-size: 19px; }
+        }
+    </style>
+
+    <meta property="og:title" content="Privacy Policy - TuxBlox 🐧" />
+    <meta property="og:site_name" content="tuxblox.net" />
+    <meta property="og:description" content="What TuxBlox sends off your machine, what it never sends, and how to turn it off." />
+    <meta property="og:image" content="https://tuxblox.net/static/images/banner/tuxblox-banner.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://tuxblox.net/privacy" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Privacy Policy - TuxBlox" />
+    <meta name="twitter:description" content="What TuxBlox sends off your machine, and how to turn it off." />
+    <meta name="twitter:image" content="https://tuxblox.net/static/images/banner/tuxblox-banner.png" />
+
+    <meta name="theme-color" content="#0e1117" />
+</head>
+<body>
+    <!-- Copyright © TuxBlox Project 2026 -->
+    <div data-include="topbar"></div>
+
+    <main>
+        <div class="wrap">
+
+            <section class="hero pp-hero">
+                <h1>Privacy Policy</h1>
+                <div class="pp-updated">Last updated 8 August 2026</div>
+                <p class="pp-lede">
+                    TuxBlox sends one thing off your machine, and only when something crashes.
+                    This page says exactly what is in that report, where it goes, and how to
+                    stop it.
+                </p>
+            </section>
+
+            <div class="pp-summary">
+                <div class="pp-tile">
+                    <h3>One feature sends data</h3>
+                    <p>Crash reports, and nothing else. No other part of TuxBlox talks to us.</p>
+                </div>
+                <div class="pp-tile">
+                    <h3>On by default</h3>
+                    <p>One switch in Settings turns it off, and it takes effect immediately.</p>
+                </div>
+                <div class="pp-tile">
+                    <h3>Never your account</h3>
+                    <p>No logins, no session data, and nothing from inside your places or plugins.</p>
+                </div>
+                <div class="pp-tile">
+                    <h3>No third-party trackers</h3>
+                    <p>No analytics SDKs. Reports reach servers we run ourselves, and are never sold.</p>
+                </div>
+            </div>
+
+            <div class="pp-body">
+                <nav class="pp-toc" aria-label="On this page">
+                    <div class="pp-toc-inner">
+                        <div class="pp-toc-title">ON THIS PAGE</div>
+                        <a href="#contents">What a crash report contains</a>
+                        <a href="#never">What is never sent</a>
+                        <a href="#off">Turning it off</a>
+                        <a href="#logs">Server logs</a>
+                        <a href="#changes">Changes</a>
+                        <a href="#contact">Contact</a>
+                    </div>
+                </nav>
+
+                <div>
+                    <section class="pp-section" id="contents">
+                        <h2>What a crash report contains</h2>
+                        <p>
+                            Crash reporting is <strong>opt-out</strong>: it is on when you install
+                            TuxBlox, and you can switch it off at any time. While it is on, and only
+                            when Player or Studio exits with a non-zero code, TuxBlox sends a single
+                            HTTPS request containing:
+                        </p>
+                        <ul class="pp-list">
+                            <li><span class="k">Operating system and version</span><span class="v">Debian 12, Arch Linux 7.1.5, and so on</span></li>
+                            <li><span class="k">Display server</span><span class="v">Wayland or X11</span></li>
+                            <li><span class="k">Desktop environment</span><span class="v">KDE Plasma, GNOME, i3, Hyprland, and so on</span></li>
+                            <li><span class="k">Graphics drivers</span><span class="v">Which driver and version you are running</span></li>
+                            <li><span class="k">TuxBlox versions</span><span class="v">Launcher and compatibility layer build numbers</span></li>
+                            <li><span class="k">Which app crashed</span><span class="v">Player or Studio</span></li>
+                            <li><span class="k">Exit code</span><span class="v">The number the process exited with</span></li>
+                            <li><span class="k">Timestamp</span><span class="v">When the crash happened</span></li>
+                            <li><span class="k">The tail of that run's crash log</span><span class="v">Up to the last 1&nbsp;MB, sent as it was written</span></li>
+                            <li><span class="k">Whether it ran as root</span><span class="v">Yes or no. Root is not required to run TuxBlox.</span></li>
+                        </ul>
+                    </section>
+
+                    <section class="pp-section" id="never">
+                        <h2>What is never sent</h2>
+                        <div class="pp-never">
+                            <ul>
+                                <li>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                    Your Roblox account, login, or session data
+                                </li>
+                                <li>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                    The contents of your places, plugins, or project files
+                                </li>
+                                <li>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                    Any identifier that links separate reports back to you, or to each other
+                                </li>
+                            </ul>
+                        </div>
+                        <p style="margin-top:16px">
+                            TuxBlox does not embed any third-party analytics or tracking SDKs. Reports
+                            go to infrastructure we run ourselves. We do not sell them or share them.
+                        </p>
+                    </section>
+
+                    <section class="pp-section" id="off">
+                        <h2>Turning it off</h2>
+                        <div class="pp-path">
+                            Settings <span class="sep">&rarr;</span> Send Crash Report Data
+                        </div>
+                        <p>
+                            Switching it off takes effect immediately: no report is generated, and
+                            none is sent. The crash log itself is still written to your own disk
+                            either way. The switch controls only whether a copy leaves your machine.
+                        </p>
+                    </section>
+
+                    <section class="pp-section" id="logs">
+                        <h2>Server logs</h2>
+                        <p>
+                            Separately from crash reports, anything you request from our
+                            infrastructure gets logged: the website, the CDN that TuxBlox fetches
+                            launcher and compatibility layer builds from, and the crash reporting
+                            endpoint above.
+                        </p>
+                        <p>
+                            Like effectively any web server, ours records each request's
+                            <strong>timestamp, IP address, user agent, request method and URL</strong>.
+                            This is retained for security purposes, such as detecting abuse and
+                            intrusion attempts, and is <strong>deleted automatically after 30
+                            days</strong>. It is not linked to crash reports and is not used to track
+                            anyone.
+                        </p>
+                    </section>
+
+                    <section class="pp-section" id="changes">
+                        <h2>Changes to this policy</h2>
+                        <p>
+                            If what gets collected changes, the "last updated" date at the top of this
+                            page moves, and the change is called out in that release's changelog.
+                        </p>
+                    </section>
+
+                    <section class="pp-section" id="contact">
+                        <h2>Contact</h2>
+                        <div class="pp-contact">
+                            <p>
+                                Questions about this policy: <code>contact@tuxblox.net</code>.
+                            </p>
+                            <p>
+                                You do not have to take our word for any of this. The launcher and
+                                compatibility layer that generate and send these reports are open
+                                source, so you can read exactly what gets collected on
+                                <a href="/github" target="_blank" rel="noopener">GitHub</a>. The server
+                                that receives them is closed source, to make it harder to abuse.
+                            </p>
+                            <p>
+                                To have data associated with your IP address deleted, email
+                                <code>contact@tuxblox.net</code>.
+                            </p>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="wrap" data-include="footer"></div>
+
+    <script src="/static/scripts/include.js?v=20260904" defer></script>
+    <script>
+    (function () {
+        'use strict';
+
+        // Highlights the contents entry for whichever section is currently in
+        // view. Progressive enhancement: without it the links still work.
+        var links = Array.prototype.slice.call(document.querySelectorAll('.pp-toc a'));
+        var sections = links
+            .map(function (a) { return document.querySelector(a.getAttribute('href')); })
+            .filter(Boolean);
+
+        if (!sections.length || !('IntersectionObserver' in window)) return;
+
+        var visible = {};
+
+        function refresh() {
+            var current = null;
+            for (var i = 0; i < sections.length; i++) {
+                if (visible[sections[i].id]) { current = sections[i].id; break; }
+            }
+            links.forEach(function (a) {
+                a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+            });
+        }
+
+        var observer = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                visible[entry.target.id] = entry.isIntersecting;
+            });
+            refresh();
+        }, {
+            // Top offset clears the fixed navbar; the negative bottom margin
+            // means a section only counts as current once it reaches the
+            // upper part of the viewport.
+            rootMargin: '-' + (72) + 'px 0px -60% 0px',
+            threshold: 0
+        });
+
+        sections.forEach(function (s) { observer.observe(s); });
+    })();
+    </script>
+</body>
+</html>

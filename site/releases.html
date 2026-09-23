@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TuxBlox - Download</title>
+
+    <!-- THEME BOOT. Must be inline and blocking, before first paint.
+         include.js is deferred and cross-origin, so it runs too late to set
+         the theme without a visible flash. Keep in sync across pages. -->
+    <script>
+    (function () {
+        var KEY = 'tuxblox_theme', t;
+        try { t = localStorage.getItem(KEY); } catch (e) {}
+        if (t !== 'light' && t !== 'dark') {
+            t = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        }
+        document.documentElement.setAttribute('data-theme', t);
+        document.documentElement.classList.add('theme-init');
+    })();
+    </script>
+
+    <meta name="description" content="Download TuxBlox. Official stable and canary builds, with changelogs and file sizes.">
+    <link rel="canonical" href="https://tuxblox.net/releases">
+
+    <link rel="icon" type="image/x-icon" href="https://tuxblox.net/favicon.ico">
+    <link rel="apple-touch-icon" href="/static/images/icon/tuxblox-icon.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles/style.css?v=20260904">
+
+    <style>
+        /* Page-local tokens. Everything else comes from style.css. */
+        :root {
+            --ok:        #22c55e;
+            --ok-soft:   rgba(34, 197, 94, 0.12);
+            --warn:      #eab308;
+            --warn-soft: rgba(234, 179, 8, 0.12);
+            --no:        #f87171;
+            --no-soft:   rgba(248, 113, 113, 0.12);
+        }
+        [data-theme="light"] {
+            --ok:        #15803d;
+            --ok-soft:   rgba(21, 128, 61, 0.10);
+            --warn:      #a16207;
+            --warn-soft: rgba(161, 98, 7, 0.12);
+            --no:        #dc2626;
+            --no-soft:   rgba(220, 38, 38, 0.12);
+        }
+
+        .dl-hero { padding-top: 48px; padding-bottom: 0; }
+        .dl-hero .hero-subtitle { margin-top: 14px; max-width: 60ch; }
+
+        /* ---- terminal alternative ---- */
+        .dl-install { margin: 28px 0 8px; max-width: 470px; }
+        .dl-install-label {
+            font-size: 13px;
+            color: var(--text-3);
+            margin-bottom: 8px;
+        }
+
+        /* ---- channel tabs ---- */
+        .channels {
+            display: flex;
+            gap: 4px;
+            margin: 48px 0 24px;
+            border-bottom: 1px solid var(--divider);
+        }
+        .channel-tab {
+            appearance: none;
+            border: 0;
+            background: transparent;
+            font: 600 14.5px var(--font-sans);
+            color: var(--text-3);
+            padding: 10px 14px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -1px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: color var(--transition-fast), border-color var(--transition-fast);
+        }
+        .channel-tab:hover { color: var(--text-1); }
+        .channel-tab[aria-selected="true"] {
+            color: var(--text-1);
+            border-bottom-color: var(--brand);
+        }
+        .channel-tab .count {
+            font: 600 11.5px var(--font-display);
+            padding: 1px 6px;
+            border-radius: 20px;
+            background: var(--bg-soft);
+            border: 1px solid var(--divider);
+            color: var(--text-3);
+        }
+
+        /* ---- badges ---- */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            font: 600 11px var(--font-sans);
+            letter-spacing: .02em;
+            padding: 3px 9px;
+            border-radius: 20px;
+            white-space: nowrap;
+        }
+        .badge-stable { background: var(--ok-soft);    color: var(--ok); }
+        .badge-canary { background: var(--warn-soft);  color: var(--warn); }
+        .badge-experimental { background: var(--no-soft); color: var(--no); }
+
+        /* ---- featured (latest) release ---- */
+        .featured {
+            border: 1px solid var(--divider);
+            border-radius: var(--radius-frame);
+            background: var(--bg-soft);
+            overflow: hidden;
+        }
+        .featured-head {
+            padding: 26px 28px;
+            border-bottom: 1px solid var(--divider);
+        }
+        .featured-eyebrow {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-3);
+            margin-bottom: 6px;
+        }
+        .featured-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .featured-title h2 {
+            font-family: var(--font-display);
+            font-size: 27px;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+            line-height: 1.2;
+        }
+        .featured-date { margin-top: 8px; font-size: 13.5px; color: var(--text-3); }
+
+        /* ---- installer button (content entries named "Installer") ---- */
+        .installer {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-top: 18px;
+        }
+        .installer .btn { flex: 0 0 auto; height: 38px; padding: 0 18px; font-size: 14px; }
+        .hrow-body .installer { margin: 0 0 18px; }
+        .hrow-body .installer + .files { margin-top: 0; }
+
+        /* First thing in the card, above the "Latest … build" line. */
+        .runs {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 0 0 16px;
+        }
+        .run {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            line-height: 1;
+            padding: 5px 12px 5px 10px;
+            border-radius: 999px;
+            border: 1px solid var(--divider);
+            background: var(--bg);
+        }
+        .run-mark { display: flex; flex: 0 0 auto; }
+        .run-mark svg { width: 14px; height: 14px; display: block; }
+        .run-state { display: flex; flex: 0 0 auto; }
+        .run-state svg { width: 12px; height: 12px; display: block; }
+
+        /* The product mark stays in the text colour. Recolouring someone
+           else's brand mark to signal status reads as an error state for the
+           product itself. Only the tick/cross carries the state. */
+        .run.yes .run-label { color: var(--text-1); }
+        .run.yes .run-mark  { color: var(--text-1); }
+        .run.yes .run-state { color: var(--ok); }
+
+        .run.no .run-label { color: var(--text-3); }
+        .run.no .run-mark  { color: var(--text-3); opacity: .7; }
+        .run.no .run-state { color: var(--no); }
+
+        /* ---- files ---- */
+        .files { padding: 22px 28px; }
+        .block-title {
+            font-size: 12.5px;
+            font-weight: 600;
+            color: var(--text-3);
+            margin-bottom: 12px;
+        }
+        .file-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 14px 0;
+            border-top: 1px solid var(--divider);
+        }
+        .file-row:last-child { padding-bottom: 0; }
+        .file-info { flex: 1 1 auto; min-width: 0; }
+        .file-name {
+            font: 500 14.5px var(--font-mono);
+            color: var(--text-1);
+            word-break: break-word;
+        }
+        .file-desc { font-size: 13px; color: var(--text-3); margin-top: 2px; }
+        .file-size {
+            font: 400 12.5px var(--font-mono);
+            color: var(--text-3);
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .file-size .arrow { opacity: .45; }
+        .file-row .btn { flex: 0 0 auto; height: 34px; padding: 0 16px; font-size: 13.5px; }
+
+        /* ---- changelog ---- */
+        .changelog { padding: 22px 28px; border-top: 1px solid var(--divider); }
+        .changelog ul { list-style: none; }
+        .changelog li {
+            position: relative;
+            padding-left: 20px;
+            font-size: 14.5px;
+            line-height: 1.7;
+            color: var(--text-2);
+        }
+        .changelog li + li { margin-top: 6px; }
+        .changelog li::before {
+            content: "";
+            position: absolute;
+            left: 5px; top: 11px;
+            width: 5px; height: 5px;
+            border-radius: 50%;
+            background: var(--brand);
+            opacity: .7;
+        }
+
+        /* ---- history ---- */
+        .history-head {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 16px;
+            margin: 48px 0 4px;
+        }
+        .history-head h2 {
+            font-family: var(--font-display);
+            font-size: 19px;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }
+        .history-head span { font-size: 13px; color: var(--text-3); }
+
+        .hrow { border-bottom: 1px solid var(--divider); }
+        .hrow-head {
+            width: 100%;
+            appearance: none;
+            border: 0;
+            background: transparent;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 8px;
+            cursor: pointer;
+            font-family: var(--font-sans);
+            transition: background-color var(--transition-fast);
+        }
+        .hrow-head:hover { background: var(--bg-soft); }
+        .hrow-name {
+            font: 500 15px var(--font-mono);
+            color: var(--text-1);
+            flex: 0 0 auto;
+        }
+        .hrow-date { font-size: 13px; color: var(--text-3); flex: 1 1 auto; }
+        .hrow-flags { display: flex; gap: 9px; flex: 0 0 auto; align-items: center; }
+        .hflag { display: flex; }
+        .hflag svg { width: 14px; height: 14px; display: block; }
+        .hrow-flags .f-yes { color: var(--text-1); }
+        /* Dimmed AND desaturated, so the difference survives without relying on
+           colour alone; the sr-only text in each flag states it outright. */
+        .hrow-flags .f-no { color: var(--text-3); opacity: .32; }
+        .hrow-chev {
+            flex: 0 0 auto;
+            color: var(--text-3);
+            display: flex;
+            transition: transform var(--t-mid);
+        }
+        .hrow-chev svg { width: 16px; height: 16px; }
+        .hrow.open .hrow-chev { transform: rotate(180deg); }
+
+        .hrow-body { display: none; padding: 0 8px 20px; }
+        .hrow.open .hrow-body { display: block; }
+        .hrow-body .changelog,
+        .hrow-body .files { padding: 0; border: 0; }
+        .hrow-body .files { margin-top: 18px; }
+
+        /* ---- states ---- */
+        .empty-state, .error-box {
+            border: 1px solid var(--divider);
+            border-radius: var(--radius-card);
+            background: var(--bg-soft);
+            padding: 40px 28px;
+            text-align: center;
+            color: var(--text-2);
+            font-size: 15px;
+            line-height: 1.7;
+        }
+        .empty-state strong { display: block; color: var(--text-1); font-size: 16.5px; margin-bottom: 6px; }
+        .error-box { border-color: var(--no); text-align: left; }
+        .error-box strong { color: var(--text-1); font-size: 16px; }
+        .error-detail {
+            font: 400 12.5px var(--font-mono);
+            color: var(--text-3);
+            margin: 10px 0 16px;
+            word-break: break-word;
+        }
+
+        /* Skeleton rather than a spinner: it holds the shape of what is
+           loading, so the page does not jump when the data lands. */
+        .skeleton { border: 1px solid var(--divider); border-radius: var(--radius-frame); overflow: hidden; }
+        .sk-line {
+            height: 12px;
+            border-radius: 4px;
+            background: var(--divider);
+            animation: sk-pulse 1.4s ease-in-out infinite;
+        }
+        .sk-pad { padding: 26px 28px; border-bottom: 1px solid var(--divider); }
+        .sk-pad:last-child { border-bottom: 0; }
+        @keyframes sk-pulse { 0%, 100% { opacity: .35; } 50% { opacity: .7; } }
+        @media (prefers-reduced-motion: reduce) { .sk-line { animation: none; opacity: .5; } }
+
+        .sr-only {
+            position: absolute; width: 1px; height: 1px;
+            padding: 0; margin: -1px; overflow: hidden;
+            clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+        }
+
+        @media (max-width: 780px) {
+            .dl-hero { padding-top: 28px; }
+            .dl-install { max-width: none; }
+            .featured-head, .files, .changelog { padding-left: 18px; padding-right: 18px; }
+            .featured-title h2 { font-size: 22px; }
+            .channels { margin: 36px 0 20px; overflow-x: auto; }
+            .channel-tab { white-space: nowrap; }
+
+            .installer .btn { flex: 1 1 auto; }
+
+            .file-row { flex-wrap: wrap; gap: 10px; }
+            .file-info { flex: 1 1 100%; }
+            .file-row .btn { flex: 1 1 auto; }
+
+            .hrow-head { flex-wrap: wrap; gap: 8px 12px; padding: 14px 4px; }
+            .hrow-date { flex: 1 1 100%; order: 3; }
+            .runs { gap: 8px; }
+            .run { font-size: 12.5px; padding: 5px 11px 5px 9px; }
+        }
+    </style>
+
+    <meta property="og:title" content="Download TuxBlox 🐧" />
+    <meta property="og:site_name" content="tuxblox.net" />
+    <meta property="og:description" content="Official stable and canary builds of TuxBlox, with changelogs and file sizes." />
+    <meta property="og:image" content="https://tuxblox.net/static/images/banner/tuxblox-banner.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://tuxblox.net/releases" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Download TuxBlox" />
+    <meta name="twitter:description" content="Official stable and canary builds of TuxBlox." />
+    <meta name="twitter:image" content="https://tuxblox.net/static/images/banner/tuxblox-banner.png" />
+
+    <meta name="theme-color" content="#0e1117" />
+</head>
+<body>
+    <!-- Copyright © TuxBlox Project 2026 -->
+    <div data-include="topbar"></div>
+
+    <main>
+        <div class="wrap">
+            <section class="hero dl-hero">
+                <h1>Download TuxBlox</h1>
+                <p class="hero-subtitle">
+                    This page contains latest and previous versions of TuxBlox.
+                </p>
+
+                <div class="dl-install">
+                    <p class="dl-install-label">Alternatively, install the latest stable release from a terminal:</p>
+                    <div class="install">
+                        <code id="install-cmd"><span class="prompt">$</span>curl -fsSL https://tuxblox.net/install.sh | sh</code>
+                        <button type="button" class="copy-btn" id="copy-btn">Copy</button>
+                    </div>
+                </div>
+            </section>
+
+            <div class="channels" id="channels" role="tablist" aria-label="Release channel"></div>
+
+            <div id="loader">
+                <div class="skeleton" aria-hidden="true">
+                    <div class="sk-pad">
+                        <div class="sk-line" style="width:120px;height:10px"></div>
+                        <div class="sk-line" style="width:220px;height:22px;margin-top:12px"></div>
+                        <div class="sk-line" style="width:160px;margin-top:14px"></div>
+                        <div class="sk-line" style="width:280px;height:30px;margin-top:20px"></div>
+                    </div>
+                    <div class="sk-pad">
+                        <div class="sk-line" style="width:70px;height:10px"></div>
+                        <div class="sk-line" style="width:100%;margin-top:16px"></div>
+                        <div class="sk-line" style="width:90%;margin-top:12px"></div>
+                    </div>
+                </div>
+                <span class="sr-only">Loading releases…</span>
+            </div>
+
+            <div id="download-content" hidden>
+                <div id="featured"></div>
+                <div id="history-wrap" hidden>
+                    <div class="history-head">
+                        <h2>Earlier versions</h2>
+                        <span id="history-count"></span>
+                    </div>
+                    <div id="history"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="wrap" data-include="footer"></div>
+
+    <script src="/static/scripts/include.js?v=20260904" defer></script>
+    <script>
+    (function () {
+        'use strict';
+
+        var RELEASES_URL = 'https://setup.tuxblox.net/v2/releases.json';
+
+        /* Content entries with this name are shown as a button under the
+           release title instead of as a row in the Files list. */
+        var INSTALLER_NAME = 'installer';
+
+        var CHANNELS = {
+            stable: {
+                label: 'Stable',
+                badge: 'badge-stable',
+                badgeText: 'stable',
+                empty: 'No stable builds are published yet.'
+            },
+            canary: {
+                label: 'Canary',
+                badge: 'badge-canary',
+                badgeText: 'pre-release',
+                empty: 'No canary builds right now. Try the stable channel.'
+            },
+            experimental: {
+                label: 'Experimental',
+                badge: 'badge-experimental',
+                badgeText: 'experimental',
+                empty: 'No experimental builds right now. Try the stable channel.'
+            },
+            other: {
+                label: 'Other',
+                badge: 'badge-canary',
+                badgeText: 'unstable',
+                empty: 'Nothing here right now.'
+            }
+        };
+
+        var state = { data: {}, order: [], active: null };
+
+        /* ---------------------------------------------------------- utils */
+
+        function esc(text) {
+            if (text == null) return '';
+            var d = document.createElement('div');
+            d.textContent = String(text);
+            return d.innerHTML;
+        }
+
+        function parseDateUTC(dateStr) {
+            if (!dateStr || typeof dateStr !== 'string') return null;
+            var trimmed = dateStr.trim();
+            if (!trimmed) return null;
+
+            var spaceIdx = trimmed.indexOf(' ');
+            if (spaceIdx !== -1) {
+                var dateBits = trimmed.slice(0, spaceIdx).split('/').map(function (s) { return parseInt(s, 10); });
+                var timeBits = trimmed.slice(spaceIdx + 1).trim().split(':').map(function (s) { return parseInt(s, 10); });
+                if (dateBits.length === 3 && timeBits.length >= 2) {
+                    var month = dateBits[0], day = dateBits[1], year = dateBits[2];
+                    var hour = timeBits[0], minute = timeBits[1];
+                    if (![month, day, year, hour, minute].some(isNaN)) {
+                        var fullYear = year < 50 ? 2000 + year : 1900 + year;
+                        var d = new Date(Date.UTC(fullYear, month - 1, day, hour, minute));
+                        if (!isNaN(d.getTime())) return d;
+                    }
+                }
+            }
+            var d2 = new Date(trimmed + ' UTC');
+            return isNaN(d2.getTime()) ? null : d2;
+        }
+
+        function formatDate(dateStr) {
+            var date = parseDateUTC(dateStr);
+            if (!date) return (dateStr && String(dateStr).trim()) || 'Unknown date';
+            return date.toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' });
+        }
+
+        function relativeDays(dateStr) {
+            var date = parseDateUTC(dateStr);
+            if (!date) return '';
+            var days = Math.floor((Date.now() - date.getTime()) / 86400000);
+            if (days < 0) return '';
+            if (days === 0) return 'today';
+            if (days === 1) return 'yesterday';
+            if (days < 30) return days + ' days ago';
+            var months = Math.floor(days / 30);
+            if (months < 12) return months + (months === 1 ? ' month ago' : ' months ago');
+            var years = Math.floor(months / 12);
+            return years + (years === 1 ? ' year ago' : ' years ago');
+        }
+
+        function sortByDateDesc(a, b) {
+            var da = parseDateUTC(a.date), db = parseDateUTC(b.date);
+            if (!da && !db) return 0;
+            if (!da) return 1;
+            if (!db) return -1;
+            return db - da;
+        }
+
+        function channelMeta(key) {
+            return CHANNELS[String(key).toLowerCase()] || CHANNELS.other;
+        }
+
+        var ICON = {
+            check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>',
+            cross: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>',
+            chevron: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>',
+            download: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"></path><polyline points="7 10 12 15 17 10"></polyline><path d="M5 21h14"></path></svg>',
+            arrow: '<svg class="arrow" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>',
+
+            studio: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M 13.936 15.356 L 1.826 12.112 L 0 18.93 L 18.928 24 L 21.608 14.01 L 14.79 12.18 L 13.936 15.356 Z M 5.072 0 L 2.394 9.992 L 9.21 11.822 L 10.064 8.644 L 22.174 11.89 L 24 5.072 L 5.072 0 Z"></path></svg>',
+            player: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.926 23.998 0 18.892 5.075.002 24 5.108ZM15.348 10.09l-5.282-1.453-1.414 5.273 5.282 1.453z"></path></svg>'
+        };
+
+        /* ------------------------------------------------------ installer */
+
+        function isInstaller(file) {
+            return !!file && typeof file.name === 'string' &&
+                   file.name.trim().toLowerCase() === INSTALLER_NAME;
+        }
+
+        // Splits a release's content into installer entries and everything else.
+        function splitContent(content) {
+            var installers = [], files = [];
+            (Array.isArray(content) ? content : []).forEach(function (file) {
+                if (isInstaller(file)) installers.push(file);
+                else files.push(file);
+            });
+            return { installers: installers, files: files };
+        }
+
+        function installerHtml(installers) {
+            if (!installers.length) return '';
+            var buttons = installers.map(function (file) {
+                return '<a class="btn btn-brand" href="' + esc(file.pointer) + '" download>' +
+                         ICON.download + 'Download installer' +
+                       '</a>';
+            }).join('');
+            return '<div class="installer">' + buttons + '</div>';
+        }
+
+        /* ---------------------------------------------------------- files */
+
+        function sizeHtml(file) {
+            var storage = file.storage ? String(file.storage).trim() : '';
+            var actual = file.actualStorage ? String(file.actualStorage).trim() : '';
+            if (!storage && !actual) return '';
+            if (actual) {
+                return '<span class="file-size" title="Download size, then space used once installed">' +
+                       esc(storage) + ICON.arrow + esc(actual) + '</span>';
+            }
+            return '<span class="file-size">' + esc(storage) + '</span>';
+        }
+
+        function filesHtml(content, heading) {
+            if (!Array.isArray(content) || !content.length) return '';
+            var rows = content.map(function (file) {
+                return '<div class="file-row">' +
+                         '<div class="file-info">' +
+                           '<div class="file-name">' + esc(file.name) + '</div>' +
+                           (file.description ? '<div class="file-desc">' + esc(file.description) + '</div>' : '') +
+                         '</div>' +
+                         sizeHtml(file) +
+                         '<a class="btn btn-brand" href="' + esc(file.pointer) + '" download>' +
+                           ICON.download + 'Download' +
+                         '</a>' +
+                       '</div>';
+            }).join('');
+            return '<div class="files">' +
+                     (heading ? '<div class="block-title">' + esc(heading) + '</div>' : '') +
+                     rows +
+                   '</div>';
+        }
+
+        function changelogHtml(changelogs, heading) {
+            if (!Array.isArray(changelogs) || !changelogs.length) return '';
+            var items = changelogs.map(function (c) { return '<li>' + esc(c) + '</li>'; }).join('');
+            return '<div class="changelog">' +
+                     (heading ? '<div class="block-title">' + esc(heading) + '</div>' : '') +
+                     '<ul>' + items + '</ul>' +
+                   '</div>';
+        }
+
+        function runChip(mark, label, supported) {
+            return '<span class="run ' + (supported ? 'yes' : 'no') + '">' +
+                     '<span class="run-mark">' + mark + '</span>' +
+                     '<span class="run-label">' + label + '</span>' +
+                     '<span class="run-state">' + (supported ? ICON.check : ICON.cross) + '</span>' +
+                     '<span class="sr-only">' + (supported ? 'works' : 'does not work yet') + '</span>' +
+                   '</span>';
+        }
+
+        function runsHtml(item) {
+            var out = '';
+            if (item.hasStudio !== undefined && item.hasStudio !== null) {
+                out += runChip(ICON.studio, 'Roblox Studio', !!item.hasStudio);
+            }
+            if (item.hasPlayer !== undefined && item.hasPlayer !== null) {
+                out += runChip(ICON.player, 'Roblox Player', !!item.hasPlayer);
+            }
+            return out ? '<div class="runs">' + out + '</div>' : '';
+        }
+
+        function renderFeatured(item, key) {
+            var meta = channelMeta(key);
+            var rel = relativeDays(item.date);
+            var parts = splitContent(item.content);
+
+            return '<div class="featured">' +
+                     '<div class="featured-head">' +
+                       runsHtml(item) +
+                       '<div class="featured-eyebrow">Latest ' + esc(meta.label.toLowerCase()) + ' build</div>' +
+                       '<div class="featured-title">' +
+                         '<h2>' + esc(item.name) + '</h2>' +
+                         '<span class="badge ' + meta.badge + '">' + esc(meta.badgeText) + '</span>' +
+                       '</div>' +
+                       '<div class="featured-date">Released ' + esc(formatDate(item.date)) +
+                         (rel ? ' &middot; ' + esc(rel) : '') + '</div>' +
+                       installerHtml(parts.installers) +
+                     '</div>' +
+                     filesHtml(parts.files, 'Files') +
+                     changelogHtml(item.changelogs, 'Changelogs') +
+                   '</div>';
+        }
+
+        function renderHistoryRow(item, idx) {
+            function flag(mark, name, supported) {
+                return '<span class="hflag ' + (supported ? 'f-yes' : 'f-no') + '" title="' +
+                       name + (supported ? ': works' : ': not supported') + '">' + mark +
+                       '<span class="sr-only">' + name +
+                       (supported ? ' works' : ' does not work') + '</span></span>';
+            }
+            var flags = '';
+            if (item.hasStudio !== undefined && item.hasStudio !== null) {
+                flags += flag(ICON.studio, 'Roblox Studio', !!item.hasStudio);
+            }
+            if (item.hasPlayer !== undefined && item.hasPlayer !== null) {
+                flags += flag(ICON.player, 'Roblox Player', !!item.hasPlayer);
+            }
+
+            var parts = splitContent(item.content);
+
+            // The row header is a <button>, so the installer link can't live
+            // inside it; it goes at the top of the expanded body instead.
+            return '<div class="hrow" data-idx="' + idx + '">' +
+                     '<button type="button" class="hrow-head" aria-expanded="false">' +
+                       '<span class="hrow-name">' + esc(item.name) + '</span>' +
+                       '<span class="hrow-date">' + esc(formatDate(item.date)) + '</span>' +
+                       '<span class="hrow-flags">' + flags + '</span>' +
+                       '<span class="hrow-chev">' + ICON.chevron + '</span>' +
+                     '</button>' +
+                     '<div class="hrow-body">' +
+                       installerHtml(parts.installers) +
+                       changelogHtml(item.changelogs, 'Changelogs') +
+                       filesHtml(parts.files, 'Files') +
+                     '</div>' +
+                   '</div>';
+        }
+
+        function renderChannelTabs() {
+            var el = document.getElementById('channels');
+            el.innerHTML = state.order.map(function (key) {
+                var meta = channelMeta(key);
+                var n = (state.data[key] || []).length;
+                var selected = key === state.active;
+                return '<button type="button" class="channel-tab" role="tab" data-channel="' + esc(key) + '"' +
+                       ' aria-selected="' + (selected ? 'true' : 'false') + '">' +
+                       esc(meta.label) + '<span class="count">' + n + '</span></button>';
+            }).join('');
+
+            Array.prototype.forEach.call(el.querySelectorAll('.channel-tab'), function (btn) {
+                btn.addEventListener('click', function () {
+                    state.active = btn.getAttribute('data-channel');
+                    renderChannelTabs();
+                    renderActiveChannel();
+                    writeUrl(state.active, null, true);
+                });
+            });
+        }
+
+        function renderActiveChannel() {
+            var key = state.active;
+            var items = state.data[key] || [];
+            var featured = document.getElementById('featured');
+            var historyWrap = document.getElementById('history-wrap');
+            var history = document.getElementById('history');
+            var meta = channelMeta(key);
+
+            if (!items.length) {
+                featured.innerHTML = '<div class="empty-state"><strong>Nothing to download here</strong>' +
+                                     esc(meta.empty) + '</div>';
+                historyWrap.hidden = true;
+                return;
+            }
+
+            featured.innerHTML = renderFeatured(items[0], key);
+
+            var rest = items.slice(1);
+            if (!rest.length) {
+                historyWrap.hidden = true;
+                return;
+            }
+
+            historyWrap.hidden = false;
+            document.getElementById('history-count').textContent =
+                rest.length + (rest.length === 1 ? ' older build' : ' older builds');
+            history.innerHTML = rest.map(function (item, i) {
+                return renderHistoryRow(item, i);
+            }).join('');
+
+            Array.prototype.forEach.call(history.querySelectorAll('.hrow-head'), function (btn, i) {
+                btn.addEventListener('click', function () {
+                    var row = btn.parentNode;
+                    var open = row.classList.toggle('open');
+                    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+
+                    var name = rest[i].name;
+                    if (open) {
+                        writeUrl(key, name, false);
+                    } else if (normVersion(readUrl().version) === normVersion(name)) {
+                        writeUrl(key, null, false);
+                    }
+                });
+            });
+        }
+
+        function openHistoryRow(i, scroll) {
+            var row = document.querySelector('#history .hrow[data-idx="' + i + '"]');
+            if (!row) return;
+            row.classList.add('open');
+            row.querySelector('.hrow-head').setAttribute('aria-expanded', 'true');
+            if (scroll) row.scrollIntoView({ block: 'center' });
+        }
+
+        /* ------------------------------------------------------------- url */
+
+        function normVersion(v) {
+            return String(v == null ? '' : v).trim().toLowerCase().replace(/^v(?=\d)/, '');
+        }
+
+        function readUrl() {
+            var p = new URLSearchParams(window.location.search);
+            return { channel: p.get('channel'), version: p.get('version') };
+        }
+
+        // Sets ?channel= and ?version= in the address bar, leaving any other
+        // query params alone. push adds a history entry so Back works.
+        function writeUrl(channel, version, push) {
+            var url;
+            try { url = new URL(window.location.href); } catch (e) { return; }
+            url.searchParams.delete('channel');
+            url.searchParams.delete('version');
+            if (channel) url.searchParams.set('channel', channel);
+            if (version) url.searchParams.set('version', version);
+            if (url.href === window.location.href) return;
+            try {
+                window.history[push ? 'pushState' : 'replaceState'](null, '', url.href);
+            } catch (e) {}
+        }
+
+        function findChannel(name) {
+            if (!name) return null;
+            var n = String(name).trim().toLowerCase();
+            for (var i = 0; i < state.order.length; i++) {
+                if (state.order[i].toLowerCase() === n) return state.order[i];
+            }
+            return null;
+        }
+
+        function findVersionIndex(key, version) {
+            var items = state.data[key] || [];
+            var v = normVersion(version);
+            for (var i = 0; i < items.length; i++) {
+                if (normVersion(items[i].name) === v) return i;
+            }
+            return -1;
+        }
+
+        // Shows whatever channel/version the URL asks for, falling back to the
+        // default channel. With only ?version=, every channel is searched.
+        function applyUrl() {
+            var q = readUrl();
+            var channel = findChannel(q.channel);
+            var index = -1;
+
+            if (q.version) {
+                var keys = channel ? [channel] : state.order;
+                for (var k = 0; k < keys.length; k++) {
+                    index = findVersionIndex(keys[k], q.version);
+                    if (index !== -1) { channel = keys[k]; break; }
+                }
+            }
+
+            var populated = state.order.filter(function (k) { return state.data[k].length; });
+            state.active = channel || populated[0] || state.order[0];
+
+            renderChannelTabs();
+            renderActiveChannel();
+
+            // index 0 is the featured build; older builds are history rows.
+            if (index > 0) openHistoryRow(index - 1, true);
+
+            // Clean out anything that didn't match, so the URL matches the page.
+            if (q.channel || q.version) {
+                writeUrl(channel, index !== -1 ? state.data[channel][index].name : null, false);
+            }
+        }
+
+        /* ------------------------------------------------------------ load */
+
+        function showError(message, detail) {
+            document.getElementById('loader').hidden = true;
+            document.getElementById('download-content').hidden = false;
+            document.getElementById('history-wrap').hidden = true;
+            document.getElementById('featured').innerHTML =
+                '<div class="error-box" role="alert">' +
+                  '<strong>' + esc(message) + '</strong>' +
+                  '<div class="error-detail">' + esc(detail) + '</div>' +
+                  '<button type="button" class="btn btn-brand" id="retry-btn">Try again</button>' +
+                '</div>';
+            var retry = document.getElementById('retry-btn');
+            if (retry) retry.addEventListener('click', load);
+        }
+
+        function load() {
+            var loader = document.getElementById('loader');
+            var content = document.getElementById('download-content');
+            loader.hidden = false;
+            content.hidden = true;
+
+            fetch(RELEASES_URL + '?source=browserjs&time=' + Date.now(), {
+                headers: { 'Accept': 'application/json' }
+            })
+            .then(function (r) {
+                if (!r.ok) throw new Error('Server returned ' + r.status + ' ' + r.statusText);
+                return r.text();
+            })
+            .then(function (text) {
+                var data;
+                try {
+                    data = JSON.parse(text);
+                } catch (e) {
+                    throw new Error('The release list came back malformed.');
+                }
+                if (!data || typeof data !== 'object' || Array.isArray(data)) {
+                    throw new Error('Unexpected data structure.');
+                }
+
+                state.data = {};
+                state.order = [];
+                Object.keys(data).forEach(function (key) {
+                    var items = data[key];
+                    if (!Array.isArray(items)) items = (items && typeof items === 'object') ? [items] : [];
+                    items = items.filter(function (it) {
+                        return it && typeof it === 'object' && it.name &&
+                               Array.isArray(it.content) && it.content.length > 0;
+                    });
+                    items.sort(sortByDateDesc);
+                    state.data[key] = items;
+                    state.order.push(key);
+                });
+
+                if (!state.order.length) {
+                    showError('No releases are published yet.', 'The release list came back empty.');
+                    return;
+                }
+
+                // Content must be visible before applyUrl can scroll to a row.
+                loader.hidden = true;
+                content.hidden = false;
+
+                applyUrl();
+            })
+            .catch(function (err) {
+                console.error('[releases] fetch failed:', err);
+                var msg = 'Could not load the release list.';
+                var detail = err.message;
+                if (err.name === 'TypeError') {
+                    msg = 'Could not reach the release server.';
+                    detail = 'Check your connection and try again.';
+                }
+                showError(msg, detail);
+            });
+        }
+
+        function setupCopy() {
+            var btn = document.getElementById('copy-btn');
+            var cmd = document.getElementById('install-cmd');
+            if (!btn || !cmd) return;
+
+            function fallback(text, done) {
+                var ta = document.createElement('textarea');
+                ta.value = text;
+                ta.setAttribute('readonly', '');
+                ta.style.position = 'fixed';
+                ta.style.opacity = '0';
+                document.body.appendChild(ta);
+                ta.select();
+                try { document.execCommand('copy'); done(); } catch (e) {}
+                document.body.removeChild(ta);
+            }
+
+            btn.addEventListener('click', function () {
+                var text = cmd.textContent.replace(/^\s*\$\s*/, '');
+                function done() {
+                    btn.textContent = 'Copied';
+                    btn.classList.add('copied');
+                    setTimeout(function () {
+                        btn.textContent = 'Copy';
+                        btn.classList.remove('copied');
+                    }, 1600);
+                }
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(text).then(done, function () { fallback(text, done); });
+                } else {
+                    fallback(text, done);
+                }
+            });
+        }
+
+        function init() {
+            setupCopy();
+            load();
+
+            // Back/Forward after switching tabs.
+            window.addEventListener('popstate', function () {
+                if (state.order.length) applyUrl();
+            });
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TuxBlox</title>
+
+
+    <!-- THEME BOOT. Must be inline and blocking, before first paint.
+         include.js is deferred and cross-origin, so it runs too late to set
+         the theme without a visible flash. Keep in sync across pages. -->
+    <script>
+    (function () {
+        var KEY = 'tuxblox_theme', t;
+        try { t = localStorage.getItem(KEY); } catch (e) {}
+        if (t !== 'light' && t !== 'dark') {
+            t = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        }
+        document.documentElement.setAttribute('data-theme', t);
+        document.documentElement.classList.add('theme-init');
+    })();
+    </script>
+    <meta name="description" content="TuxBlox is an open-source launcher and compatibility layer that runs the official Roblox Client and Studio natively on Linux.">
+    <link rel="canonical" href="https://tuxblox.net">
+
+    <link rel="icon" type="image/x-icon" href="https://tuxblox.net/favicon.ico">
+    <link rel="apple-touch-icon" href="/static/images/icon/tuxblox-icon.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles/style.css?v=20260904">
+</head>
+<body>
+
+    <div class="container">
+        <div data-include="topbar"></div>
+
+        <section class="hero" style="padding: 100px 0 80px 0;">
+            <h1 style="font-family: var(--font-mono); font-size: 72px; margin-bottom: 16px;">404</h1>
+            <h1><span class="orange-text">Not Found</span></h1>
+            <p class="hero-subtitle" style="max-width: 620px; margin-top: 20px;">The page you're looking for doesn't exist or has been moved.</p>
+            
+            <div class="cta-group" style="margin-top: 40px; margin-bottom: 0;">
+                <a href="/" class="btn btn-primary">Return Home</a>
+                <a href="/releases" class="btn btn-secondary">Releases Page</a>
+            </div>
+        </section>
+
+        <div data-include="footer"></div>
+    </div>
+
+    <script src="/static/scripts/include.js?v=20260904" defer></script>
+</body>
+</html>

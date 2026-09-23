@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TuxBlox - Run Roblox natively on Linux</title>
+
+    <meta name="description" content="TuxBlox is a free, open-source launcher that runs Roblox Studio on Linux. Nothing to configure, no virtual machine.">
+    <link rel="canonical" href="https://tuxblox.net">
+
+    <!-- THEME BOOT.
+         Must be inline and blocking, before the stylesheet and before first
+         paint. include.js cannot do this: it is deferred and served from
+         static.tuxblox.net, so it runs after the browser has already painted
+         the default theme, which made every light-mode visitor see a dark
+         flash on each page load. Keep this snippet in sync across pages. -->
+    <script>
+    (function () {
+        var KEY = 'tuxblox_theme', t;
+        try { t = localStorage.getItem(KEY); } catch (e) {}
+        if (t !== 'light' && t !== 'dark') {
+            t = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        }
+        document.documentElement.setAttribute('data-theme', t);
+        document.documentElement.classList.add('theme-init');
+    })();
+    </script>
+
+    <link rel="icon" type="image/x-icon" href="https://tuxblox.net/favicon.ico">
+    <link rel="apple-touch-icon" href="/static/images/icon/tuxblox-icon.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles/style.css?v=20260904">
+
+    <meta property="og:title" content="TuxBlox 🐧" />
+    <meta property="og:site_name" content="tuxblox.net" />
+    <meta property="og:description" content="Run Roblox natively on Linux. A free, open-source launcher and compatibility layer." />
+    <meta property="og:image" content="https://tuxblox.net/static/images/banner/tuxblox-banner.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://tuxblox.net" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="TuxBlox 🐧" />
+    <meta name="twitter:description" content="Run Roblox natively on Linux. Free and open source." />
+    <meta name="twitter:image" content="https://tuxblox.net/static/images/banner/tuxblox-banner.png" />
+
+    <meta name="theme-color" content="#0e1117" />
+</head>
+<body>
+    <!-- Copyright © TuxBlox Project 2026 -->
+    <div data-include="topbar"></div>
+
+    <main>
+
+        <section class="hero">
+            <div class="wrap hero-grid">
+                <div>
+                    <h1>Run <span class="blue-text">Roblox</span> natively on <span class="orange-text">Linux</span></h1>
+                    <p class="hero-subtitle">
+                        TuxBlox is a free, open source launcher and compatibility layer that runs Roblox on Linux. It is designed for both beginners and experts, has a friendly launcher, and is in <strong>active development</strong>. 
+                    </p>
+
+                    <div class="hero-actions">
+                        <a href="/releases" class="btn btn-brand">Download TuxBlox</a>
+                        <a href="/discord" target="_blank" rel="noopener noreferrer" class="btn btn-alt">
+                            <span class="icon" data-icon="discord"></span>
+                            Join Discord
+                        </a>
+                        <a href="/gitlab" target="_blank" rel="noopener noreferrer" class="btn btn-alt">
+                            <span class="icon" data-icon="gitlab"></span>
+                            GitLab
+                        </a>
+                        <a href="/github" target="_blank" rel="noopener noreferrer" class="btn btn-alt">
+                            <span class="icon" data-icon="github"></span>
+                            GitHub
+                        </a>
+                    </div>
+
+                </div>
+
+                <div class="hero-art">
+                    <img src="/static/images/svg/tuxblox.svg" alt="">
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="wrap">
+                <div class="section-head">
+                    <h2>Features</h2>
+                </div>
+                <div class="cards">
+                    <div class="card">
+                        <h3>Works out of the box</h3>
+                        <p>Installation, updates and graphics setup are handled by the launcher. There are no launch options to supply or no prefix to maintain, TuxBlox handles everything for you.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Native performance</h3>
+                        <p>No virtual machine sits between Roblox and your hardware. Studio starts quickly, and the GPU is driven directly rather than through an emulation layer.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Full control</h3>
+                        <p>Every default the launcher applies can be overridden from its settings tab. Sensible behaviour out of the box, full control when you want it.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="showcase">
+            <div class="wrap">
+                <div class="showcase-stage">
+                    <div class="frame">
+                        <div class="slides" id="slides">
+                            <div class="slide is-active">
+                                <img src="/static/images/screenshots/Studio_Racing_Night_1.png"
+                                     alt="Roblox Studio running on Linux, editing a night-time racing scene">
+                            </div>
+                            <div class="slide">
+                                <img data-src="/static/images/screenshots/Studio_ModernCity_Night_1.png"
+                                     alt="Roblox Studio running on Linux, editing a night-time city scene">
+                            </div>
+                            <div class="slide">
+                                <img data-src="/static/images/screenshots/Studio_Racing_Night_2.png"
+                                     alt="Roblox Studio running on Linux, viewing a racing map at night">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="button" class="slide-nav prev" aria-label="Previous screenshot">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                    </button>
+                    <button type="button" class="slide-nav next" aria-label="Next screenshot">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                    </button>
+                </div>
+
+                <div class="dots" id="dots">
+                    <button type="button" class="dot-btn" aria-current="true" aria-label="Show screenshot 1"></button>
+                    <button type="button" class="dot-btn" aria-current="false" aria-label="Show screenshot 2"></button>
+                    <button type="button" class="dot-btn" aria-current="false" aria-label="Show screenshot 3"></button>
+                </div>
+                <p class="caption">Screenshots of the real unmodified Roblox through TuxBlox</p>
+            </div>
+        </section>
+
+        <!--section class="distros">
+            <div class="wrap">
+                <p class="distros-label">Tested on these Linux distributions</p>
+            </div>
+            <div class="marquee">
+                <div class="marquee-track" id="marquee-track"></div>
+            </div>
+        </section-->
+
+        <section class="section" id="about">
+            <div class="wrap how">
+                <div class="section-head">
+                    <h2>How it works</h2>
+                </div>
+                <div class="how-body">
+                    <p>
+                        Roblox is distributed as Windows binaries only; there is no Linux build.
+                        TuxBlox is a compatibility layer and launcher capable of running those
+                        binaries on Linux. It loads and executes the official Roblox binaries
+                        <strong>unmodified</strong>, implementing the Windows API calls they make
+                        using their Linux equivalents.
+                    </p>
+                    <p>
+                        Instead of simulating internal Windows logic like a virtual machine or an
+                        emulator, TuxBlox translates those calls as the process runs. This avoids the
+                        performance and memory penalties of those approaches, and leaves the Roblox
+                        installation byte for byte identical to the one Roblox publishes.
+                    </p>
+                    <p>
+                        The compatibility layer is <strong>developed and maintained specifically for
+                        Roblox</strong>. Targeting a single application means defects can be fixed at
+                        the source rather than worked around through configuration, including cases
+                        that general purpose compatibility tools cannot reach.
+                    </p>
+
+                    <div class="how-points">
+                        <div class="row">
+                            <span class="k">No Windows installation</span>
+                            <span class="v">No second operating system, no disk image, and no Windows licence to supply.</span>
+                        </div>
+                        <div class="row">
+                            <span class="k">Unmodified binaries</span>
+                            <span class="v">The Studio files are exactly those Roblox publishes. TuxBlox neither patches nor repackages them.</span>
+                        </div>
+                        <div class="row">
+                            <span class="k">No resource reservation</span>
+                            <span class="v">Memory and GPU are used on demand, as with any native process. Nothing is pre-allocated.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="wrap">
+                <div class="section-head">
+                    <h2>Common questions</h2>
+                </div>
+                <div class="faq">
+
+                    <details open>
+                        <summary>What are the requirements?
+                            <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
+                        </summary>
+                        <div class="answer">
+                            <p>Most current Linux installations already satisfy these requirements.</p>
+                            <ul class="spec-list">
+                                <li><span class="n">Kernel</span><span class="d">Linux 6.7 or newer</span></li>
+                                <li><span class="n">Processor</span><span class="d">x86-64 with SSE3</span></li>
+                                <li><span class="n">Memory</span><span class="d">8 GB</span></li>
+                                <li><span class="n">Disk space</span><span class="d">6 GB free</span></li>
+                                <li><span class="n">NVIDIA graphics</span><span class="d">Proprietary driver 418.49.04 or newer</span></li>
+                                <li><span class="n">AMD graphics</span><span class="d">Mesa 17.0 or newer</span></li>
+                            </ul>
+                        </div>
+                    </details>
+
+                    <details>
+                        <summary>Will this get my account banned?
+                            <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
+                        </summary>
+                        <div class="answer">
+                            <p><strong>For Studio, probably not.</strong> Roblox has allowed the usage of Roblox Studio on Linux for a long while now, however Roblox may still take action on your account at any time.</p>
+                            <p><strong>For Player, account safety is not guaranteed.</strong> Roblox does not support Linux, and its anti-cheat may flag your account at any point if you use TuxBlox. Your account might be banned or terminated. Use it at your own risk.</p>
+                            <p>Check our documentation for more information about this.</p>
+                        </div>
+                    </details>
+
+                    <details>
+                        <summary>Which Roblox versions are supported?
+                            <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
+                        </summary>
+                        <div class="answer">
+                            <p>Player support is experimental. Expect bugs and issues to regularly happen.</p>
+                            <p>Studio is the alternative target and the most stable one. It should run correctly.</p>
+                        </div>
+                    </details>
+
+                    <details>
+                        <summary>Does it require root?
+                            <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
+                        </summary>
+                        <div class="answer">
+                            <p>No. TuxBlox installs and runs entirely as an unprivileged user. Root is not required at any point, and you will not be asked for a password.</p>
+                        </div>
+                    </details>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <div class="wrap" data-include="footer"></div>
+
+    <script src="/static/scripts/include.js?v=20260904" defer></script>
+    <script src="/static/scripts/home.js?v=20260904" defer></script>
+</body>
+</html>
