@@ -1,11 +1,16 @@
-import test from 'node:test';
+import test, { after } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { resolvePath } from '../tools/serve.mjs';
 
-const root = fs.mkdtempSync(path.join(os.tmpdir(), 'serve-'));
+// Everything this file creates lives under one directory, removed at the end,
+// so test runs do not pile up in the (often RAM-backed) temp directory.
+const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'tuxbloxsite-test-'));
+after(() => fs.rmSync(TMP, { recursive: true, force: true }));
+
+const root = fs.mkdtempSync(path.join(TMP, 'serve-'));
 for (const f of ['index.html', 'releases.html', '404.html', 'docs/index.html', 'docs/a/p.html', 'static/x.css']) {
     fs.mkdirSync(path.dirname(path.join(root, f)), { recursive: true });
     fs.writeFileSync(path.join(root, f), f);

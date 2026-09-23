@@ -1,4 +1,4 @@
-import test from 'node:test';
+import test, { after } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
@@ -6,11 +6,16 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { build } from '../build/build.mjs';
 
+// Everything this file creates lives under one directory, removed at the end,
+// so test runs do not pile up in the (often RAM-backed) temp directory.
+const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'tuxbloxsite-test-'));
+after(() => fs.rmSync(TMP, { recursive: true, force: true }));
+
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const quiet = { warn() {} };
 
 function tmp(prefix) {
-    return fs.mkdtempSync(path.join(os.tmpdir(), prefix));
+    return fs.mkdtempSync(path.join(TMP, prefix));
 }
 
 test('builds the real site', () => {

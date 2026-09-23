@@ -1,4 +1,4 @@
-import test from 'node:test';
+import test, { after } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
@@ -8,9 +8,14 @@ import {
     renderDocNav, renderDocPage, renderRedirectPage, checkDocLinks,
 } from '../build/docs.mjs';
 
+// Everything this file creates lives under one directory, removed at the end,
+// so test runs do not pile up in the (often RAM-backed) temp directory.
+const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'tuxbloxsite-test-'));
+after(() => fs.rmSync(TMP, { recursive: true, force: true }));
+
 // Writes a docs directory: info is docs-info.json, files are paths to create.
 function makeDocs(info, files) {
-    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'docs-test-'));
+    const dir = fs.mkdtempSync(path.join(TMP, 'docs-'));
     fs.writeFileSync(path.join(dir, 'docs-info.json'), JSON.stringify(info));
     for (const f of files) {
         fs.mkdirSync(path.dirname(path.join(dir, f)), { recursive: true });
