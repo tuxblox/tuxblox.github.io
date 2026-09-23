@@ -2,7 +2,7 @@
 
 This is the official documentation for TuxBlox, the launcher and compatibility layer for running Roblox on Linux.
 
-This directory is updated before [tuxblox.net/docs](https://tuxblox.net/docs), and the website is synced from it regularly. If the two ever disagree, this one is right.
+These pages are published to [tuxblox.net/docs](https://tuxblox.net/docs) on every push to `main`.
 
 ## Contents
 
