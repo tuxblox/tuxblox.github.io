@@ -18,12 +18,15 @@ status() {  # path expected-code
   if [[ "$got" == "$2" ]]; then echo "ok   $1 -> $got"; else echo "FAIL $1 -> $got, expected $2"; fail=1; fi
 }
 
-redirect() {  # full-url expected-code expected-location
+# The target is what matters; any redirect status (301, 302, 307, 308) is
+# accepted, since Cloudflare rules and GitHub pick their own. The second
+# argument is kept as documentation of what the old server sent.
+redirect() {  # full-url old-server-code expected-location
   local out code loc
   out="$(curl -s -o /dev/null -w '%{http_code} %{redirect_url}' "$1")"
   code="${out%% *}"; loc="${out#* }"
-  if [[ "$code" == "$2" && "$loc" == "$3" ]]; then echo "ok   $1 -> $code $loc"
-  else echo "FAIL $1 -> $code $loc, expected $2 $3"; fail=1; fi
+  if [[ "$code" =~ ^30[1278]$ && "$loc" == "$3" ]]; then echo "ok   $1 -> $code $loc"
+  else echo "FAIL $1 -> $code $loc, expected a redirect to $3"; fail=1; fi
 }
 
 for p in / /releases /privacy /docs/getting-started/welcome /docs/search-index.json \
