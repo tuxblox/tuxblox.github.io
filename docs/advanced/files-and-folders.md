@@ -143,6 +143,10 @@ The one TuxBlox draws itself is the message Roblox puts up when it stops unexpec
 
 The text in those dialogs uses your desktop's own font, at your desktop's size. TuxBlox reads it at every launch, so changing your font settings is enough -- there is nothing to set here. If it cannot work out what you use, it leaves the drive's own font alone.
 
+### Text smoothing
+
+How sharp text looks inside the virtual drive -- Studio's menus and panels most of all -- depends on what the drive tells programs about your screen. TuxBlox reads your desktop's own text smoothing setting at every launch and passes it through, so text is drawn the way Windows would draw it on the same screen. A desktop that says your screen has no colour stripe order, or one Windows has no way to describe, gets plain smoothing instead, which is the right choice there. There is nothing to set here -- change it on your desktop and start Roblox again.
+
 ### Resetting it
 
 **Wipe prefix** in Settings deletes the whole thing. The next launch rebuilds it and reinstalls Roblox, which takes about as long as your first launch did.
