@@ -118,7 +118,9 @@ Roblox itself installs into `pfx/drive_c/`, in a per user folder, with one direc
 
 On most Wine setups, `Z:` maps your entire Linux filesystem into the Windows world. TuxBlox removes it, because a `Z:` drive is one of the most reliable ways to detect that a program is running under Wine, and Roblox lives entirely under `C:` anyway.
 
-The practical effect: a Windows program run inside the drive cannot see your home folder. When you double click a `.rbxl` file, TuxBlox bridges that one file in rather than exposing everything.
+The practical effect: a Windows program run inside the drive cannot see your home folder. Anything you hand it is bridged in one piece at a time rather than everything being exposed: double clicking a `.rbxl` file, dragging a file onto Studio's window, and picking one through a file browser each bring in just the file you chose.
+
+Files bridged in by dragging or picking show up in the drive under `C:\users\user\files`. They point at the real file rather than being copies of it, so what Studio opens is the file itself, wherever it actually lives. Choosing somewhere to **save** brings in the folder you picked rather than a single file, because a program writes a save by creating a second file beside the first and renaming it into place.
 
 ### Colours
 
