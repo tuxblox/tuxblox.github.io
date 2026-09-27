@@ -115,13 +115,33 @@ The account folder inside the drive is named after your own account, so it is `c
 > [!WARNING]
 > Do not share your virtual drive, and do not put it in a bug report. It can contain your Roblox session cookies, which is the same as handing over your account. Send the log file instead.
 
+### Your everyday folders are shared
+
+Six folders inside the drive point straight at the matching ones in your home folder, so Roblox opens and saves in them directly:
+
+| In the drive | On your computer |
+| --- | --- |
+| `C:\users\<your account>\Desktop` | `~/Desktop` |
+| `C:\users\<your account>\Documents` | `~/Documents` |
+| `C:\users\<your account>\Downloads` | `~/Downloads` |
+| `C:\users\<your account>\Music` | `~/Music` |
+| `C:\users\<your account>\Pictures` | `~/Pictures` |
+| `C:\users\<your account>\Videos` | `~/Videos` |
+
+If your desktop uses translated folder names, those are followed — TuxBlox reads the names your desktop recorded rather than assuming the English ones. A folder you do not have is simply not shared, and TuxBlox never creates one.
+
+The first time you launch after this arrived, anything already sitting in those folders inside the drive is moved out to the matching folder in your home, so a place file you saved in the drive's Documents turns up in your real Documents. Nothing is ever written over: if a name is already taken in your home folder, that folder keeps its own copy inside the drive instead and TuxBlox says so in the log.
+
+> [!NOTE]
+> This means Roblox can read and write anything in those six folders, the same as any other program you run. The rest of your home folder stays outside the drive.
+
 ### There is no Z: drive
 
 On most Wine setups, `Z:` maps your entire Linux filesystem into the Windows world. TuxBlox removes it, because a `Z:` drive is one of the most reliable ways to detect that a program is running under Wine, and Roblox lives entirely under `C:` anyway.
 
-The practical effect: a Windows program run inside the drive cannot see your home folder. Anything you hand it is bridged in one piece at a time rather than everything being exposed: double clicking a `.rbxl` file, dragging a file onto Studio's window, and picking one through a file browser each bring in just the file you chose.
+The practical effect: a Windows program run inside the drive sees your six everyday folders and nothing else of your home folder. Anything outside them is brought in one piece at a time rather than everything being exposed: double clicking a `.rbxl` file, dragging a file onto Studio's window, and picking one through a file browser each bring in just the file you chose.
 
-Files bridged in by dragging or picking show up in the drive under `C:\users\<your account>\files`. They point at the real file rather than being copies of it, so what Studio opens is the file itself, wherever it actually lives. Choosing somewhere to **save** brings in the folder you picked rather than a single file, because a program writes a save by creating a second file beside the first and renaming it into place.
+Files brought in that way show up in the drive under `C:\users\<your account>\files`. They point at the real file rather than being copies of it, so what Studio opens is the file itself, wherever it actually lives. Choosing somewhere to **save** brings in the folder you picked rather than a single file, because a program writes a save by creating a second file beside the first and renaming it into place.
 
 ### Colours
 
