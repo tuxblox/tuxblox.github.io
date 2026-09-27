@@ -24,9 +24,19 @@ TUXBLOX_LOG=1 ~/.tuxblox/TuxBloxLauncher --launch-studio
 
 ## TuxBlox variables
 
+### TUXBLOX_ROOT
+
+The TuxBlox folder to use, for one run. Must be an absolute path; a relative one is ignored with a warning.
+
+You will not normally need this. Each part of TuxBlox already looks for the others next to itself, so an install at `/opt/tuxblox` or anywhere else works on its own. This is for pointing a launcher at a different install than the one sitting beside it, which is mostly useful when you keep more than one.
+
+```bash
+TUXBLOX_ROOT=/opt/tuxblox /opt/tuxblox/TuxBloxLauncher
+```
+
 ### TUXBLOX_PREFIX
 
-Path to the virtual drive. The launcher sets this to `~/.tuxblox/runtime`.
+Path to the virtual drive. The launcher sets this to `runtime` inside the TuxBlox folder, so `~/.tuxblox/runtime` for a default install.
 
 Only needs setting by hand if you are running `compat/main` directly. It is the one variable the layer cannot work without.
 
@@ -49,7 +59,7 @@ Turning this on also raises the graphics layers' own logging to a level that rep
 
 ### TUXBLOX_LOG_DIR
 
-Where `tuxblox.log` is written. The launcher sets it to `~/.tuxblox/logs`. Defaults to your home folder if unset.
+Where `tuxblox.log` is written. The launcher sets it to `logs` inside the TuxBlox folder, so `~/.tuxblox/logs` for a default install. Defaults to your home folder if unset.
 
 ### TUXBLOX_LOG_LIMIT
 

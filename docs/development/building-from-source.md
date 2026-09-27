@@ -75,15 +75,23 @@ A build wipes and recreates `build/` every time, including the virtual drive und
 
 ## Running what you built, in place
 
-The launcher always looks for an installed TuxBlox in `~/.tuxblox`, so it cannot be pointed at your build directory. To try a build without installing it, start the program through the compatibility layer yourself and aim it at the virtual drive inside `build/`:
+`build/` has the same shape as an install, and every part of TuxBlox looks for the others next to itself, so you can just run the launcher out of it:
+
+```bash
+./build/TuxBloxLauncher
+```
+
+It uses `build/runtime` as its virtual drive and `build/logs` for its logs, leaving any real install at `~/.tuxblox` alone.
+
+To skip the launcher and start a program through the compatibility layer yourself:
 
 ```bash
 TUXBLOX_PREFIX="$PWD/build/runtime" \
   ./build/compat/main run \
-  "$PWD/build/runtime/pfx/drive_c/users/user/AppData/Local/Roblox/Versions/version-<id>/RobloxStudioBeta.exe"
+  "$PWD/build/runtime/pfx/drive_c/users/<your account>/AppData/Local/Roblox/Versions/version-<id>/RobloxStudioBeta.exe"
 ```
 
-Replace `version-<id>` with whichever folder is actually there. Roblox picks a new name on every update, so list the `Versions` folder to see it.
+`<your account>` is your own username, which is what the drive names its account folder after. Replace `version-<id>` with whichever folder is actually there; Roblox picks a new name on every update, so list the `Versions` folder to see it.
 
 A freshly built virtual drive has no Roblox in it yet. Download the official Roblox installer and run it the same way first, and it will install into that drive rather than your real one.
 

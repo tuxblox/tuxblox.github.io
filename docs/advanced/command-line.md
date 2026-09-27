@@ -22,6 +22,9 @@ Run with no arguments, it opens the launcher window. With an argument, it does o
 | `roblox-player:…` | Same |
 | `roblox-studio:…` | Starts Studio with that link |
 | `roblox-studio-auth:…` | Signs in to Studio from a website link |
+| `--allow-root` | Lets TuxBlox start as the root user |
+
+`--allow-root` can go anywhere on the line and combines with any of the others. Without it, TuxBlox run as root refuses to start and says so. With it, it prints a warning and carries on. You almost certainly do not want it: a virtual drive built by root is one your normal account cannot write to afterwards, and every later launch fails in a way that looks like a broken install.
 
 Two more exist but are meant for TuxBlox's own use rather than yours:
 
@@ -51,11 +54,15 @@ Two more exist but are meant for TuxBlox's own use rather than yours:
 
 `~/.tuxblox/TuxBloxInstaller`
 
-Installs TuxBlox into `~/.tuxblox`, upgrading an existing install in place if it finds one, then starts the launcher.
+Installs TuxBlox into `~/.tuxblox`, or wherever `--dir` says, upgrading an existing install in place if it finds one, then starts the launcher.
 
 ```
 Usage: TuxBloxInstaller [options]
 
+  --dir <path>       Absolute path to install into, instead of
+                     ~/.tuxblox.
+  --allow-root       Allow installing as root, which is not
+                     recommended.
   --headless         Report progress on the terminal instead of
                      opening a window. Needs no display.
   --nolaunch         Don't start the launcher once the install
@@ -70,6 +77,8 @@ Usage: TuxBloxInstaller [options]
 ```
 
 Unknown options are an error rather than being ignored, so a typo cannot quietly change what the installer does.
+
+`--dir` has to be an absolute path, and its parent folder has to exist. Use it with `--uninstall` too if you installed somewhere other than the default, so the uninstaller removes the right folder. It will refuse to delete a folder that does not hold a TuxBlox install.
 
 ### Which version gets installed
 
@@ -110,6 +119,7 @@ Options:
   --destroy               Destroys the prefix
   --verify-integrity      Check that the executable is signed by Roblox
                           before running it
+  --allow-root            Allow running as root, which is not recommended
 
 Arguments:
   run <executable>        Runs the specified executable
@@ -117,7 +127,7 @@ Arguments:
 
 Options go before the executable. Anything after it is passed to the program being run, not read by the layer.
 
-`--version` prints `2.7.0-stable`: the version, then the update channel that build came from. Every TuxBlox program answers the same way.
+`--version` prints `2.8.0-stable`: the version, then the update channel that build came from. Every TuxBlox program answers the same way.
 
 It needs to be told where the virtual drive is, through `TUXBLOX_PREFIX`:
 

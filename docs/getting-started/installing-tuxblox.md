@@ -54,14 +54,26 @@ Nothing surprising, and nothing outside your home folder:
 - Registers `roblox:` links and `.rbxl` files so they open in TuxBlox.
 - Starts the launcher.
 
-It never asks for your password, never touches system directories, and never installs a background service.
+It never asks for your password, never touches system directories, and never installs a background service. If you try to run it as root it refuses, because an install made by root is one your normal account cannot update or write to afterwards.
+
+## Installing somewhere else
+
+`~/.tuxblox` is only the default. To put TuxBlox somewhere else, give the installer a folder:
+
+```bash
+./TuxBloxInstaller --dir /opt/tuxblox
+```
+
+The path has to be absolute, and the folder it goes in has to exist already. Pick somewhere your own account can write to: TuxBlox updates itself in place, so an install in a folder you need root for cannot update.
+
+You can also move an install after the fact. Every part of TuxBlox looks for the others next to itself, so moving the whole folder is enough; nothing inside it records where it used to be. The desktop entries still point at the old place, though, so open the launcher once from the new location and it will write them again.
 
 ## Starting TuxBlox
 
 Once installed, you can start it in either of these ways:
 
 - **From your desktop.** Open your applications menu and search for **TuxBlox**.
-- **From a terminal.** Run `~/.tuxblox/TuxBloxLauncher`.
+- **From a terminal.** Run `~/.tuxblox/TuxBloxLauncher`, or `TuxBloxLauncher` inside whichever folder you installed into.
 
 Next: [Your First Launch](first-launch.md).
 
@@ -79,4 +91,12 @@ From a terminal, the equivalent is:
 ~/.tuxblox/TuxBloxInstaller --uninstall
 ```
 
-Either one removes `~/.tuxblox` entirely, including your virtual drive and everything Roblox installed into it, plus the desktop entries and file associations.
+Either one removes the TuxBlox folder entirely, including your virtual drive and everything Roblox installed into it, plus the desktop entries and file associations.
+
+If you installed somewhere other than the default, pass the same folder again, so the uninstaller removes the right one:
+
+```bash
+/opt/tuxblox/TuxBloxInstaller --uninstall --dir /opt/tuxblox
+```
+
+It checks the folder really is a TuxBlox install before deleting anything, and refuses if it is not.

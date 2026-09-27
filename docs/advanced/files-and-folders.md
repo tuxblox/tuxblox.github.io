@@ -1,8 +1,10 @@
 # Files and Folders
 
-Everything TuxBlox installs lives in one folder: `~/.tuxblox`. The only exceptions are the desktop entry and icon files, which have to go in standard XDG locations for your desktop to find them.
+Everything TuxBlox installs lives in one folder. By default that is `~/.tuxblox`. The only exceptions are the desktop entry and icon files, which have to go in standard XDG locations for your desktop to find them.
 
-Nothing is installed system wide, and nothing needs root.
+The folder does not have to be there. Each part of TuxBlox looks for the others next to itself, so you can move the whole folder somewhere else, or install it somewhere else to begin with, and it keeps working. See [installing TuxBlox](../getting-started/installing-tuxblox.md) for how to choose the place.
+
+Nothing is installed system wide, and nothing needs root. TuxBlox will in fact refuse to start as root unless you tell it to, because a virtual drive built by root is one your normal account cannot write to afterwards.
 
 ## The TuxBlox folder
 
@@ -104,7 +106,9 @@ runtime/
 └── tracked_files       which files TuxBlox owns, as opposed to Roblox
 ```
 
-Roblox itself installs into `pfx/drive_c/`, in a per user folder, with one directory per installed build.
+Roblox itself installs into `pfx/drive_c/users/<your account>/`, with one directory per installed build.
+
+The account folder inside the drive is named after your own account, so it is `cherry` for a user called cherry, the same way Windows names it. Drives built by TuxBlox 2.7.4 and earlier used a folder called `user` instead; those are renamed the first time you launch 2.8.0, and everything inside them, including your installed Roblox and your login, comes along.
 
 `tracked_files` is how an update can replace TuxBlox's own files without touching anything Roblox or you put in the drive.
 
@@ -117,7 +121,7 @@ On most Wine setups, `Z:` maps your entire Linux filesystem into the Windows wor
 
 The practical effect: a Windows program run inside the drive cannot see your home folder. Anything you hand it is bridged in one piece at a time rather than everything being exposed: double clicking a `.rbxl` file, dragging a file onto Studio's window, and picking one through a file browser each bring in just the file you chose.
 
-Files bridged in by dragging or picking show up in the drive under `C:\users\user\files`. They point at the real file rather than being copies of it, so what Studio opens is the file itself, wherever it actually lives. Choosing somewhere to **save** brings in the folder you picked rather than a single file, because a program writes a save by creating a second file beside the first and renaming it into place.
+Files bridged in by dragging or picking show up in the drive under `C:\users\<your account>\files`. They point at the real file rather than being copies of it, so what Studio opens is the file itself, wherever it actually lives. Choosing somewhere to **save** brings in the folder you picked rather than a single file, because a program writes a save by creating a second file beside the first and renaming it into place.
 
 ### Colours
 
@@ -178,6 +182,6 @@ The folder is named after your user, and TuxBlox refuses to use one it does not 
 | Worth keeping | Path |
 |---|---|
 | Your settings and FastFlags | `~/.tuxblox/settings.json` |
-| Anything you saved inside the drive | `~/.tuxblox/runtime/pfx/drive_c/users/` |
+| Anything you saved inside the drive | `~/.tuxblox/runtime/pfx/drive_c/users/<your account>/` |
 
 Everything else can be downloaded again. There is no point backing up `compat/` or an installed Roblox build.
