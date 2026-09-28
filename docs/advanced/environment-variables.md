@@ -81,6 +81,18 @@ This is what the **Enable Haptics** setting writes.
 
 Unlike haptics, both values are sent explicitly, because the layer's own default differs from the launcher's.
 
+### TUXBLOX_USE_MSWEBVIEW
+
+Set to `1` to make TuxBlox stand aside, so a copy of Microsoft's own browser runtime installed in the virtual drive is used for web pages instead of the one TuxBlox provides.
+
+This is a diagnostic setting, not a better option. Microsoft's runtime installs under TuxBlox but does not currently run — its browser processes stop as soon as they start. The setting exists so that can be investigated, and so it is ready if that ever changes.
+
+With it unset, TuxBlox provides the browser view itself, and puts its own runtime in the virtual drive where a program that goes looking for Microsoft's will find it. Turning this on takes that runtime back out, and turning it off again puts it back.
+
+```bash
+TUXBLOX_USE_MSWEBVIEW=1 ~/.tuxblox/TuxBloxLauncher
+```
+
 ### TUXBLOX_NO_FSYNC
 
 Set to `1` to drop down a rung on the thread synchronisation ladder.
