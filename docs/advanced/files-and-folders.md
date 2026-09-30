@@ -185,9 +185,16 @@ Your settings and FastFlags live outside the drive and survive.
 | `~/.local/share/applications/` | Desktop entries for TuxBlox, Roblox Studio, Roblox Player, and the link handlers |
 | `~/.local/share/icons/hicolor/` | Icons for those entries |
 | `~/.local/share/mime/packages/` | The `.rbxl` and `.rbxlx` file type definitions |
+| `~/.cache/tuxblox/` | The installer's interface, see below |
 | `/tmp/tuxblox-<your user id>/` | Scratch files programs in the drive write while they run |
 
 That is the complete list. Uninstalling removes all of it, apart from the scratch folder, which your computer clears out on its own.
+
+### The cache folder
+
+`~/.cache/tuxblox` holds the installer's interface. The installer carries it inside its own file and unpacks it here the first time its window opens, so later runs start without unpacking it again.
+
+It is safe to delete. The installer unpacks it again the next time its window opens, and nothing you have made lives there. Uninstalling TuxBlox removes it.
 
 ### Scratch files
 

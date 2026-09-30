@@ -40,7 +40,9 @@ chmod +x TuxBloxInstaller
 ./TuxBloxInstaller
 ```
 
-A window opens and walks you through the rest.
+A window opens and walks you through the rest. It has a normal title bar and follows your desktop's light or dark setting.
+
+The installer is one file of about 13.9 MB, up from about 4.3 MB in earlier versions, because it now carries its own interface inside it. Nothing extra has to be installed first. The first time you open the window, it unpacks that interface into `~/.cache/tuxblox` (see [Files and Folders](../advanced/files-and-folders.md#the-cache-folder)), which takes a moment; later runs reuse it. It also opens on machines whose graphics driver could not run the old installer.
 
 > [!TIP]
 > On a machine with no desktop, such as a server you are testing on over SSH, run `./TuxBloxInstaller --headless` instead. It reports progress in the terminal and never tries to open a window. See [Command Line Reference](../advanced/command-line.md) for the other flags.
@@ -91,7 +93,7 @@ From a terminal, the equivalent is:
 ~/.tuxblox/TuxBloxInstaller --uninstall
 ```
 
-Either one removes the TuxBlox folder entirely, including your virtual drive and everything Roblox installed into it, plus the desktop entries and file associations.
+Either one removes the TuxBlox folder entirely, including your virtual drive and everything Roblox installed into it, plus the desktop entries, the file associations and the installer's interface in `~/.cache/tuxblox`.
 
 If you installed somewhere other than the default, pass the same folder again, so the uninstaller removes the right one:
 
