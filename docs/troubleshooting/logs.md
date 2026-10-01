@@ -102,9 +102,9 @@ Logs are written for debugging, not for publishing. Before attaching one:
 
 ## Crash reports
 
-When Roblox exits badly and **Send crash reports** is on, TuxBlox sends a report containing the exit code, your Roblox and TuxBlox versions, basic system information, and the session log.
+When Roblox exits badly and **Always send crash reports** is on, TuxBlox sends a report containing the exit code, your Roblox and TuxBlox versions, basic system information, and the session log.
 
-That is the whole list. The setting is off unless you turn it on, and even then a report is sent only on a bad exit, never during normal use. The full policy is at [tuxblox.net/privacy](https://tuxblox.net/privacy).
+That is the whole list. The setting is off unless you turn it on, and even then a report is sent only on a bad exit, never during normal use. With the setting off, the crash window offers a **Report** button, and a report is sent only if you press it. The full policy is at [tuxblox.net/privacy](https://tuxblox.net/privacy).
 
 A crash report is not a bug report. Nobody is reading them one by one and following up. If you want your problem looked at, [report it](reporting-bugs.md).
 

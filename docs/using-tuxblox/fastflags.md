@@ -35,17 +35,27 @@ TuxBlox does not check the type for you. It passes whatever you type straight th
 
 ## Using the editor
 
-Open the **FastFlags** tab. At the top are two buttons, **Player** and **Studio**. Each keeps its own separate list, so a flag you set for Studio does not affect Player.
+Open the **FastFlags** tab. It has two lists, **Player** and **Studio**. Each keeps its own separate flags, so a flag you set for Studio does not affect Player.
 
 To add a flag:
 
-1. Press **+ Add flag**.
+1. Press **Add flag** above the list you want.
 2. Type the flag name in the left box, exactly as Roblox spells it. Names are case sensitive.
 3. Type the value in the right box.
 
 To remove one, press the **−** button at the end of its row.
 
 Changes are saved as you type. There is no save button.
+
+### Importing many flags at once
+
+If you already have your flags as JSON, press **Import JSON** above the list you want, paste them, and press **Import**:
+
+```json
+{"FFlagExample": "true", "DFIntExample": 30}
+```
+
+Values can be text, numbers, or `true` and `false`. The **Import** button stays greyed out while the text is not valid JSON, and the window says what is wrong. A flag that is already in the list takes the imported value; new flags are added at the end.
 
 ### Duplicates
 

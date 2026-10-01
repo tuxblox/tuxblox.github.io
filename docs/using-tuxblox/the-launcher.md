@@ -62,9 +62,9 @@ If you are reporting a bug, the version number here is the one to quote.
 
 ## Update notifications
 
-When an update is available and **Automatic updates** is off, a small popup slides into the bottom right corner of the launcher: `Update available: v2.1.0`.
+When an update is available and **Automatic updates** is off, TuxBlox shows a desktop notification, `TuxBlox 2.1.0 is available`, with an **Update** button on it. The bottom right of the Home page reads `Version 2.1.0 available` with an **Update** button too.
 
-Clicking it starts the update. Dismissing it leaves you on your current version until next time. With automatic updates on, you never see the popup, the update just installs.
+Pressing either **Update** starts the update. If your desktop's notifications cannot show buttons, you get the notification without one and use the Home page. Ignoring it leaves you on your current version until next time. With automatic updates on, you never see the notification, the update just installs.
 
 > [!NOTE]
 > If TuxBlox is missing its compatibility layer entirely, rather than just having an old one, it updates immediately whatever this setting says. There would be nothing to launch otherwise.

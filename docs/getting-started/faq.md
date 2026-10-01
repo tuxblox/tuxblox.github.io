@@ -78,7 +78,7 @@ You still have to set up the Studio side first, following [Roblox's guide](https
 
 ## Does TuxBlox collect data about me?
 
-Only crash reports, and only if you turn that setting on yourself. It is off unless you do. A crash report contains the exit code, your Roblox and TuxBlox versions, basic system information, and the session log.
+Only crash reports, and only if you turn that setting on yourself or press **Report** on a crash. It is off unless you do. A crash report contains the exit code, your Roblox and TuxBlox versions, basic system information, and the session log.
 
 You can turn it off in Settings at any time. The full policy is at [tuxblox.net/privacy](https://tuxblox.net/privacy).
 

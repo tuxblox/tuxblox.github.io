@@ -20,7 +20,7 @@ Nothing is installed system wide, and nothing needs root. TuxBlox will in fact r
 ├── COPYRIGHT.txt          notices for everything bundled
 ├── LICENSE                the GPLv3 text
 ├── compat/                the compatibility layer
-├── libtuxblox/            libraries the launcher's interface needs
+├── libtuxblox/            libraries the launcher and the update window need
 ├── logs/                  session logs
 ├── runtime/               the virtual drive
 ├── RobloxPlayer/          Roblox's own downloaded installer
@@ -71,9 +71,9 @@ This folder is replaced wholesale by updates. Anything you put in it goes away.
 
 ### libtuxblox/
 
-Libraries the launcher's interface needs, so the launcher looks and behaves the same regardless of what your distribution ships.
+Interface libraries the launcher and the window TuxBlox shows while it updates Roblox need, so they look and behave the same regardless of what your distribution ships.
 
-It has to stay next to `TuxBloxLauncher`. Moving one without the other breaks the launcher.
+It has to stay next to `TuxBloxLauncher` and `TuxBloxBootstrapper`. If it goes missing, they use your system's own libraries when it has them and cannot start without them. Reinstalling TuxBlox puts the folder back.
 
 ### logs/
 

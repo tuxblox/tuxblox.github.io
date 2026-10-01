@@ -12,23 +12,23 @@ Player and Studio have separate lists, even though they share a folder inside th
 
 ## The install bar
 
-One row of controls along the top:
+An **Install a version** box along the top:
 
 | Control | What it does |
 |---|---|
-| **Player / Studio** | Which app you are installing for |
-| **Channel** | Roblox's release channel, `live` unless you have a reason. See [Channels](#channels) |
-| **Version** | A specific `version-…` hash, or leave it blank for the latest |
+| **App** | Whether you are installing for Player or Studio |
+| **Channel** | Roblox's release channel, `live` unless you have a reason. Capital letters are turned into lowercase as you type. See [Channels](#channels) |
+| **Version hash** | A specific `version-…` hash, or leave it blank for the latest |
 | **Install** | Downloads and installs what the fields describe |
-| **Previous** | Installs the build immediately before the current latest |
+| **Install previous version** | Installs the build immediately before the current latest |
 
-**Previous** is the button most people want. It is the "Roblox broke something today" button.
+**Install previous version** is the one most people want. It is the "Roblox broke something today" button.
 
 ### Channels
 
 Roblox publishes its builds to named channels. `live` is the one everybody gets, and it is what the box starts on.
 
-Roblox keeps its other channels private. Asking for the newest build on one of those comes back refused, so **Install** with an empty Version box and **Previous** both only work on `live`. Roblox also hides the build list for those channels, which is what **Previous** reads.
+Roblox keeps its other channels private. Asking for the newest build on one of those comes back refused, so **Install** with an empty Version hash box and **Install previous version** both only work on `live`. Roblox also hides the build list for those channels, which is what **Install previous version** reads.
 
 If you already know the exact hash you want, type the channel name and that hash and TuxBlox will fetch it. Capitals do not matter.
 

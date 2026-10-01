@@ -89,6 +89,20 @@ Turn it off if those panels are blank, flickering, drawing garbage, or crashing.
 
 Takes effect the next time Roblox starts.
 
+### Show what you are doing on Discord
+
+**Default: off**
+
+Puts Roblox Studio on your Discord profile while Studio is open, so people can see what you are building.
+
+It shows the place you have open, whether you are editing or play testing, and how long the session has been going. When the place has an icon, that icon is shown too, with a small Studio badge on it.
+
+**Anyone who can see your Discord profile can read the name of the place**, including a game you have not released yet. That is the whole of what this setting does, so leave it off if you would rather not share it.
+
+Nothing is shown when Discord is not running, and nothing is sent anywhere else. The presence disappears when Studio closes.
+
+Takes effect the next time Roblox starts.
+
 ### Virtual Desktop Mode
 
 **Default: off**
@@ -161,11 +175,11 @@ Leave it on. The check costs a moment at startup and is the one thing standing b
 
 If it refuses to launch something you believe is fine, make sure TuxBlox itself is up to date first, then reinstall Roblox. Turning this off to get past the warning means launching files that failed verification, and you should be sure that is what you want.
 
-### Send crash reports
+### Always send crash reports
 
 **Default: off**
 
-When Roblox exits badly, TuxBlox sends a report containing:
+When this is on and Roblox exits badly, TuxBlox sends a report containing:
 
 - The exit code
 - Your Roblox and TuxBlox versions
@@ -174,13 +188,15 @@ When Roblox exits badly, TuxBlox sends a report containing:
 
 Nothing else is collected and nothing is sent while things are working normally. The full policy is at [tuxblox.net/privacy](https://tuxblox.net/privacy).
 
-Turn it on if you would like to help. It gives us information we genuinely cannot get any other way, but it is your call, and TuxBlox works exactly the same either way.
+With this off, the window that tells you about a crash has a **Report** button. Pressing it sends that one report and nothing else, so you can help on the crashes you choose to.
+
+Turn it on if you would like to help every time. It gives us information we genuinely cannot get any other way, but it is your call, and TuxBlox works exactly the same either way.
 
 ---
 
 ## Danger zone
 
-Three buttons that do real damage. The bottom two need two clicks: the first arms them, the second does it.
+Three buttons that do real damage. The bottom two ask you to confirm in a window first, and nothing happens until you do.
 
 ### Terminate Roblox
 

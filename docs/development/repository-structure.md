@@ -66,7 +66,7 @@ The one exception is `compat/wine/`, which is a fork TuxBlox maintains, so it is
 ```
 build/
 ├── compat/          the compatibility layer, entry point is main
-├── libtuxblox/      libraries the launcher's interface needs
+├── libtuxblox/      libraries the launcher and the update window need
 ├── runtime/         the virtual drive
 ├── TuxBloxLauncher
 ├── TuxBloxInstaller
@@ -81,7 +81,7 @@ That layout deliberately matches what ends up in `~/.tuxblox`, so what you test 
 
 | You want to change | Go to |
 |---|---|
-| Something in the launcher window | `launcher/src/ui_qt/` |
+| Something in the launcher window | `launcher/src/ui_adw/` |
 | How a setting behaves | `launcher/src/settings.cpp` |
 | The install or update flow | `installer/src/` |
 | How Roblox is started | `compat/tuxblox/src/launch/` |
