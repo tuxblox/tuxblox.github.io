@@ -24,8 +24,19 @@ The button on each card tells you what state that app is in:
 
 - **Install & Launch** means Roblox is not in the virtual drive yet. Pressing it downloads and installs Roblox first, then starts it.
 - **Launch Studio** or **Launch Player** means it is installed and ready.
+- **Stop Player**, red, means a Player session is open. Pressing it closes that session.
 
 Under each card's name is the Roblox version it will start, such as `0.740.0.7400927`, and which channel it came from. If TuxBlox cannot read a version out of that build it shows the folder name Roblox installed it under instead, which looks like `version-2366ba214ec740ca`.
+
+### Closing what is running
+
+Each card says how many sessions are open — "1 session running", "2 sessions running" — under the version.
+
+The Player card's one button becomes a red **Stop Player** while a session is open, because one Player session runs at a time. Studio can have several open at once, so its card keeps the green **Launch Studio** and shows a separate red Stop beside it: **Stop Studio** for one session, or **Stop 2** when there are two. That button closes all of them.
+
+**Stopping Studio closes it immediately, and anything you have not saved is lost.** Studio is not given the chance to ask you to save first, so save before you press it.
+
+Starting the Player again while a session is open closes that session and starts a new one. Roblox runs one Player session at a time, which means the new launch replaces the old one rather than opening beside it — and because it is a new session rather than a return to the old one, you start again from the beginning. The Home screen's button never does this: while a session is open it says Stop, so closing and starting are two deliberate presses. A desktop shortcut, a Roblox link or a place file does replace the running session.
 
 At the bottom of the tab is a status strip:
 

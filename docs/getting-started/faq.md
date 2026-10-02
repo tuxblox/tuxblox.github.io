@@ -16,6 +16,14 @@ Roblox's anti-cheat blocks Roblox Player from starting under every Wine based co
 
 Studio is not affected. See [Known Issues](../troubleshooting/known-issues.md) for where things stand.
 
+## Can I run two Roblox Player sessions at once?
+
+No. Roblox runs one Player session at a time, and TuxBlox follows that rule rather than working around it.
+
+Starting the Player while a session is already open closes the open one and starts the new session in its place. On the Home screen you do this in two presses, because while a session is open that card's button says Stop instead of Launch; a desktop shortcut or a Roblox link replaces the running session directly.
+
+Roblox Studio is different — it is built to have several sessions open together, and TuxBlox opens as many as you ask for. Its Home card keeps its Launch button for that reason.
+
 ## Will I get banned for using TuxBlox?
 
 Nobody outside Roblox can answer that, and we will not pretend otherwise. Enforcement is Roblox Corporation's decision alone. TuxBlox has no say in it, no agreement with them, and cannot protect your account.
