@@ -42,6 +42,8 @@ This is the default, and you can turn it off with **Minimize to background** in 
 
 Once Roblox is running the launcher has no reason to sit in your taskbar, so it hands the session to a small background watcher and closes. The watcher is what notices if Roblox exits badly and shows you a message about it, so nothing is lost by the window closing.
 
+In a process list the watcher appears as `tuxbloxWatcher`, separately from the launcher itself. They are the same program, so without that they would be indistinguishable, and anything that went looking for the launcher by name would find a running Roblox session instead.
+
 With the setting off the window stays open and usable instead, which is handy for starting Studio and the Player together or changing a setting mid session.
 
 ## Versions

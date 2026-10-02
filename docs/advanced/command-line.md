@@ -30,7 +30,7 @@ Two more exist but are meant for TuxBlox's own use rather than yours:
 
 | Argument | What it does |
 |---|---|
-| `--watch-launch player\|studio` | Starts Roblox and stays running to watch the session |
+| `--watch-launch player\|studio` | Starts Roblox and stays running to watch the session. Lists itself as `tuxbloxWatcher` |
 | `--run-exe <path>` | What the exported desktop shortcuts use |
 
 `--run-exe` only accepts `RobloxStudioBeta.exe` or `RobloxPlayerBeta.exe` and refuses anything else. It ignores the rest of the path and works out which Roblox to start from the filename, which is why an old shortcut keeps working after Roblox updates.
