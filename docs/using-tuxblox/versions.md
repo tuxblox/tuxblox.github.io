@@ -40,7 +40,7 @@ Only one install can run at a time.
 
 ## The version list
 
-Each installed build gets a row showing its hash, the channel it came from, and the date it was installed.
+Each installed build gets a row showing its hash, and under it the version Roblox reports for itself (such as `0.740.0.7400927`), the channel it came from, and the date it was installed. The version is read out of the build on disk, so a row cannot claim a version that is not the one installed.
 
 | Button | What it does |
 |---|---|

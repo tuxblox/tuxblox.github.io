@@ -53,7 +53,7 @@ Nothing surprising, and nothing outside your home folder:
 
 - Creates `~/.tuxblox` and downloads TuxBlox into it.
 - Writes desktop entries so TuxBlox appears in your applications menu.
-- Registers `roblox:` links and `.rbxl` files so they open in TuxBlox.
+- Registers `roblox:` links and Roblox place and model files so they open in TuxBlox.
 - Starts the launcher.
 
 It never asks for your password, never touches system directories, and never installs a background service. If you try to run it as root it refuses, because an install made by root is one your normal account cannot update or write to afterwards.

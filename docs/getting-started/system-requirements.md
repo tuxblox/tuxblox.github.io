@@ -67,6 +67,22 @@ Running TuxBlox inside a VM is not supported. Graphics passthrough inside a VM i
 
 Running inside a container such as Distrobox works, but only if the container was created with access to your graphics card. TuxBlox detects this case and warns you on startup if the passthrough is missing. See [Common Problems](../troubleshooting/common-problems.md) for the fix.
 
+## TuxBlox checks this itself
+
+TuxBlox checks your computer before it starts, and if it cannot run it says so and stops rather than failing later in a way that is harder to understand. The same check happens however you start it, including from a `roblox:` link or by double clicking a place file.
+
+It refuses only on what it can actually measure:
+
+| Checked | Refuses when |
+|---|---|
+| Kernel | Older than 6.7 |
+| NVIDIA drivers | Older than 418.49.04 |
+| Vulkan | No Vulkan driver is installed at all |
+
+Everything else on this page is a requirement but not something TuxBlox can read reliably, so it is never a reason to stop. Mesa does not publish its version anywhere TuxBlox can check without extra tools installed, and the amount of memory or free disk you have does not reliably say whether Roblox will run. TuxBlox would rather start on a machine it cannot fully measure than refuse one that would have worked.
+
+The NVIDIA check only applies if you have NVIDIA's driver. An AMD or Intel machine is not held to it.
+
 ## Checking what you have
 
 Run these in a terminal if you want to confirm before installing:

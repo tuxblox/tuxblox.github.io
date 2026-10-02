@@ -17,7 +17,7 @@ Run with no arguments, it opens the launcher window. With an argument, it does o
 | *(none)* | Opens the launcher window |
 | `--launch-studio` | Starts Roblox Studio directly, no window |
 | `--launch-player` | Starts Roblox Player directly, no window |
-| `--open-file <path>` | Opens a `.rbxl` or `.rbxlx` file in Studio |
+| `--open-file <path>` | Opens a place or model file in Studio (`.rbxl`, `.rbxlx`, `.rbxm`, `.rbxmx`) |
 | `roblox:…` | Starts Player with that link |
 | `roblox-player:…` | Same |
 | `roblox-studio:…` | Starts Studio with that link |
@@ -117,8 +117,6 @@ Options:
   --immediate             Run TuxBlox without draining the prefix, must be
                           used with the "run" argument
   --destroy               Destroys the prefix
-  --verify-integrity      Check that the executable is signed by Roblox
-                          before running it
   --allow-root            Allow running as root, which is not recommended
 
 Arguments:

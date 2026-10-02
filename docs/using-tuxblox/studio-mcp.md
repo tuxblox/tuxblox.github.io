@@ -129,7 +129,7 @@ It looks in three places, in order:
 
 It also runs the layer in its immediate mode, meaning it does not wait for the virtual drive to empty out before returning. Without that it would sit there forever while Studio was open.
 
-If **Verify Roblox Integrity** is turned on in Settings, `studio-mcp` checks the MCP server is signed by Roblox before running it, the same check TuxBlox applies to Studio itself.
+`studio-mcp` checks the MCP server is signed by Roblox before running it, the same check TuxBlox applies to Studio itself. This always happens and there is no way to turn it off.
 
 All logging is off, deliberately. MCP clients talk over the same pipe the server prints to, so anything else written there would break the connection.
 

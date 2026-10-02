@@ -184,7 +184,7 @@ Your settings and FastFlags live outside the drive and survive.
 |---|---|
 | `~/.local/share/applications/` | Desktop entries for TuxBlox, Roblox Studio, Roblox Player, and the link handlers |
 | `~/.local/share/icons/hicolor/` | Icons for those entries |
-| `~/.local/share/mime/packages/` | The `.rbxl` and `.rbxlx` file type definitions |
+| `~/.local/share/mime/packages/` | The place and model file type definitions |
 | `~/.cache/tuxblox/` | The installer's interface, see below |
 | `/tmp/tuxblox-<your user id>/` | Scratch files programs in the drive write while they run |
 

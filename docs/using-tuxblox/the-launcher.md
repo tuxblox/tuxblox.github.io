@@ -25,16 +25,24 @@ The button on each card tells you what state that app is in:
 - **Install & Launch** means Roblox is not in the virtual drive yet. Pressing it downloads and installs Roblox first, then starts it.
 - **Launch Studio** or **Launch Player** means it is installed and ready.
 
+Under each card's name is the Roblox version it will start, such as `0.740.0.7400927`, and which channel it came from. If TuxBlox cannot read a version out of that build it shows the folder name Roblox installed it under instead, which looks like `version-2366ba214ec740ca`.
+
 At the bottom of the tab is a status strip:
 
 - On the left, whether Roblox is running.
-- On the right, your TuxBlox version, your update channel, and the update state (`Up to date`, `Checking for updates`, `Version 2.1.0 available`, and so on).
+- On the right, your TuxBlox version, your update channel, and the update state (`Up to date`, `Checking`, `Version 2.1.0 available`, and so on).
+
+TuxBlox checks for an update as soon as it opens. The cards stay where they are while it does, so there is nothing to wait for before pressing a button. The screen is only given over to a progress bar when an update is actually being installed.
+
+If automatic updates are on, the check happens before the window opens at all, so an update that is about to install does not flash the Home screen up first.
 
 ### The launcher closes when Roblox starts
 
-This is on purpose. Once Roblox is running the launcher has no reason to sit in your taskbar, so it hands the session to a small background watcher and closes.
+This is the default, and you can turn it off with **Minimize to background** in Settings.
 
-The watcher is what notices if Roblox exits badly and shows you a message about it. Nothing is lost by the window closing.
+Once Roblox is running the launcher has no reason to sit in your taskbar, so it hands the session to a small background watcher and closes. The watcher is what notices if Roblox exits badly and shows you a message about it, so nothing is lost by the window closing.
+
+With the setting off the window stays open and usable instead, which is handy for starting Studio and the Player together or changing a setting mid session.
 
 ## Versions
 
@@ -50,7 +58,7 @@ See [FastFlags](fastflags.md).
 
 ## Settings
 
-Update channel, automatic updates, graphics card selection, controller vibration, detailed logging, integrity verification, crash reporting, and the danger zone.
+Whether the window closes when Roblox starts, update channel, automatic updates, graphics card selection, controller vibration, detailed logging, crash reporting, and the danger zone.
 
 See [Settings](settings.md).
 

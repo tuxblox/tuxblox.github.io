@@ -36,11 +36,28 @@ When one of these links is opened, TuxBlox starts the right application directly
 > [!NOTE]
 > Firefox keeps its own separate list of protocol handlers. If Firefox keeps asking you what to open `roblox:` links with, or picks the wrong thing, that is Firefox's list rather than your desktop's. Firefox has to be closed to edit it, from Settings, then General, then Applications.
 
-## Place files
+## Place and model files
 
-`.rbxl` and `.rbxlx` files are registered to open in Roblox Studio.
+These are registered to open in Roblox Studio:
 
-Double clicking one in your file manager opens Studio with that place loaded, wherever the file happens to be on your disk. You do not have to move it into the virtual drive first, TuxBlox makes it reachable from inside.
+| Extension | What it is |
+|---|---|
+| `.rbxl` | A place |
+| `.rbxlx` | A place, saved as XML |
+| `.rbxm` | A model |
+| `.rbxmx` | A model, saved as XML |
+
+Double clicking one in your file manager opens Studio with it loaded, wherever the file happens to be on your disk. You do not have to move it into the virtual drive first, TuxBlox makes it reachable from inside.
+
+## TuxBlox does not take file types from other programs
+
+If you already have something else set to open Roblox files or `roblox:` links, that stays. TuxBlox checks what each one is set to before changing anything, and claims only the ones nothing else has taken.
+
+There is one exception, which is not silent: an association still pointing at a program you have since removed opens nothing at all, so TuxBlox treats that as free and claims it.
+
+Installing or updating TuxBlox is different. That is something you asked for directly, so it does set TuxBlox as the default for its own links.
+
+To hand a file type to another program, set it there, or in your desktop's default applications settings. The launcher will not take it back.
 
 ## Where all this is written
 
@@ -50,7 +67,7 @@ Standard XDG locations in your home folder, nothing system wide:
 |---|---|
 | `~/.local/share/applications/` | The `.desktop` entries |
 | `~/.local/share/icons/hicolor/` | The TuxBlox and Roblox icons |
-| `~/.local/share/mime/packages/` | The `.rbxl` and `.rbxlx` file type definitions |
+| `~/.local/share/mime/packages/` | The place and model file type definitions |
 
 Uninstalling TuxBlox removes all of them.
 

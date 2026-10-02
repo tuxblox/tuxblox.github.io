@@ -4,6 +4,24 @@ Everything on the Settings tab, in the order you see it. Changes save the moment
 
 Settings live in `~/.tuxblox/settings.json`. You can edit that file by hand if you prefer, but the launcher rewrites it whenever you change something in the window, so do not have both open at once.
 
+The launcher shows a short line under each setting. This page is the long version of those lines.
+
+---
+
+## Launcher
+
+### Minimize to background
+
+**Default: on**
+
+Closes the launcher window once Roblox is on its way.
+
+Roblox is watched by a separate part of TuxBlox either way, so nothing is lost by the window going. It is still there to tell you if Roblox crashes, and it still writes the session log.
+
+Turn it off to keep the window open and usable while you play. That is worth doing if you want to start Studio and the Player together, switch versions, or change a setting without opening the launcher again.
+
+This is not a tray icon. On, the window closes; off, it stays a normal window you can use.
+
 ---
 
 ## Updates
@@ -165,16 +183,6 @@ Takes effect the next time Roblox starts.
 
 ## Privacy
 
-### Verify Roblox Integrity
-
-**Default: on**
-
-Before launching, TuxBlox checks that Roblox's files carry a valid signature from Roblox and have not been altered since. If that check fails, TuxBlox refuses to launch and tells you to reinstall Roblox.
-
-Leave it on. The check costs a moment at startup and is the one thing standing between you and running a Roblox that somebody else has modified.
-
-If it refuses to launch something you believe is fine, make sure TuxBlox itself is up to date first, then reinstall Roblox. Turning this off to get past the warning means launching files that failed verification, and you should be sure that is what you want.
-
 ### Always send crash reports
 
 **Default: off**
@@ -206,7 +214,7 @@ Use this when Roblox has stopped responding and will not close normally, or when
 
 Unlike the other two, this is safe. The worst it can do is lose unsaved work in Studio.
 
-### Wipe prefix
+### Wipe the virtual drive
 
 Deletes the virtual drive and everything in it.
 
