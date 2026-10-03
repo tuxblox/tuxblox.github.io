@@ -14,16 +14,16 @@ The launcher shows a short line under each setting. This page is the long versio
 
 **Default: System theme**
 
-The colours the launcher window uses. It changes the launcher only — Roblox looks exactly the same whichever you pick.
+The colours TuxBlox uses. Roblox looks exactly the same whichever you pick.
 
 | Option | What you get |
 |---|---|
 | System theme | Follows whether your desktop is set to light or dark, and moves with it when you change that. |
 | Dark | The dark TuxBlox colours, whatever your desktop is set to. |
-| Grey | The plain grey the launcher wore before it took the colours from tuxblox.net. |
+| Grey | The plain grey TuxBlox wore before it took the colours from tuxblox.net. |
 | Light | The light TuxBlox colours, whatever your desktop is set to. |
 
-The window changes the moment you pick one, so there is nothing to close and reopen.
+The launcher changes the moment you pick one, so there is nothing to close and reopen. The installer and the window that updates Roblox follow your choice too, from the next time each one opens.
 
 ### Minimize to background
 
