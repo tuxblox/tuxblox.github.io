@@ -50,11 +50,19 @@ Each installed build gets a row showing its hash, and under it the version Roblo
 
 Deleting the active build is allowed. The next launch simply installs Roblox again.
 
+### What an automatic update does to the active build
+
+If you have never pressed **Set active**, TuxBlox keeps the newest build you have as the active one, so an automatic update makes the build it just installed the one that launches.
+
+Once you press **Set active** on a build, that choice is remembered and an automatic update will not move it. The newer build still gets installed and still appears in the list; it just does not become the active one until you say so. Press **Set active** on the newest row whenever you want to follow along again.
+
 ## The list reflects reality, not bookkeeping
 
 TuxBlox works out what is installed by looking in the virtual drive, not by trusting a list it wrote earlier. If you delete a version folder by hand it disappears from the tab, and if something appears there that TuxBlox did not install, it shows up.
 
 That means the tab cannot get stuck telling you something is installed when it is not.
+
+The tab also keeps up while it is open. An update that happens in the background, or a build you add or remove yourself, shows up within a second or so without reopening the launcher.
 
 ## Roblox still updates itself
 
