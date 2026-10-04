@@ -121,6 +121,14 @@ Set to `1` to turn off NVIDIA's NVAPI support inside the layer. Only relevant on
 
 Overrides which libraries get copied into the virtual drive rather than linked. Internal, and changing it will probably break your install. Listed for completeness.
 
+### TUXBLOX_WM_SYNC
+
+Set to `1` to let your desktop hold a window's new size back until Roblox has redrawn at it, while you drag the window's edge.
+
+Off by default, and normally best left that way. The idea is to stop a strip along the edge of a growing window being shown before anything has been drawn in it. In practice Roblox draws its main window itself rather than through TuxBlox, so it never reports having finished, and the desktop waits for a signal that does not come — which makes dragging the edge stall, sometimes for several seconds at a time.
+
+Desktops that ignore this are unaffected either way.
+
 ---
 
 ## Graphics variables
