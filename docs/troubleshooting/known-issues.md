@@ -10,7 +10,7 @@ For anything else, try [Common Problems](common-problems.md) first, then [Report
 
 **Status:** being worked on, no date
 
-Roblox's anti-cheat blocks Roblox Player from starting under every Wine based compatibility layer, TuxBlox included. This is not a bug in TuxBlox that a setting or a driver update will fix.
+Roblox's anti-tamper blocks Roblox Player from starting under every Wine based compatibility layer, TuxBlox included. This is not a bug in TuxBlox that a setting or a driver update will fix.
 
 This is the project's largest ongoing piece of work, and it is real progress rather than a placeholder. Player now gets much further into its own startup than it used to. There is still no date, and we would rather say nothing than give one we cannot keep.
 

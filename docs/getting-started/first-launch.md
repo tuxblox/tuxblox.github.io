@@ -43,7 +43,7 @@ Roblox updates itself from then on, the same way it does on Windows. You can als
 
 ## What about Roblox Player?
 
-Roblox Player does not start yet. Roblox's anti-cheat blocks it under every Wine based compatibility layer, TuxBlox included. Getting it working is the project's largest ongoing piece of work.
+Roblox Player does not start yet. Roblox's anti-tamper blocks it under every Wine based compatibility layer, TuxBlox included. Getting it working is the project's largest ongoing piece of work.
 
 The Player card is in the launcher because the work is active, not because it is finished. Studio is unaffected and works normally. See [Known Issues](../troubleshooting/known-issues.md) for the current status.
 

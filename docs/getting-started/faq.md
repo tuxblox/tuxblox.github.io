@@ -12,7 +12,7 @@ Yes. Studio is the part of TuxBlox that works today, and it is what most of the 
 
 Not yet.
 
-Roblox's anti-cheat blocks Roblox Player from starting under every Wine based compatibility layer, including TuxBlox. This is the project's largest ongoing piece of work and there is real progress, but there is no date.
+Roblox's anti-tamper blocks Roblox Player from starting under every Wine based compatibility layer, including TuxBlox. This is the project's largest ongoing piece of work and there is real progress, but there is no date.
 
 Studio is not affected. See [Known Issues](../troubleshooting/known-issues.md) for where things stand.
 

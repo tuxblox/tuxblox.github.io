@@ -44,7 +44,7 @@ These are closed without merge regardless of intent.
 
 Hiding the fact that Roblox is running under Wine is fine. Hiding what a player is doing inside the game is not.
 
-A patch that makes the unmodified official client run properly on Linux is in scope, even when it touches the same interfaces an anti-cheat also reads. A patch that hides tampering, or hands a Linux player something a Windows player does not have, is not.
+A patch that makes the unmodified official client run properly on Linux is in scope, even when it touches the same interfaces an anti-tamper also reads. A patch that hides tampering, or hands a Linux player something a Windows player does not have, is not.
 
 The distinction is intent, not mechanism: "is this Wine" versus "is this player cheating".
 

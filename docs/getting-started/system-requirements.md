@@ -61,7 +61,7 @@ WSL is not supported. It does not provide the graphics and kernel features TuxBl
 
 ### Virtual machines
 
-Running TuxBlox inside a VM is not supported. Graphics passthrough inside a VM is fragile enough that we cannot help debug it, and Roblox's anti-cheat is unlikely to be happy about it either.
+Running TuxBlox inside a VM is not supported. Graphics passthrough inside a VM is fragile enough that we cannot help debug it, and Roblox's anti-tamper is unlikely to be happy about it either.
 
 ### Containers
 
