@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-URL="https://setup.tuxblox.net/v1/stable/3.0.1/installer"
+URL="https://setup.tuxblox.net/v1/stable/3.1.0/installer"
 ARGS=(--headless --nolaunch)
 
 if ! command -v curl >/dev/null 2>&1; then
