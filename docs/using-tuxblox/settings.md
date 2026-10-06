@@ -126,13 +126,29 @@ Takes effect the next time Roblox starts.
 
 **Default: off**
 
-Puts Roblox Studio on your Discord profile while Studio is open, so people can see what you are building.
+Puts Roblox on your Discord profile while it is open, so people can see what you are building or playing.
 
-It shows the place you have open, whether you are editing or play testing, and how long the session has been going. When the place has an icon, that icon is shown too, with a small Studio badge on it.
+In Studio it shows the place you have open, whether you are editing or play testing, and how long the session has been going. When the place has an icon, that icon is shown too, with a small Studio badge on it.
 
-**Anyone who can see your Discord profile can read the name of the place**, including a game you have not released yet. That is the whole of what this setting does, so leave it off if you would rather not share it.
+In the Roblox app it shows the game you are in and how long you have been there, with the game's own icon when there is one. Many games also set their own status text, such as which floor or room you are on, and that text is shown when they do. The pictures a game can ask for are limited to things on Roblox, so a game cannot put a picture of its own choosing on your profile.
 
-Nothing is shown when Discord is not running, and nothing is sent anywhere else. The presence disappears when Studio closes.
+**Anyone who can see your Discord profile can read the name of the place**, including a game you have not released yet, and any text a game sets for itself. That is the whole of what this setting does, so leave it off if you would rather not share it.
+
+Nothing is shown when Discord is not running, and nothing is sent anywhere else. The presence disappears when Roblox closes.
+
+Takes effect the next time Roblox starts.
+
+### Show which region a server is in
+
+**Default: off**
+
+Shows a notification naming the region of each Roblox server you join, for example "Connected to a server in Frankfurt am Main, Hesse, Germany", with the network that runs it underneath.
+
+To work out the region, TuxBlox sends the server's address to `geo.tuxblox.net` and asks where it is. **That is the one thing this setting sends anywhere**, it is only ever the address of a server Roblox itself put you on, and nothing about you or your account goes with it. Each address is asked about once per session, so rejoining the same server asks nothing further.
+
+It covers both the Roblox app and a Studio session connected to Team Create. A place you are testing on your own machine is not a server, so nothing is sent and no notification appears.
+
+If the lookup fails, or you are offline, nothing is shown and nothing is retried.
 
 Takes effect the next time Roblox starts.
 

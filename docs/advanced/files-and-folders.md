@@ -83,7 +83,7 @@ One file per Roblox session, named after the app, the start time in UTC, and the
 Studio-20260912T143107Z-8814.log
 ```
 
-Roblox's own logs from the same session are appended to the end of the file, so one log has both halves of the story. See [Logs and Diagnostics](../troubleshooting/logs.md).
+Roblox's own logs from the same session are appended to the end of the file, so one log has both halves of the story. Once they are in, TuxBlox removes the copy Roblox left in the virtual drive, so a session leaves one log in one place and there is never a second file to wonder about. Roblox's crash reports in the virtual drive are left alone. See [Logs and Diagnostics](../troubleshooting/logs.md).
 
 Old logs are never deleted automatically. Clear them out yourself if the folder gets large.
 
