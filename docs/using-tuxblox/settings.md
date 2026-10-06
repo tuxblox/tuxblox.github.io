@@ -130,7 +130,7 @@ Puts Roblox on your Discord profile while it is open, so people can see what you
 
 In Studio it shows the place you have open, whether you are editing or play testing, and how long the session has been going. When the place has an icon, that icon is shown too, with a small Studio badge on it.
 
-In the Roblox app it shows the game you are in and how long you have been there, with the game's own icon when there is one. Many games also set their own status text, such as which floor or room you are on, and that text is shown when they do. The pictures a game can ask for are limited to things on Roblox, so a game cannot put a picture of its own choosing on your profile.
+In the Roblox app it shows the game you are in and how long you have been there, with the game's own icon when there is one. Many games also set their own status text, such as which floor or room you are on, and that text is shown when they do. A game can only name a picture that is already on Roblox, never a web address of its own, and TuxBlox looks the picture up itself rather than following anything the game hands it.
 
 **Anyone who can see your Discord profile can read the name of the place**, including a game you have not released yet, and any text a game sets for itself. That is the whole of what this setting does, so leave it off if you would rather not share it.
 
