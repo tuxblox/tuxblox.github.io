@@ -23,7 +23,7 @@ test('builds the real site', () => {
     const result = build({ root: ROOT, out, log: quiet });
     const read = (f) => fs.readFileSync(path.join(out, f), 'utf8');
 
-    assert.equal(result.pages, 22);
+    assert.equal(result.pages, 23);
     assert.equal(result.sections, 5);
 
     const welcome = read('docs/getting-started/welcome.html');
@@ -36,13 +36,13 @@ test('builds the real site', () => {
     assert.ok(read('docs/troubleshooting/index.html').includes('url=/docs/troubleshooting/common-problems'));
 
     const index = JSON.parse(read('docs/search-index.json'));
-    assert.equal(index.length, 22);
+    assert.equal(index.length, 23);
     assert.deepEqual(Object.keys(index[0]), ['title', 'section', 'urlPath', 'text']);
     assert.equal(index[0].urlPath, '/docs/getting-started/welcome');
     assert.equal(index[0].section, 'Getting Started');
 
     const sitemap = read('sitemap.xml');
-    assert.equal(sitemap.match(/<loc>/g).length, 25);
+    assert.equal(sitemap.match(/<loc>/g).length, 26);
     assert.ok(sitemap.includes('<loc>https://tuxblox.net/</loc>'));
     assert.ok(sitemap.includes('<loc>https://tuxblox.net/docs/development/contributing</loc>'));
 

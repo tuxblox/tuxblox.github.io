@@ -114,6 +114,10 @@
             "contributing": {
                 "Title": "Contributing",
                 "Sort": 3
+            },
+            "roblox-version-tracker": {
+                "Title": "Roblox Version Tracker",
+                "Sort": 4
             }
         }
     }
