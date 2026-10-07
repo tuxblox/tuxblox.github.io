@@ -130,17 +130,21 @@ Puts Roblox on your Discord profile while it is open, so people can see what you
 
 In Studio it shows the place you have open, whether you are editing or play testing, who made it, and how long the session has been going, with a button to open its page. When the place has an icon, that icon is shown too, with a small Studio badge on it. A Studio plugin can set its own status text the same way a game can.
 
-In the Roblox app it shows the experience's name, who made it, how long you have been playing and its icon, with two buttons: one to open its page, and one to join the server you are in. Many games also set their own status text, such as which floor or room you are on, and that text is shown when they do — TuxBlox reads it the same way games already expect, so it looks the same here as it does on Windows. A game can only name a picture that is already on Roblox, never a web address of its own, and TuxBlox looks the picture up itself rather than following anything the game hands it.
+In the Roblox app it shows the experience's name, who made it, how long you have been playing and its icon, with two buttons: one to open its page, and one to join the server you are in. Many games also set their own status text, such as which floor or room you are on, and that text is shown when they do, unless you turn that off below — TuxBlox reads it the same way games already expect, so it looks the same here as it does on Windows. A game can only name a picture that is already on Roblox, never a web address of its own, and TuxBlox looks the picture up itself rather than following anything the game hands it.
 
 A place that is only a file on your machine is never named: it reads "Editing a local place", with no author, no picture and no link, so a project you have not released is not announced by its filename.
 
-**Anyone who can see your Discord profile can read the name of a published place** and any text a game sets for itself. Opening this setting reveals a second switch, **Let people join your server**, which puts a button on your profile that takes somebody into the same server you are in. That is useful for a friend and worth knowing about for anyone else, so turn it off if you would rather show what you are playing without being followed there. That is the whole of what this setting does, so leave it off if you would rather not share it.
+**Anyone who can see your Discord profile can read the name of a published place** and any text a game sets for itself. Opening this setting reveals two more switches, and that is the whole of what it does, so leave it off if you would rather not share any of it.
+
+**Let people join your server** puts a button on your profile that takes somebody into the same server you are in. That is useful for a friend and worth knowing about for anyone else, so turn it off if you would rather show what you are playing without being followed there.
+
+**Let games set their own status** decides whether the text and picture a game sets for itself are shown at all. With it off, nothing a game sends is read, and your profile shows only what TuxBlox works out on its own: the experience, who made it, its icon and how long you have been playing.
 
 Nothing is shown when Discord is not running, and nothing is sent anywhere else. The presence disappears when Roblox closes.
 
 Takes effect the next time Roblox starts.
 
-### Show which region a server is in
+### Notify server location
 
 **Default: off**
 
