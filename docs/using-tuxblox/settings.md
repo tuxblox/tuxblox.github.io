@@ -128,7 +128,7 @@ Takes effect the next time Roblox starts.
 
 Puts Roblox on your Discord profile while it is open, so people can see what you are building or playing.
 
-In Studio it shows the place you have open, whether you are editing or play testing, and how long the session has been going. When the place has an icon, that icon is shown too, with a small Studio badge on it.
+In Studio it shows the place you have open, whether you are editing or play testing, who made it, and how long the session has been going, with a button to open its page. When the place has an icon, that icon is shown too, with a small Studio badge on it. A Studio plugin can set its own status text the same way a game can.
 
 In the Roblox app it shows the experience's name, who made it, how long you have been playing and its icon, with two buttons: one to open its page, and one to join the server you are in. Many games also set their own status text, such as which floor or room you are on, and that text is shown when they do — TuxBlox reads it the same way games already expect, so it looks the same here as it does on Windows. A game can only name a picture that is already on Roblox, never a web address of its own, and TuxBlox looks the picture up itself rather than following anything the game hands it.
 
@@ -146,7 +146,7 @@ Shows a notification naming the region of each Roblox server you join, for examp
 
 To work out the region, TuxBlox sends the server's address to `geo.tuxblox.net` and asks where it is. **That is the one thing this setting sends anywhere**, it is only ever the address of a server Roblox itself put you on, and nothing about you or your account goes with it. Each address is asked about once per session, so rejoining the same server asks nothing further.
 
-It covers both the Roblox app and a Studio session connected to Team Create. A place you are testing on your own machine is not a server, so nothing is sent and no notification appears.
+It covers both the Roblox app and a Studio session connected to Team Create. A place you are testing on your own machine runs on your own machine rather than on a server, so nothing is sent and no notification appears for one.
 
 If the lookup fails, or you are offline, nothing is shown and nothing is retried.
 
