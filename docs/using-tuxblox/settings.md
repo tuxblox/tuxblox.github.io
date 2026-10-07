@@ -142,7 +142,7 @@ Takes effect the next time Roblox starts.
 
 **Default: off**
 
-Shows a notification naming the region of each Roblox server you join, for example "Connected to a server in Frankfurt am Main, Hesse, Germany", with the network that runs it underneath.
+Shows a notification naming the region of each Roblox server you join, for example "Connected to a server in Frankfurt am Main, Hesse, Germany".
 
 To work out the region, TuxBlox sends the server's address to `geo.tuxblox.net` and asks where it is. **That is the one thing this setting sends anywhere**, it is only ever the address of a server Roblox itself put you on, and nothing about you or your account goes with it. Each address is asked about once per session, so rejoining the same server asks nothing further.
 
