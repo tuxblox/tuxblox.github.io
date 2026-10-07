@@ -14,6 +14,14 @@ All of this is set up for you during install and kept up to date every time the 
 
 TuxBlox creates the Roblox entries itself as soon as Roblox is installed, so they are ready the first time you want to pin one to a taskbar or dock. Where Roblox has also left its own Start Menu shortcuts inside the virtual drive, TuxBlox reads those and republishes them instead, so the entries carry Roblox's own icons and names.
 
+### The icon on your desktop
+
+The first time a Roblox program is installed, TuxBlox also puts an icon for it on your desktop. It opens whichever version you have at the time, so it keeps working after Roblox updates.
+
+It is put there **once**. Updating Roblox does not bring it back, so if you delete it, it stays deleted. It is also kept out of your applications menu and search, because the entry described above already covers those and you would otherwise be offered the same program twice.
+
+Removing TuxBlox takes these icons away again. It only removes the ones it wrote: an icon you made yourself is left alone, even if it has the same name.
+
 Either way the entries are routed back through the launcher rather than at a fixed location, which is what lets them keep working after Roblox updates itself — they always start whichever version you have installed.
 
 The **TuxBlox** entry also has a right click action for opening this documentation.
