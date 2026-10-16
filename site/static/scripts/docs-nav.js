@@ -51,6 +51,41 @@
         }
     }
 
+    // What to store after a toggle. The subcategory holding the current page
+    // was forced open by applyState, not chosen by the reader, so its stored
+    // value is left alone unless this toggle is that element's own.
+    function nextState(prev, groups, currentGroup, toggled) {
+        const next = {};
+        for (const details of groups) {
+            const name = details.dataset.group;
+            if (name === currentGroup && details !== toggled && typeof prev[name] === 'boolean') {
+                next[name] = prev[name];
+            } else {
+                next[name] = details.open;
+            }
+        }
+        return next;
+    }
+
+    // The earliest heading inside the observer band. Between two headings the
+    // band is empty, so the previous pick stands rather than the rail going
+    // blank for the gap.
+    function pickActive(order, visible, previous) {
+        for (const id of order) {
+            if (visible.has(id)) return id;
+        }
+        return previous;
+    }
+
+    // Where Tab should land to keep focus inside the open drawer. null means
+    // the browser's own order is already fine.
+    function focusWrap(target, shiftKey, first, last, inRail) {
+        if (!inRail) return first;
+        if (shiftKey && target === first) return last;
+        if (!shiftKey && target === last) return first;
+        return null;
+    }
+
     function wire() {
         const rail = document.getElementById('docs-rail');
         if (!rail) return;
@@ -65,9 +100,7 @@
             applyState(groups, readState(storage), currentGroup);
             for (const details of groups) {
                 details.addEventListener('toggle', function () {
-                    const state = {};
-                    for (const g of groups) state[g.dataset.group] = g.open;
-                    writeState(storage, state);
+                    writeState(storage, nextState(readState(storage), groups, currentGroup, details));
                 });
             }
         }
@@ -88,35 +121,42 @@
         const links = Array.prototype.slice.call(document.querySelectorAll('.docs-toc a[href^="#"]'));
         if (links.length === 0 || typeof IntersectionObserver === 'undefined') return;
 
-        const byId = new Map();
+        // Document order comes from the TOC itself, which the build emits in
+        // order -- no need to compare node positions at runtime.
+        const order = [];
+        const linkById = new Map();
+        const headings = [];
         for (const link of links) {
             const id = decodeURIComponent(link.getAttribute('href').slice(1));
             const heading = document.getElementById(id);
-            if (heading) byId.set(heading, link);
+            if (!heading) continue;
+            order.push(id);
+            linkById.set(id, link);
+            headings.push(heading);
         }
-        if (byId.size === 0) return;
+        if (order.length === 0) return;
 
         const visible = new Set();
+        let active = null;
         function highlight() {
-            // the earliest heading still on screen is the one being read
-            let best = null;
-            for (const heading of byId.keys()) {
-                if (visible.has(heading) && (best === null || heading.compareDocumentPosition(best) & Node.DOCUMENT_POSITION_FOLLOWING)) {
-                    best = heading;
-                }
-            }
-            for (const [heading, link] of byId) link.classList.toggle('active', heading === best);
+            active = pickActive(order, visible, active);
+            for (const [id, link] of linkById) link.classList.toggle('active', id === active);
         }
 
+        // The band is offset by the real topbar height rather than a literal,
+        // so a taller topbar does not shift the reading line.
+        const headerH = parseInt(getComputedStyle(document.documentElement)
+            .getPropertyValue('--header-h'), 10) || 60;
         const observer = new IntersectionObserver(function (entries) {
             for (const entry of entries) {
-                if (entry.isIntersecting) visible.add(entry.target);
-                else visible.delete(entry.target);
+                if (entry.isIntersecting) visible.add(entry.target.id);
+                else visible.delete(entry.target.id);
             }
             highlight();
-        }, { rootMargin: '-80px 0px -70% 0px', threshold: 0 });
+        }, { rootMargin: `-${headerH + 20}px 0px -70% 0px`, threshold: 0 });
 
-        for (const heading of byId.keys()) observer.observe(heading);
+        for (const heading of headings) observer.observe(heading);
+        highlight();
     }
 
     function setupDrawer(rail) {
@@ -124,12 +164,23 @@
         const backdrop = document.querySelector('.docs-rail-backdrop');
         if (!toggle) return;
 
+        const FOCUSABLE = 'a[href], summary, button';
+        function ends() {
+            const items = rail.querySelectorAll(FOCUSABLE);
+            return { first: items[0] || null, last: items[items.length - 1] || null };
+        }
+
         function open() {
             rail.classList.add('open');
             toggle.setAttribute('aria-expanded', 'true');
             if (backdrop) backdrop.hidden = false;
-            const first = rail.querySelector('a, summary');
-            if (first) first.focus();
+            // the rail transitions from visibility:hidden, and a hidden
+            // element cannot take focus -- so wait for the frame that makes
+            // it visible
+            requestAnimationFrame(function () {
+                const first = ends().first;
+                if (first && rail.classList.contains('open')) first.focus();
+            });
             document.addEventListener('keydown', onKeydown);
         }
 
@@ -146,11 +197,14 @@
                 close();
                 return;
             }
-            // nothing behind the drawer is reachable while it is open
-            if (event.key === 'Tab' && !rail.contains(event.target) && event.target !== toggle) {
+            if (event.key !== 'Tab') return;
+            // nothing behind the drawer is reachable while it is open, and
+            // that includes tabbing off either end of the rail itself
+            const { first, last } = ends();
+            const target = focusWrap(event.target, event.shiftKey, first, last, rail.contains(event.target));
+            if (target) {
                 event.preventDefault();
-                const first = rail.querySelector('a, summary');
-                if (first) first.focus();
+                target.focus();
             }
         }
 
@@ -167,7 +221,7 @@
         else wire();
     }
 
-    const api = { readState, writeState, applyState };
+    const api = { readState, writeState, applyState, nextState, pickActive, focusWrap };
 
     if (typeof module !== 'undefined' && module.exports) {
         module.exports = api;

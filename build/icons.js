@@ -1,6 +1,6 @@
 // Copyright © TuxBlox Project 2026
 //
-// The sidebar's line icons, vendored from Lucide (MIT; licence in
+// The sidebar's line icons, vendored from Lucide (ISC; licence in
 // ICONS-LICENSE.txt beside this file). Inlined into the built HTML rather
 // than fetched: the existing data-icon mechanism in include.js resolves
 // icons from a deferred script, which would pop them in after first paint,

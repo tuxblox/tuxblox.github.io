@@ -38,3 +38,20 @@ test('duplicate headings get numbered suffixes', () => {
 test('ids are emitted even when no headings array is passed', () => {
     assert.ok(renderMarkdown('# Welcome\n').includes('<h1 id="welcome">'));
 });
+
+// A blockquote renders through a recursive call. If that call starts its own
+// slug counter, two "## Notes" produce one id twice -- which silently defeats
+// the fragment check in checkDocLinks, because the id is in the set.
+test('a heading inside a blockquote shares the page slug counter', () => {
+    const headings = [];
+    renderMarkdown('## Notes\n\n> [!NOTE]\n> ## Notes\n', { headings });
+    assert.deepEqual(headings.map(h => h.id), ['notes', 'notes-1']);
+});
+
+// The TOC shows heading.text, so it has to be the readable form, not the
+// Markdown source.
+test('collected heading text is plain, not raw Markdown', () => {
+    const headings = [];
+    renderMarkdown('## `mcp.sh` and **you**\n\n## See [the docs](/docs/s/p)\n', { headings });
+    assert.deepEqual(headings.map(h => h.text), ['mcp.sh and you', 'See the docs']);
+});

@@ -36,6 +36,13 @@ test('builds the real site', () => {
     assert.ok(welcome.includes('id="docs-drawer-toggle"'));
     assert.ok(welcome.includes('<noscript>'));
     assert.ok(welcome.includes('/static/scripts/docs-nav.js?v=20261017'));
+
+    // Without this every anchor -- the 11 cross-page ones and every TOC
+    // click -- scrolls its heading under the fixed topbar.
+    const css = read('static/styles/docs.css');
+    assert.match(css, /scroll-margin-top:\s*calc\(var\(--header-h\)/);
+    // TUXBLOX_WEBVIEW_IPC_TIMEOUT is wider than the 232px rail
+    assert.match(css, /\.docs-toc a\s*\{[^}]*overflow-wrap:\s*anywhere/);
     assert.ok(read('docs/advanced/environment-variables.html').includes('href="#tuxblox_log_limit"'));
 
     assert.ok(read('docs/index.html').includes('url=/docs/getting-started/welcome'));

@@ -42,10 +42,19 @@ function stripMdExtension(url) {
 // GitHub's heading slug, not a choice: the docs carry #fragment links written
 // against it, and the same files are read on GitHub where those anchors
 // already work. Underscores survive -- TUXBLOX_LOG_LIMIT is a real target.
-function slugify(text) {
-    const slug = String(text)
+// The readable form of a heading: what the TOC shows. Only the inline markup
+// that turns up in a heading is handled -- code spans, links, emphasis.
+function plainHeadingText(text) {
+    return String(text)
         .replace(/`/g, '')
-        .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+        .replace(/!?\[([^\]]*)\]\([^)]*\)/g, '$1')
+        .replace(/\*\*([^*]+)\*\*/g, '$1')
+        .replace(/\*([^*]+)\*/g, '$1')
+        .trim();
+}
+
+function slugify(text) {
+    const slug = plainHeadingText(text)
         .trim()
         .toLowerCase()
         .replace(/[^\p{L}\p{N} _-]/gu, '')
@@ -463,9 +472,12 @@ function renderMarkdown(markdown, options = {}) {
     // alerts carry their own inline styling unless you opt out
     const inlineStyles = options.inlineStyles !== false;
 
-    // one counter per render, so two "## Examples" on a page become
-    // examples and examples-1 the way GitHub numbers them
-    const slugCounts = new Map();
+    // One counter per page, not per call: a blockquote renders through a
+    // recursive renderMarkdown, and a counter that restarted there would hand
+    // two headings the same id. Parked on options because that is what the
+    // recursive call shares.
+    if (!options.slugCounts) options.slugCounts = new Map();
+    const slugCounts = options.slugCounts;
     function uniqueSlug(text) {
         const base = slugify(text);
         const seen = slugCounts.get(base) || 0;
@@ -518,7 +530,9 @@ function renderMarkdown(markdown, options = {}) {
             const level = headerMatch[1].length;
             const text = headerMatch[2].trim();
             const id = uniqueSlug(text);
-            if (Array.isArray(options.headings)) options.headings.push({ level, text, id });
+            if (Array.isArray(options.headings)) {
+                options.headings.push({ level, text: plainHeadingText(text), id });
+            }
             html += `<h${level} id="${escapeHtml(id)}">${renderInline(text)}</h${level}>\n`;
             i++;
             continue;

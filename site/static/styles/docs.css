@@ -153,6 +153,9 @@
     top: calc(var(--header-h) + 24px);
     max-height: calc(100vh - var(--header-h) - 48px);
     overflow-y: auto;
+    /* overflow-y alone would compute overflow-x to auto, and a heading like
+       TUXBLOX_WEBVIEW_IPC_TIMEOUT is wider than the column */
+    overflow-x: hidden;
     font-family: var(--font-stack);
 }
 
@@ -175,6 +178,7 @@
     text-decoration: none;
     font-size: 13px;
     line-height: 1.4;
+    overflow-wrap: anywhere;
     transition: color var(--transition-fast), border-color var(--transition-fast);
 }
 
@@ -232,6 +236,16 @@ article h4 {
 
 article > :first-child {
     margin-top: 0;
+}
+
+/* The topbar is fixed, so an anchor would otherwise land its heading
+   underneath it -- which would make every TOC click and every #fragment
+   link in the docs appear to jump to the wrong place. */
+article h1[id],
+article h2[id],
+article h3[id],
+article h4[id] {
+    scroll-margin-top: calc(var(--header-h) + 16px);
 }
 
 article h1 {
