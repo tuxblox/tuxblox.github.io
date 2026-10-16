@@ -93,6 +93,18 @@ With it unset, TuxBlox provides the browser view itself, and puts its own runtim
 TUXBLOX_USE_MSWEBVIEW=1 ~/.tuxblox/TuxBloxLauncher
 ```
 
+### TUXBLOX_WEBVIEW_IPC_TIMEOUT
+
+How many seconds Roblox waits for an answer from the helper that draws the panels which are web pages, such as Studio's Toolbox. The default is `45`.
+
+Roblox asks that helper a question and waits for the reply before it carries on, so a helper that stops answering stops Roblox with it. Once the wait runs out, TuxBlox empties the panel and starts a fresh helper, which leaves Roblox running instead of frozen.
+
+The default is set well above the longest job the helper does on its own, so reaching it means the helper really has stopped rather than that it is still busy. Lower it only to reproduce that recovery on purpose; `0` brings back the old behaviour of waiting for ever, which is useful when debugging the helper itself and nothing else.
+
+```bash
+TUXBLOX_WEBVIEW_IPC_TIMEOUT=10 ~/.tuxblox/TuxBloxLauncher
+```
+
 ### TUXBLOX_NO_FSYNC
 
 Set to `1` to drop down a rung on the thread synchronisation ladder.
