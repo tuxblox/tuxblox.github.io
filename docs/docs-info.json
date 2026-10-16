@@ -5,27 +5,33 @@
         "Content": {
             "welcome": {
                 "Title": "Welcome",
-                "Sort": 1
+                "Sort": 1,
+                "Icon": "rocket"
             },
             "system-requirements": {
                 "Title": "System Requirements",
-                "Sort": 2
+                "Sort": 2,
+                "Icon": "monitor"
             },
             "installing-tuxblox": {
                 "Title": "Installing TuxBlox",
-                "Sort": 3
+                "Sort": 3,
+                "Icon": "download"
             },
             "first-launch": {
                 "Title": "Your First Launch",
-                "Sort": 4
+                "Sort": 4,
+                "Icon": "play"
             },
             "how-it-works": {
                 "Title": "How TuxBlox Works",
-                "Sort": 5
+                "Sort": 5,
+                "Icon": "layers"
             },
             "faq": {
                 "Title": "Frequently Asked Questions",
-                "Sort": 6
+                "Sort": 6,
+                "Icon": "help-circle"
             }
         }
     },
@@ -35,27 +41,33 @@
         "Content": {
             "the-launcher": {
                 "Title": "The Launcher",
-                "Sort": 1
+                "Sort": 1,
+                "Icon": "zap"
             },
             "settings": {
                 "Title": "Settings",
-                "Sort": 2
+                "Sort": 2,
+                "Icon": "settings"
             },
             "fastflags": {
                 "Title": "FastFlags",
-                "Sort": 3
+                "Sort": 3,
+                "Icon": "flag"
             },
             "versions": {
                 "Title": "Versions",
-                "Sort": 4
+                "Sort": 4,
+                "Icon": "git-branch"
             },
             "desktop-integration": {
                 "Title": "Desktop Integration",
-                "Sort": 5
+                "Sort": 5,
+                "Icon": "app-window"
             },
             "studio-mcp": {
                 "Title": "Studio MCP",
-                "Sort": 6
+                "Sort": 6,
+                "Icon": "plug"
             }
         }
     },
@@ -65,15 +77,18 @@
         "Content": {
             "command-line": {
                 "Title": "Command Line Reference",
-                "Sort": 1
+                "Sort": 1,
+                "Icon": "terminal"
             },
             "environment-variables": {
                 "Title": "Environment Variables",
-                "Sort": 2
+                "Sort": 2,
+                "Icon": "variable"
             },
             "files-and-folders": {
                 "Title": "Files and Folders",
-                "Sort": 3
+                "Sort": 3,
+                "Icon": "folder"
             }
         }
     },
@@ -83,19 +98,23 @@
         "Content": {
             "common-problems": {
                 "Title": "Common Problems",
-                "Sort": 1
+                "Sort": 1,
+                "Icon": "life-buoy"
             },
             "known-issues": {
                 "Title": "Known Issues",
-                "Sort": 2
+                "Sort": 2,
+                "Icon": "triangle-alert"
             },
             "logs": {
                 "Title": "Logs and Diagnostics",
-                "Sort": 3
+                "Sort": 3,
+                "Icon": "file-text"
             },
             "reporting-bugs": {
                 "Title": "Reporting Bugs",
-                "Sort": 4
+                "Sort": 4,
+                "Icon": "bug"
             }
         }
     },
@@ -105,19 +124,23 @@
         "Content": {
             "building-from-source": {
                 "Title": "Building From Source",
-                "Sort": 1
+                "Sort": 1,
+                "Icon": "hammer"
             },
             "repository-structure": {
                 "Title": "Repository Structure",
-                "Sort": 2
+                "Sort": 2,
+                "Icon": "folder-tree"
             },
             "contributing": {
                 "Title": "Contributing",
-                "Sort": 3
+                "Sort": 3,
+                "Icon": "git-pull-request"
             },
             "roblox-version-tracker": {
                 "Title": "Roblox Version Tracker",
-                "Sort": 4
+                "Sort": 4,
+                "Icon": "git-branch"
             }
         }
     }

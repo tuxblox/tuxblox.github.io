@@ -116,11 +116,26 @@ test('Markdown files the index does not name are reported, README.md is not', ()
     assert.deepEqual(findUnindexed(dir, buildDocTree(dir)), ['b/extra.md']);
 });
 
-test('the sidebar marks the current page', () => {
-    const tree = buildDocTree(makeDocs({ a: { Title: 'A', Content: { p: { Title: 'P' } } } }, ['a/p.md']));
-    assert.equal(renderSidebar(tree, '/a/p'),
-        '<ul>\n<li class="folder"><span>A</span>\n<ul>\n' +
-        '<li><a href="/docs/a/p" class="active">P</a></li>\n</ul>\n</li>\n</ul>\n');
+test('the sidebar renders categories, icon rows, and a collapsible subcategory', () => {
+    const tree = buildDocTree(makeDocs(NESTED, NESTED_FILES));
+    const html = renderSidebar(tree, '/c/grp/a');
+    assert.ok(html.startsWith('<ul class="docs-tree" data-current-group="c/grp">\n'
+        + '<li class="docs-cat"><span>C</span>\n<ul>\n'));
+    assert.ok(html.includes('<li><a class="docs-link" href="/docs/c/solo"><svg'));
+    assert.ok(html.includes('<li class="docs-group"><details open data-group="c/grp">'));
+    assert.ok(html.includes('<a class="docs-link docs-sub active" href="/docs/c/grp/a">A</a>'));
+    assert.ok(!html.includes('<a class="docs-link docs-sub active" href="/docs/c/grp/b">'));
+});
+
+test('a subcategory not holding the current page renders closed', () => {
+    const html = renderSidebar(buildDocTree(makeDocs(NESTED, NESTED_FILES)), '/c/solo');
+    assert.ok(html.includes('<li class="docs-group"><details data-group="c/grp">'));
+    assert.ok(html.startsWith('<ul class="docs-tree" data-current-group="">'));
+});
+
+test('an unknown icon name stops the build', () => {
+    const info = { c: { Content: { p: { Icon: 'no-such-icon' } } } };
+    assert.throws(() => renderSidebar(buildDocTree(makeDocs(info, ['c/p.md'])), '/c/p'), /no-such-icon/);
 });
 
 test('the first page gets an empty slot where the previous link would be', () => {
@@ -134,7 +149,7 @@ test('page content is inserted literally, $ sequences included', () => {
     const page = tree[0].items[0];
     const content = "<p>awk '{print $1}' then $& and $' and $$</p>";
     const html = renderDocPage('<title>{{TITLE}}</title>{{SIDEBAR}}<main>{{CONTENT}}</main>{{DOCNAV}}', tree, page, content, '<nav></nav>');
-    assert.ok(html.startsWith('<title>First</title><ul>'));
+    assert.ok(html.startsWith('<title>First</title><ul class="docs-tree"'));
     assert.ok(html.includes(`<main>${content}</main><nav></nav>`));
 });
 

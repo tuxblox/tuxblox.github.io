@@ -5,6 +5,9 @@
 // answering requests could not.
 import fs from 'node:fs';
 import path from 'node:path';
+import { createRequire } from 'node:module';
+
+const { renderIcon } = createRequire(import.meta.url)('./icons.js');
 
 export const SITE_ORIGIN = 'https://tuxblox.net';
 export const URL_PREFIX = '/docs';
@@ -182,13 +185,44 @@ export function findUnindexed(docsDir, tree) {
     return found;
 }
 
+function pageLink(page, currentUrlPath, nested) {
+    const classes = ['docs-link'];
+    if (nested) classes.push('docs-sub');
+    if (page.urlPath === currentUrlPath) classes.push('active');
+    // a nested page is a plain text row; only rows directly under a category
+    // carry an icon
+    const icon = nested ? '' : renderIcon(page.icon);
+    return `<li><a class="${classes.join(' ')}" href="${encodeURI(getFullUrl(page.urlPath))}">`
+        + `${icon}${escapeHtml(page.title)}</a></li>\n`;
+}
+
+// The open/closed state is decided here rather than by script, so a page
+// arrives with the right subcategory already expanded and nothing flashes.
+// docs-nav.js reads data-group and data-current-group to layer a reader's
+// remembered choice on top.
 export function renderSidebar(tree, currentUrlPath) {
-    let html = '<ul>\n';
+    let currentGroup = '';
     for (const section of tree) {
-        html += `<li class="folder"><span>${escapeHtml(section.title)}</span>\n<ul>\n`;
-        for (const page of flattenPages([section])) {
-            const active = page.urlPath === currentUrlPath ? ' class="active"' : '';
-            html += `<li><a href="${encodeURI(getFullUrl(page.urlPath))}"${active}>${escapeHtml(page.title)}</a></li>\n`;
+        for (const item of section.items) {
+            if (item.kind !== 'group') continue;
+            if (item.pages.some(p => p.urlPath === currentUrlPath)) currentGroup = `${section.slug}/${item.slug}`;
+        }
+    }
+
+    let html = `<ul class="docs-tree" data-current-group="${escapeHtml(currentGroup)}">\n`;
+    for (const section of tree) {
+        html += `<li class="docs-cat"><span>${escapeHtml(section.title)}</span>\n<ul>\n`;
+        for (const item of section.items) {
+            if (item.kind !== 'group') {
+                html += pageLink(item, currentUrlPath, false);
+                continue;
+            }
+            const groupPath = `${section.slug}/${item.slug}`;
+            const open = groupPath === currentGroup ? ' open' : '';
+            html += `<li class="docs-group"><details${open} data-group="${escapeHtml(groupPath)}">`
+                + `<summary>${renderIcon(item.icon)}<span>${escapeHtml(item.title)}</span></summary>\n<ul>\n`;
+            for (const page of item.pages) html += pageLink(page, currentUrlPath, true);
+            html += '</ul>\n</details></li>\n';
         }
         html += '</ul>\n</li>\n';
     }

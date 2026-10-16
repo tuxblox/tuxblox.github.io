@@ -28,7 +28,7 @@ test('builds the real site', () => {
 
     const welcome = read('docs/getting-started/welcome.html');
     assert.ok(welcome.includes('<title>Welcome | TuxBlox Docs</title>'));
-    assert.ok(welcome.includes('<a href="/docs/getting-started/welcome" class="active">Welcome</a>'));
+    assert.ok(welcome.includes('<a class="docs-link active" href="/docs/getting-started/welcome">'));
     assert.ok(welcome.includes('href="/static/styles/docs.css?v=20260904"'));
     assert.ok(welcome.includes('<a href="system-requirements">System Requirements</a>'));
 
