@@ -122,7 +122,7 @@ Turn it off if those panels are blank, flickering, drawing garbage, or crashing.
 
 Takes effect the next time Roblox starts.
 
-### Show what you are doing on Discord
+### Enable Discord Rich Presence
 
 **Default: off**
 
@@ -136,9 +136,9 @@ A place that is only a file on your machine is never named: it reads "Editing a 
 
 **Anyone who can see your Discord profile can read the name of a published place** and any text a game sets for itself. Opening this setting reveals two more switches, and that is the whole of what it does, so leave it off if you would rather not share any of it.
 
-**Let people join your server** puts a button on your profile that takes somebody into the same server you are in. That is useful for a friend and worth knowing about for anyone else, so turn it off if you would rather show what you are playing without being followed there.
+**Let people join your server** adds a button to your activity that takes somebody into the same server you are in. That is useful for a friend and worth knowing about for anyone else, so turn it off if you would rather show what you are playing without being followed there.
 
-**Let games set their own status** decides whether the text and picture a game sets for itself are shown at all. With it off, nothing a game sends is read, and your profile shows only what TuxBlox works out on its own: the experience, who made it, its icon and how long you have been playing.
+**Let games use the Rich Presence API** decides whether the text and picture a game sets for itself are shown at all. It only works on games that use the Bloxstrap API. With it off, nothing a game sends is read, and your profile shows only what TuxBlox works out on its own: the experience, who made it, its icon and how long you have been playing.
 
 Nothing is shown when Discord is not running, and nothing is sent anywhere else. The presence disappears when Roblox closes.
 
