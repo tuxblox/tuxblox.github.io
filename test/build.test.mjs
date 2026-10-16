@@ -32,6 +32,10 @@ test('builds the real site', () => {
     assert.ok(welcome.includes('href="/static/styles/docs.css?v=20261017"'));
     assert.ok(welcome.includes('<a href="system-requirements">System Requirements</a>'));
     assert.ok(welcome.includes('<nav class="docs-toc"'));
+    assert.ok(welcome.includes('id="docs-rail"'));
+    assert.ok(welcome.includes('id="docs-drawer-toggle"'));
+    assert.ok(welcome.includes('<noscript>'));
+    assert.ok(welcome.includes('/static/scripts/docs-nav.js?v=20261017'));
     assert.ok(read('docs/advanced/environment-variables.html').includes('href="#tuxblox_log_limit"'));
 
     assert.ok(read('docs/index.html').includes('url=/docs/getting-started/welcome'));
