@@ -26,7 +26,7 @@ export const TOP_PAGES = ['/', '/releases', '/privacy'];
 export const REQUIRED_FILES = [
     'index.html', 'releases.html', 'privacy.html', '404.html',
     'install.sh', 'robots.txt', 'favicon.ico', '.well-known/security.txt',
-    'static/scripts/include.js', 'static/scripts/docs-search.js',
+    'static/scripts/include.js', 'static/scripts/docs-search.js', 'static/scripts/docs-nav.js',
     'static/images/icon/tuxblox-icon.png', 'static/images/banner/tuxblox-banner.png',
     'docs/index.html', 'docs/search-index.json', 'sitemap.xml',
 ];
