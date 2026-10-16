@@ -230,6 +230,23 @@ export function renderSidebar(tree, currentUrlPath) {
     return html;
 }
 
+// The right-hand rail. Built here rather than discovered by script, so it is
+// there on first paint. One heading is not a table of contents, so a page
+// with fewer than two gets nothing and the column collapses.
+export function renderToc(headings) {
+    const wanted = headings.filter(h => h.level === 2 || h.level === 3);
+    if (wanted.length < 2) return '';
+
+    let html = '<nav class="docs-toc" aria-label="On this page">'
+        + '<div class="docs-toc-title">On this page</div>\n<ul>\n';
+    for (const heading of wanted) {
+        const cls = heading.level === 3 ? ' class="docs-toc-sub"' : '';
+        html += `<li${cls}><a href="#${encodeURIComponent(heading.id)}">${escapeHtml(heading.text)}</a></li>\n`;
+    }
+    html += '</ul>\n</nav>';
+    return html;
+}
+
 const ICON_PREV = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 const ICON_NEXT = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 3L11 8L6 13" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 

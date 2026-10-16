@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import {
-    DocsError, buildDocTree, flattenPages, findUnindexed, renderSidebar,
+    DocsError, buildDocTree, flattenPages, findUnindexed, renderSidebar, renderToc,
     renderDocNav, renderDocPage, renderRedirectPage, checkDocLinks,
 } from '../build/docs.mjs';
 
@@ -136,6 +136,32 @@ test('a subcategory not holding the current page renders closed', () => {
 test('an unknown icon name stops the build', () => {
     const info = { c: { Content: { p: { Icon: 'no-such-icon' } } } };
     assert.throws(() => renderSidebar(buildDocTree(makeDocs(info, ['c/p.md'])), '/c/p'), /no-such-icon/);
+});
+
+test('the page TOC keeps h2 and h3 and marks the nested ones', () => {
+    const html = renderToc([
+        { level: 1, text: 'Title', id: 'title' },
+        { level: 2, text: 'Theme', id: 'theme' },
+        { level: 3, text: 'Pinning a theme', id: 'pinning-a-theme' },
+        { level: 4, text: 'Deep', id: 'deep' },
+    ]);
+    assert.ok(html.includes('<li><a href="#theme">Theme</a></li>'));
+    assert.ok(html.includes('<li class="docs-toc-sub"><a href="#pinning-a-theme">Pinning a theme</a></li>'));
+    assert.ok(!html.includes('#title'));
+    assert.ok(!html.includes('#deep'));
+});
+
+// Review Focus 5
+test('a page with fewer than two headings gets no TOC', () => {
+    assert.equal(renderToc([{ level: 2, text: 'Only', id: 'only' }]), '');
+    assert.equal(renderToc([{ level: 1, text: 'Title', id: 'title' }]), '');
+    assert.equal(renderToc([]), '');
+});
+
+test('TOC text is escaped', () => {
+    assert.ok(renderToc([
+        { level: 2, text: 'A & B', id: 'a--b' }, { level: 2, text: 'C', id: 'c' },
+    ]).includes('>A &amp; B<'));
 });
 
 test('the first page gets an empty slot where the previous link would be', () => {
