@@ -268,14 +268,15 @@ export function renderDocNav(prevNode, nextNode) {
 // One pass with a function replacement, so "$&", "$1" and friends in the
 // content are inserted literally. The server chained .replace() calls with
 // string replacements, which would have rewritten them.
-export function renderDocPage(template, tree, page, contentHtml, docNavHtml = '') {
+export function renderDocPage(template, tree, page, contentHtml, docNavHtml = '', tocHtml = '') {
     const values = {
         TITLE: escapeHtml(page.title),
         SIDEBAR: renderSidebar(tree, page.urlPath),
         CONTENT: contentHtml,
         DOCNAV: docNavHtml,
+        TOC: tocHtml,
     };
-    return template.replace(/{{(TITLE|SIDEBAR|CONTENT|DOCNAV)}}/g, (_, key) => values[key]);
+    return template.replace(/{{(TITLE|SIDEBAR|CONTENT|DOCNAV|TOC)}}/g, (_, key) => values[key]);
 }
 
 // Pages has no server-side redirects, so /docs and /docs/<section> get a page

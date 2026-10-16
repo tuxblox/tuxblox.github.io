@@ -11,7 +11,7 @@ import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import {
     SITE_ORIGIN, DocsError, getFullUrl, buildDocTree, flattenPages, findUnindexed,
-    renderDocNav, renderDocPage, renderRedirectPage, checkDocLinks,
+    renderDocNav, renderDocPage, renderRedirectPage, renderToc, checkDocLinks,
 } from './docs.mjs';
 import { renderSitemap } from './sitemap.mjs';
 
@@ -51,30 +51,41 @@ export function build({ root, out, log = console }) {
     const pages = flattenPages(tree);
     const rendered = [];
     const searchIndex = [];
+    const idsByPath = new Map();
 
     pages.forEach((page, i) => {
         const markdown = fs.readFileSync(page.fsPath, 'utf8');
-        const contentHtml = renderMarkdown(markdown);
+        const headings = [];
+        const contentHtml = renderMarkdown(markdown, { headings });
         const docNav = renderDocNav(pages[i - 1] || null, pages[i + 1] || null);
         const fullUrl = getFullUrl(page.urlPath);
 
         // <page>.html rather than <page>/index.html: Pages serves it without a
         // trailing slash, so relative links written against the repo resolve.
-        write(path.join(out, `${fullUrl.slice(1)}.html`), renderDocPage(template, tree, page, contentHtml, docNav));
+        write(path.join(out, `${fullUrl.slice(1)}.html`),
+            renderDocPage(template, tree, page, contentHtml, docNav, renderToc(headings)));
 
         rendered.push({ urlPath: fullUrl, html: contentHtml });
-        searchIndex.push({ title: page.title, section: page.sectionTitle, urlPath: fullUrl, text: stripMarkdown(markdown) });
+        idsByPath.set(fullUrl, new Set(headings.map(h => h.id)));
+        // a nested page is filed under both names, so a search hit says which
+        // subcategory it came from
+        const section = page.groupTitle ? `${page.sectionTitle} › ${page.groupTitle}` : page.sectionTitle;
+        searchIndex.push({ title: page.title, section, urlPath: fullUrl, text: stripMarkdown(markdown) });
     });
 
     // /docs and each section work with or without a trailing slash (Pages
     // redirects to the slash form, whose index.html redirects on). Pages only
     // work without one.
+    const groupDirs = tree.flatMap(s => s.items
+        .filter(i => i.kind === 'group')
+        .map(g => `/docs/${s.slug}/${g.slug}`));
     const known = new Set([
         '/docs', '/docs/',
         ...tree.flatMap(s => [`/docs/${s.slug}`, `/docs/${s.slug}/`]),
+        ...groupDirs.flatMap(d => [d, `${d}/`]),
         ...pages.map(p => getFullUrl(p.urlPath)),
     ]);
-    const broken = checkDocLinks(rendered, known);
+    const broken = checkDocLinks(rendered, known, idsByPath);
     if (broken.length) {
         throw new DocsError(broken.map(b => `${b.page}: broken link ${b.href}`).join('\n'));
     }
@@ -82,7 +93,12 @@ export function build({ root, out, log = console }) {
     // /docs and /docs/<section> land on the first page, as the server's 302s did.
     write(path.join(out, 'docs', 'index.html'), renderRedirectPage(getFullUrl(pages[0].urlPath)));
     for (const section of tree) {
-        write(path.join(out, 'docs', section.slug, 'index.html'), renderRedirectPage(getFullUrl(flattenPages([section])[0].urlPath)));
+        write(path.join(out, 'docs', section.slug, 'index.html'),
+            renderRedirectPage(getFullUrl(flattenPages([section])[0].urlPath)));
+        for (const group of section.items.filter(i => i.kind === 'group')) {
+            write(path.join(out, 'docs', section.slug, group.slug, 'index.html'),
+                renderRedirectPage(getFullUrl(group.pages[0].urlPath)));
+        }
     }
 
     write(path.join(out, 'docs', 'search-index.json'), JSON.stringify(searchIndex));
