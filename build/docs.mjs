@@ -13,6 +13,9 @@ const INFO_NAME = 'docs-info.json';
 // Slugs that would land on a file the build writes itself.
 const RESERVED_PAGE_SLUGS = new Set(['index']);
 const RESERVED_SECTION_SLUGS = new Set(['index.html', 'search-index.json']);
+// A subcategory is a directory that also gets an index.html, so it is barred
+// from both lists.
+const RESERVED_GROUP_SLUGS = new Set([...RESERVED_PAGE_SLUGS, ...RESERVED_SECTION_SLUGS]);
 
 export class DocsError extends Error {}
 
@@ -45,9 +48,64 @@ function sortKey(a, b) {
     return sa - sb || a.title.localeCompare(b.title);
 }
 
-// Same shape and ordering as the server's buildDocTree. Stricter: a bad slug,
-// a page missing on disk, or an index with no pages is an error, where the
-// server skipped the entry and served what was left.
+// One page of a section, or of a subcategory inside it. A page nested in a
+// subcategory carries no icon: only rows directly under a category get one.
+function buildPage(docsDir, section, group, pageSlug, pageRaw) {
+    const where = group ? `${section.slug}/${group.slug}/${pageSlug}` : `${section.slug}/${pageSlug}`;
+    if (!isSafeSlug(pageSlug)) throw new DocsError(`unusable page slug: ${where}`);
+    if (RESERVED_PAGE_SLUGS.has(pageSlug)) throw new DocsError(`reserved page slug: ${where}`);
+    if (!pageRaw || typeof pageRaw !== 'object') throw new DocsError(`page ${where} is not an object`);
+
+    const fsPath = path.join(docsDir, `${where}.md`);
+    if (!fs.existsSync(fsPath)) {
+        throw new DocsError(`${INFO_NAME} names ${where} but ${where}.md does not exist`);
+    }
+
+    return {
+        kind: 'page',
+        slug: pageSlug,
+        title: pageRaw.Title || titleize(pageSlug),
+        sort: Number(pageRaw.Sort),
+        icon: group ? undefined : pageRaw.Icon,
+        urlPath: `/${where}`,
+        fsPath,
+        sectionTitle: section.title,
+        groupTitle: group ? group.title : null,
+    };
+}
+
+// A subcategory: one level only, and empty ones are dropped the way an empty
+// section is. Returns null when it names no pages.
+function buildGroup(docsDir, section, groupSlug, groupRaw) {
+    const where = `${section.slug}/${groupSlug}`;
+    if (!isSafeSlug(groupSlug)) throw new DocsError(`unusable subcategory slug: ${where}`);
+    if (RESERVED_GROUP_SLUGS.has(groupSlug)) throw new DocsError(`reserved subcategory slug: ${where}`);
+
+    const group = { slug: groupSlug, title: groupRaw.Title || titleize(groupSlug) };
+    const pages = [];
+    for (const [pageSlug, pageRaw] of Object.entries(groupRaw.Content)) {
+        if (pageRaw && typeof pageRaw === 'object' && pageRaw.Content && typeof pageRaw.Content === 'object') {
+            throw new DocsError(`${where}/${pageSlug}: subcategories cannot contain subcategories`);
+        }
+        pages.push(buildPage(docsDir, section, group, pageSlug, pageRaw));
+    }
+
+    if (pages.length === 0) return null;
+    pages.sort(sortKey);
+    return {
+        kind: 'group',
+        slug: groupSlug,
+        title: group.title,
+        sort: Number(groupRaw.Sort),
+        icon: groupRaw.Icon,
+        pages,
+    };
+}
+
+// Same ordering as the server's buildDocTree. Stricter: a bad slug, a page
+// missing on disk, or an index with no pages is an error, where the server
+// skipped the entry and served what was left. A Content entry is a
+// subcategory when it has a Content of its own, and a page otherwise.
 export function buildDocTree(docsDir) {
     let info;
     try {
@@ -62,31 +120,20 @@ export function buildDocTree(docsDir) {
         if (RESERVED_SECTION_SLUGS.has(sectionSlug)) throw new DocsError(`reserved section slug: ${sectionSlug}`);
         if (!sectionRaw || typeof sectionRaw !== 'object') throw new DocsError(`section ${sectionSlug} is not an object`);
 
-        const sectionTitle = sectionRaw.Title || titleize(sectionSlug);
-        const pages = [];
-        for (const [pageSlug, pageRaw] of Object.entries(sectionRaw.Content || {})) {
-            if (!isSafeSlug(pageSlug)) throw new DocsError(`unusable page slug: ${sectionSlug}/${pageSlug}`);
-            if (RESERVED_PAGE_SLUGS.has(pageSlug)) throw new DocsError(`reserved page slug: ${sectionSlug}/${pageSlug}`);
-            if (!pageRaw || typeof pageRaw !== 'object') throw new DocsError(`page ${sectionSlug}/${pageSlug} is not an object`);
-
-            const fsPath = path.join(docsDir, sectionSlug, `${pageSlug}.md`);
-            if (!fs.existsSync(fsPath)) {
-                throw new DocsError(`${INFO_NAME} names ${sectionSlug}/${pageSlug} but ${sectionSlug}/${pageSlug}.md does not exist`);
+        const section = { slug: sectionSlug, title: sectionRaw.Title || titleize(sectionSlug) };
+        const items = [];
+        for (const [slug, raw] of Object.entries(sectionRaw.Content || {})) {
+            if (raw && typeof raw === 'object' && raw.Content && typeof raw.Content === 'object') {
+                const group = buildGroup(docsDir, section, slug, raw);
+                if (group) items.push(group);
+            } else {
+                items.push(buildPage(docsDir, section, null, slug, raw));
             }
-
-            pages.push({
-                slug: pageSlug,
-                title: pageRaw.Title || titleize(pageSlug),
-                sort: Number(pageRaw.Sort),
-                urlPath: `/${sectionSlug}/${pageSlug}`,
-                fsPath,
-                sectionTitle,
-            });
         }
 
-        if (pages.length === 0) continue;
-        pages.sort(sortKey);
-        sections.push({ slug: sectionSlug, title: sectionTitle, sort: Number(sectionRaw.Sort), pages });
+        if (items.length === 0) continue;
+        items.sort(sortKey);
+        sections.push({ ...section, sort: Number(sectionRaw.Sort), items });
     }
 
     if (sections.length === 0) throw new DocsError(`${INFO_NAME} names no pages`);
@@ -94,9 +141,16 @@ export function buildDocTree(docsDir) {
     return sections;
 }
 
+// Display order, subcategories expanded where they sit. The prev/next links
+// are cut from this, so the order has to be the one the sidebar shows.
 export function flattenPages(tree) {
     const pages = [];
-    for (const section of tree) pages.push(...section.pages);
+    for (const section of tree) {
+        for (const item of section.items) {
+            if (item.kind === 'group') pages.push(...item.pages);
+            else pages.push(item);
+        }
+    }
     return pages;
 }
 
@@ -110,9 +164,19 @@ export function findUnindexed(docsDir, tree) {
         .map(e => e.name)
         .sort();
     for (const dir of dirs) {
-        for (const file of fs.readdirSync(path.join(docsDir, dir)).sort()) {
-            const rel = `${dir}/${file}`;
-            if (file.endsWith('.md') && !named.has(rel)) found.push(rel);
+        const entries = fs.readdirSync(path.join(docsDir, dir), { withFileTypes: true })
+            .sort((a, b) => a.name.localeCompare(b.name));
+        for (const entry of entries) {
+            const rel = `${dir}/${entry.name}`;
+            // one level further than the sections, for subcategory directories
+            if (entry.isDirectory()) {
+                for (const file of fs.readdirSync(path.join(docsDir, rel)).sort()) {
+                    const nested = `${rel}/${file}`;
+                    if (file.endsWith('.md') && !named.has(nested)) found.push(nested);
+                }
+            } else if (entry.name.endsWith('.md') && !named.has(rel)) {
+                found.push(rel);
+            }
         }
     }
     return found;
@@ -122,7 +186,7 @@ export function renderSidebar(tree, currentUrlPath) {
     let html = '<ul>\n';
     for (const section of tree) {
         html += `<li class="folder"><span>${escapeHtml(section.title)}</span>\n<ul>\n`;
-        for (const page of section.pages) {
+        for (const page of flattenPages([section])) {
             const active = page.urlPath === currentUrlPath ? ' class="active"' : '';
             html += `<li><a href="${encodeURI(getFullUrl(page.urlPath))}"${active}>${escapeHtml(page.title)}</a></li>\n`;
         }

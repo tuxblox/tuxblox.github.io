@@ -82,7 +82,7 @@ export function build({ root, out, log = console }) {
     // /docs and /docs/<section> land on the first page, as the server's 302s did.
     write(path.join(out, 'docs', 'index.html'), renderRedirectPage(getFullUrl(pages[0].urlPath)));
     for (const section of tree) {
-        write(path.join(out, 'docs', section.slug, 'index.html'), renderRedirectPage(getFullUrl(section.pages[0].urlPath)));
+        write(path.join(out, 'docs', section.slug, 'index.html'), renderRedirectPage(getFullUrl(flattenPages([section])[0].urlPath)));
     }
 
     write(path.join(out, 'docs', 'search-index.json'), JSON.stringify(searchIndex));
