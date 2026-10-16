@@ -307,10 +307,15 @@ function unescapeHtml(text) {
 }
 
 // Every link in the rendered content that lands under /docs on this site must
-// be one of knownPaths, exactly. Hash and query are ignored; a trailing slash
-// is not, because Pages serves a page as <page>.html, so /docs/a/page/ is a 404
-// while /docs/a/ (a section's redirect page) is fine. The caller lists both.
-export function checkDocLinks(rendered, knownPaths) {
+// be one of knownPaths, exactly. Query is ignored; a trailing slash is not,
+// because Pages serves a page as <page>.html, so /docs/a/page/ is a 404 while
+// /docs/a/ (a section's redirect page) is fine. The caller lists both.
+//
+// A #fragment is checked against idsByPath, the heading ids each page emitted,
+// so an anchor that points at nothing stops the build the way a missing page
+// does. Paths the map does not hold -- the directory redirect pages -- keep
+// the old behaviour and have their fragment ignored.
+export function checkDocLinks(rendered, knownPaths, idsByPath = new Map()) {
     const broken = [];
     for (const { urlPath, html } of rendered) {
         const base = new URL(urlPath, SITE_ORIGIN);
@@ -326,7 +331,19 @@ export function checkDocLinks(rendered, knownPaths) {
             if (target.origin !== SITE_ORIGIN) continue;
             const p = target.pathname;
             if (p !== URL_PREFIX && !p.startsWith(`${URL_PREFIX}/`)) continue;
-            if (!knownPaths.has(p)) broken.push({ page: urlPath, href });
+            if (!knownPaths.has(p)) {
+                broken.push({ page: urlPath, href });
+                continue;
+            }
+            const ids = idsByPath.get(p);
+            if (!ids || !target.hash) continue;
+            let fragment;
+            try {
+                fragment = decodeURIComponent(target.hash.slice(1));
+            } catch {
+                fragment = target.hash.slice(1);
+            }
+            if (!ids.has(fragment)) broken.push({ page: urlPath, href });
         }
     }
     return broken;

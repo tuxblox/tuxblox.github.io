@@ -193,6 +193,31 @@ test('the link check accepts real targets and reports missing ones', () => {
     assert.deepEqual(broken.map(b => b.href), ['../b/missing', 'https://tuxblox.net/docs/nope', '/docs/b/z/', 'z/']);
 });
 
+test('a fragment that matches no heading is reported', () => {
+    const known = new Set(['/docs/a/one', '/docs/a/two', '/docs/a', '/docs/a/']);
+    const ids = new Map([
+        ['/docs/a/one', new Set(['intro', 'the-command'])],
+        ['/docs/a/two', new Set(['channels'])],
+    ]);
+    const html = [
+        '<a href="#the-command">',          // Review Focus 2: same page, real id
+        '<a href="#nope">',                 // same page, missing id
+        '<a href="two#channels">',          // cross page, real id
+        '<a href="two#gone">',              // cross page, missing id
+        '<a href="/docs/a/">',              // directory, no fragment
+    ].join('');
+    assert.deepEqual(
+        checkDocLinks([{ urlPath: '/docs/a/one', html }], known, ids),
+        [{ page: '/docs/a/one', href: '#nope' }, { page: '/docs/a/one', href: 'two#gone' }]);
+});
+
+test('fragments are ignored where the page has no recorded ids', () => {
+    const known = new Set(['/docs/a/', '/docs/a/one']);
+    assert.deepEqual(
+        checkDocLinks([{ urlPath: '/docs/a/one', html: '<a href="/docs/a/#x">' }], known, new Map()),
+        []);
+});
+
 test('redirect pages point at their target three ways', () => {
     const html = renderRedirectPage('/docs/getting-started/welcome');
     assert.ok(html.includes('<meta http-equiv="refresh" content="0; url=/docs/getting-started/welcome">'));
