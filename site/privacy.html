@@ -20,16 +20,13 @@
     })();
     </script>
 
-    <meta name="description" content="What TuxBlox sends off your machine, what it never sends, and how to turn it off.">
+    <meta name="description" content="We do not track you and we do not sell your data. What TuxBlox sends off your machine, where each part is hosted, and how to turn it all off.">
     <link rel="canonical" href="https://tuxblox.net/privacy">
 
     <link rel="icon" type="image/x-icon" href="https://tuxblox.net/favicon.ico">
     <link rel="apple-touch-icon" href="/static/images/icon/tuxblox-icon.png">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/styles/style.css?v=20260904">
+    <link rel="stylesheet" href="/static/styles/style.css?v=20261016">
 
     <style>
         :root {
@@ -52,8 +49,18 @@
             font: 400 13px var(--font-mono);
             color: var(--text-3);
         }
+        .pp-claim {
+            margin-top: 20px;
+            font-family: var(--font-display);
+            font-size: 22px;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            line-height: 1.4;
+            color: var(--text-1);
+            max-width: 46ch;
+        }
         .pp-lede {
-            margin-top: 22px;
+            margin-top: 16px;
             font-size: 18px;
             line-height: 1.7;
             color: var(--text-2);
@@ -138,6 +145,53 @@
         .pp-section p + p { margin-top: 14px; }
         .pp-section strong { color: var(--text-1); font-weight: 600; }
         .pp-section a { color: var(--brand); }
+
+        /* ---- one feature inside a section ---- */
+        .pp-section h3 {
+            font-family: var(--font-display);
+            font-size: 16.5px;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            line-height: 1.35;
+            margin: 34px 0 10px;
+            color: var(--text-1);
+        }
+        .pp-badge {
+            display: inline-block;
+            margin-left: 8px;
+            padding: 2px 9px;
+            border: 1px solid var(--divider);
+            border-radius: 20px;
+            background: var(--bg-alt);
+            font: 500 11px var(--font-sans);
+            letter-spacing: .02em;
+            color: var(--text-3);
+            vertical-align: 2px;
+            white-space: nowrap;
+        }
+
+        .pp-badge-always {
+            border-color: var(--brand);
+            color: var(--brand);
+            background: var(--brand-soft);
+        }
+
+        /* ---- a point that needs to stand apart from the prose ---- */
+        .pp-box {
+            margin-top: 18px;
+            border: 1px solid var(--divider);
+            border-radius: var(--radius-card);
+            background: var(--bg-soft);
+            padding: 20px 22px;
+        }
+        .pp-box p { max-width: none; }
+        .pp-box .pp-list { margin: 16px 0 4px; }
+        .pp-box .pp-list li:last-child { border-bottom: 0; }
+        .pp-box p + p { margin-top: 12px; }
+
+        /* The switches read as a row of names, wrapping on a narrow screen. */
+        .pp-switches { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0 4px; }
+        .pp-switches .pp-path { margin: 0; }
 
         /* ---- data tables ---- */
         .pp-list { list-style: none; margin-top: 18px; }
@@ -238,23 +292,25 @@
 
         @media (max-width: 780px) {
             .pp-hero { padding-top: 28px; }
+            .pp-claim { font-size: 19px; }
             .pp-lede { font-size: 16.5px; }
             .pp-summary { grid-template-columns: 1fr; gap: 10px; }
             .pp-list li { grid-template-columns: 1fr; gap: 2px; }
             .pp-section h2 { font-size: 19px; }
+            .pp-section h3 { font-size: 15.5px; margin-top: 28px; }
         }
     </style>
 
     <meta property="og:title" content="Privacy Policy - TuxBlox 🐧" />
     <meta property="og:site_name" content="tuxblox.net" />
-    <meta property="og:description" content="What TuxBlox sends off your machine, what it never sends, and how to turn it off." />
+    <meta property="og:description" content="We do not track you and we do not sell your data. What TuxBlox sends off your machine, where each part is hosted, and how to turn it all off." />
     <meta property="og:image" content="https://tuxblox.net/static/images/banner/tuxblox-banner.png" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://tuxblox.net/privacy" />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Privacy Policy - TuxBlox" />
-    <meta name="twitter:description" content="What TuxBlox sends off your machine, and how to turn it off." />
+    <meta name="twitter:description" content="We do not track you and we do not sell your data. Here is exactly what TuxBlox sends, and how to turn it off." />
     <meta name="twitter:image" content="https://tuxblox.net/static/images/banner/tuxblox-banner.png" />
 
     <meta name="theme-color" content="#0e1117" />
@@ -268,30 +324,33 @@
 
             <section class="hero pp-hero">
                 <h1>Privacy Policy</h1>
-                <div class="pp-updated">Last updated 8 August 2026</div>
+                <div class="pp-updated">Last updated 16 October 2026</div>
+                <p class="pp-claim">We do not track you and we do not sell your data.</p>
                 <p class="pp-lede">
-                    TuxBlox sends one thing off your machine, and only when something crashes.
-                    This page says exactly what is in that report, where it goes, and how to
-                    stop it.
+                    On startup TuxBlox checks our server for updates, and that is the only thing it
+                    sends on its own. Three further features can send something off your machine,
+                    and all three are off until you turn them on. This page covers each of them,
+                    who gets what, which parts of TuxBlox we host, and what the Roblox client
+                    itself can see.
                 </p>
             </section>
 
             <div class="pp-summary">
                 <div class="pp-tile">
-                    <h3>One feature sends data</h3>
-                    <p>Crash reports, and nothing else. No other part of TuxBlox talks to us.</p>
+                    <h3>Only an update check</h3>
+                    <p>On startup TuxBlox checks whether it is up to date. Nothing else is sent to us until you turn a feature on.</p>
                 </div>
                 <div class="pp-tile">
-                    <h3>On by default</h3>
-                    <p>One switch in Settings turns it off, and it takes effect immediately.</p>
+                    <h3>The website is not ours</h3>
+                    <p>GitHub Pages serves it, behind Cloudflare. Only the releases page reaches a server of ours.</p>
                 </div>
                 <div class="pp-tile">
-                    <h3>Never your account</h3>
-                    <p>No logins, no session data, and nothing from inside your places or plugins.</p>
+                    <h3>Never your login</h3>
+                    <p>No passwords, no session data, and nothing from inside your places or plugins.</p>
                 </div>
                 <div class="pp-tile">
-                    <h3>No third-party trackers</h3>
-                    <p>No analytics SDKs. Reports reach servers we run ourselves, and are never sold.</p>
+                    <h3>No trackers, anywhere</h3>
+                    <p>No analytics, no third-party assets, nothing sold or shared. Not on any page here.</p>
                 </div>
             </div>
 
@@ -299,23 +358,62 @@
                 <nav class="pp-toc" aria-label="On this page">
                     <div class="pp-toc-inner">
                         <div class="pp-toc-title">ON THIS PAGE</div>
-                        <a href="#contents">What a crash report contains</a>
+                        <a href="#sends">What leaves your machine</a>
+                        <a href="#hosting">Where each part is hosted</a>
+                        <a href="#roblox">What Roblox can see</a>
                         <a href="#never">What is never sent</a>
-                        <a href="#off">Turning it off</a>
-                        <a href="#logs">Server logs</a>
+                        <a href="#off">Turning it all off</a>
+                        <a href="#logs">Logs and how long we keep them</a>
                         <a href="#changes">Changes</a>
                         <a href="#contact">Contact</a>
                     </div>
                 </nav>
 
                 <div>
-                    <section class="pp-section" id="contents">
-                        <h2>What a crash report contains</h2>
+                    <section class="pp-section" id="sends">
+                        <h2>What leaves your machine</h2>
                         <p>
-                            Crash reporting is <strong>opt-out</strong>: it is on when you install
-                            TuxBlox, and you can switch it off at any time. While it is on, and only
-                            when Player or Studio exits with a non-zero code, TuxBlox sends a single
-                            HTTPS request containing:
+                            The update check below happens every time TuxBlox starts and no setting
+                            controls it, so it comes first. Everything after it is a feature that is
+                            off on a fresh install, and a switch that is off sends nothing at all.
+                        </p>
+
+                        <h3>The update check <span class="pp-badge pp-badge-always">every launch</span></h3>
+                        <p>
+                            Every time TuxBlox starts, it asks <code>setup.tuxblox.net</code> two
+                            things: which version your release channel currently serves, and that
+                            version's file list, which carries each file's size and checksum. The
+                            second is how TuxBlox tells whether the copy on your disk still matches
+                            the release it claims to be, so it is fetched whether an update is
+                            needed or not. That list is held in memory and never written to your
+                            disk.
+                        </p>
+                        <p>
+                            <strong>No setting turns this off.</strong> It is how TuxBlox knows it
+                            is out of date, and it is the same request whatever else you have
+                            chosen. What our server records about it is covered under
+                            <a href="#logs">Logs</a>.
+                        </p>
+                        <p>
+                            If an update then gets installed, because Auto-Update is on or because
+                            you asked for one, TuxBlox makes further requests to the same server to
+                            download the new files. Those are TuxBlox's own files and nothing else.
+                        </p>
+                        <p>
+                            <strong>Roblox itself never comes from us.</strong> TuxBlox always
+                            downloads the Roblox client, and checks which Roblox version is
+                            current, from Roblox's own servers. Those requests go to Roblox under
+                            Roblox's own policies, and none of it passes through our
+                            infrastructure.
+                        </p>
+
+                        <h3>Crash reports <span class="pp-badge">off by default</span></h3>
+                        <p>
+                            When Roblox stops with an error, TuxBlox can send us one report about
+                            it. With the setting off, nothing is sent on its own. The error window
+                            gets a <strong>Report</strong> button instead, and a report goes only
+                            if you press it, only for that one crash. Turning the setting on sends
+                            every crash without asking. A report contains:
                         </p>
                         <ul class="pp-list">
                             <li><span class="k">Operating system and version</span><span class="v">Debian 12, Arch Linux 7.1.5, and so on</span></li>
@@ -324,11 +422,177 @@
                             <li><span class="k">Graphics drivers</span><span class="v">Which driver and version you are running</span></li>
                             <li><span class="k">TuxBlox versions</span><span class="v">Launcher and compatibility layer build numbers</span></li>
                             <li><span class="k">Which app crashed</span><span class="v">Player or Studio</span></li>
-                            <li><span class="k">Exit code</span><span class="v">The number the process exited with</span></li>
+                            <li><span class="k">Exit codes</span><span class="v">What TuxBlox and Roblox each exited with</span></li>
                             <li><span class="k">Timestamp</span><span class="v">When the crash happened</span></li>
-                            <li><span class="k">The tail of that run's crash log</span><span class="v">Up to the last 1&nbsp;MB, sent as it was written</span></li>
-                            <li><span class="k">Whether it ran as root</span><span class="v">Yes or no. Root is not required to run TuxBlox.</span></li>
+                            <li><span class="k">The tail of that session's log</span><span class="v">Up to the last 1&nbsp;MB, sent as it was written. Roblox writes its own log into the end of the same file, so that part comes too.</span></li>
+                            <li><span class="k">Whether it ran as administrator</span><span class="v">Yes or no. TuxBlox refuses to run with administrator rights unless you deliberately force it.</span></li>
                         </ul>
+                        <p>
+                            Reports go to <code>telemetry.tuxblox.net</code>, a server we run, and
+                            are deleted after 90 days. The log gets written to your own disk either
+                            way. The switch only decides whether a copy of it leaves your machine.
+                        </p>
+                        <div class="pp-box">
+                            <p>
+                                <strong>Roblox writes its own log into the end of that same
+                                file</strong>, and it goes to our telemetry server along with ours.
+                                Roblox's part of it can name things we never ask for, including:
+                            </p>
+                            <ul class="pp-list">
+                                <li><span class="k">Place names</span><span class="v">What you had open, or were playing, at the time</span></li>
+                                <li><span class="k">The server address</span><span class="v">The Roblox server you were connected to</span></li>
+                                <li><span class="k">Your Roblox user ID</span><span class="v">The number your account is identified by</span></li>
+                                <li><span class="k">Other people joining</span><span class="v">Anybody with edit access who joined a place you were in</span></li>
+                            </ul>
+                            <p>
+                                TuxBlox does not collect, request or separate out any of that. It
+                                is in the file because Roblox wrote it there, and that log is
+                                usually the only thing that explains a crash. This is why the
+                                setting starts off, and why sending a report is left up to you.
+                            </p>
+                        </div>
+                        <p>
+                            TuxBlox developers can read the reports that arrive, since that is what
+                            makes a crash fixable. <strong>The address a report came from is not
+                            shown alongside it</strong>, and only the server knows which report
+                            belongs to which address.
+                        </p>
+                        <p>
+                            That does not make a report anonymous. Roblox's part of the log can
+                            carry your Roblox user ID, as above, and anybody reading it can look
+                            that up. <strong>A report identifies you as much as the log inside it
+                            does.</strong> It is the other reason sending one is left up to you.
+                        </p>
+
+                        <h3>Discord Rich Presence <span class="pp-badge">off by default</span></h3>
+                        <p>
+                            This shows what you are playing or editing on your Discord profile: the
+                            experience's name, who made it, its icon, how long you have been in it,
+                            and buttons to open its page.
+                        </p>
+                        <p>
+                            <strong>None of this is sent to us.</strong> TuxBlox hands it to the
+                            Discord app already running on your own machine, over a connection that
+                            never leaves your computer. Discord publishes it from there, under
+                            Discord's own policies. With Discord closed, nothing happens at all.
+                        </p>
+                        <p>
+                            To name what you are in, the launcher asks Roblox's own public services
+                            for the experience's name, creator and icon. Those requests go to
+                            Roblox, not to us.
+                        </p>
+                        <p>
+                            Anyone who can see your Discord profile can see the result. That is the
+                            point of the feature, but it is worth saying out loud. Two switches sit
+                            under it:
+                        </p>
+                        <ul class="pp-list">
+                            <li><span class="k">Let people join your server</span><span class="v">On by default. Adds a join button, which puts the server you are in on your profile. Off keeps the rest of the presence without it.</span></li>
+                            <li><span class="k">Let games use the Rich Presence API</span><span class="v">On by default. Lets an experience set its own status text, such as which area you are in. Off means nothing an experience sends is read at all, and your profile shows only what TuxBlox worked out itself.</span></li>
+                        </ul>
+
+                        <h3>Server location <span class="pp-badge">off by default</span></h3>
+                        <p>
+                            This shows a notification naming the region of the Roblox server you
+                            just joined. What gets looked up is <strong>the Roblox server's
+                            address, not yours</strong>. The lookup goes to
+                            <code>geo.tuxblox.net</code>, which answers from a database held on that
+                            same server, so the address is not passed on to anybody else.
+                        </p>
+                        <p>
+                            A test on your own machine is not a server, so local and private
+                            addresses are never looked up. Each server is asked about once per
+                            session.
+                        </p>
+                        <p>
+                            Looking up a Roblox server is not recorded beyond the ordinary request
+                            log. A lookup for anything that is not a Roblox server is counted
+                            against where it came from, so the service cannot be used as a general
+                            address lookup tool, and that count lasts 24 hours. See
+                            <a href="#logs">Logs</a>.
+                        </p>
+                    </section>
+
+                    <section class="pp-section" id="hosting">
+                        <h2>Where each part is hosted</h2>
+                        <p>
+                            TuxBlox is not all in one place, and the difference decides who can see
+                            what.
+                        </p>
+                        <ul class="pp-list">
+                            <li><span class="k">tuxblox.net<br>(this site and the docs)</span><span class="v">GitHub Pages, behind Cloudflare. Not our infrastructure.</span></li>
+                            <li><span class="k">setup.tuxblox.net</span><span class="v">Our own server, with neither GitHub nor Cloudflare involved. Update checks, TuxBlox's own downloads, and the releases page's version list.</span></li>
+                            <li><span class="k">geo.tuxblox.net</span><span class="v">Our own server, behind Cloudflare. Server location lookups.</span></li>
+                            <li><span class="k">telemetry.tuxblox.net</span><span class="v">Our own server, behind Cloudflare. Crash reports.</span></li>
+                        </ul>
+                        <p>
+                            GitHub Pages and Cloudflare serve this website between them, so for
+                            almost every page <strong>we receive nothing at all about your
+                            visit</strong>. No logs, no analytics, no way for us to know you were
+                            here. GitHub and Cloudflare handle those requests and keep whatever
+                            their own policies say they keep.
+                        </p>
+                        <p>
+                            <strong>The releases page is the exception.</strong> To list what is
+                            published, it asks <code>setup.tuxblox.net</code> for the metadata of
+                            every available version, and your browser makes that request itself.
+                            Opening that page therefore does reach a server of ours, and it is
+                            logged the same as any other request to it. That server sits behind
+                            neither GitHub nor Cloudflare.
+                        </p>
+                        <p>
+                            The three subdomains above are servers we run. Requests to them reach
+                            us. Cloudflare sits in front of <code>geo</code> and
+                            <code>telemetry</code>, so it handles those two as well.
+                        </p>
+                    </section>
+
+                    <section class="pp-section" id="roblox">
+                        <h2>What Roblox can see</h2>
+                        <p>
+                            TuxBlox runs the real Roblox client. The client asks your computer the
+                            same questions it would ask a Windows machine, and TuxBlox answers
+                            them: your machine's make and model, your processor, your graphics card,
+                            your network adapter's address, and identifiers such as the machine's
+                            serial numbers and UUID. Roblox's anti-tamper reads these, the same as
+                            it does on Windows.
+                        </p>
+                        <p>
+                            <strong>The network adapter's address is always the permanent
+                            one.</strong> If you randomise or change your MAC address, Roblox is
+                            still shown the address the adapter was built with rather than the one
+                            in use. TuxBlox asks the adapter itself for that value, because it is
+                            what a Windows machine reports and it does not change.
+                        </p>
+                        <p>
+                            Some of those values cannot be read on Linux without administrator
+                            rights, which TuxBlox never asks for. Rather than report nothing at all,
+                            TuxBlox works out a stand-in from your hardware that stays the same for
+                            that machine.
+                        </p>
+                        <div class="pp-box">
+                            <p>
+                                <strong>These answers go to the Roblox client, not to us.</strong>
+                                TuxBlox does not collect, store, log or send any of them, and none
+                                of it is part of a crash report.
+                            </p>
+                            <p>
+                                What the Roblox client then sends to Roblox, and what Roblox does
+                                with it, is between you and Roblox, under Roblox's own policies. We
+                                cannot see it and we cannot change it. TuxBlox is not affiliated
+                                with, endorsed by, or associated with Roblox Corporation, and
+                                playing through TuxBlox does not change the policies and rules that
+                                apply to your Roblox account. Enforcement of those rules is
+                                Roblox's decision alone.
+                            </p>
+                        </div>
+                        <p style="margin-top:16px">
+                            Roblox itself is never downloaded from us. The launcher always fetches
+                            the Roblox client, and checks which Roblox version is current, from
+                            Roblox's own servers, so those requests go to Roblox and Roblox's own
+                            policies cover them. Only TuxBlox's own files come from
+                            <code>setup.tuxblox.net</code>.
+                        </p>
                     </section>
 
                     <section class="pp-section" id="never">
@@ -337,7 +601,7 @@
                             <ul>
                                 <li>
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                                    Your Roblox account, login, or session data
+                                    Your Roblox password, login, or session data
                                 </li>
                                 <li>
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
@@ -345,51 +609,99 @@
                                 </li>
                                 <li>
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                                    Any identifier that links separate reports back to you, or to each other
+                                    Any other file from your virtual drive. Only that session's log travels, and only in a report you sent
+                                </li>
+                                <li>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                    Any identifier of our own. TuxBlox adds no account, device or install ID to a report, and does not tie reports together
                                 </li>
                             </ul>
                         </div>
                         <p style="margin-top:16px">
-                            TuxBlox does not embed any third-party analytics or tracking SDKs. Reports
-                            go to infrastructure we run ourselves. We do not sell them or share them.
+                            TuxBlox embeds no third-party analytics or tracking SDKs, and neither
+                            does this website. Its assets are served from this domain rather than
+                            somebody else's, so loading a page here reaches nobody but this site.
+                            Reports go to servers we run. We do not sell them and we do not share
+                            them.
                         </p>
                     </section>
 
                     <section class="pp-section" id="off">
-                        <h2>Turning it off</h2>
-                        <div class="pp-path">
-                            Settings <span class="sep">&rarr;</span> Send Crash Report Data
-                        </div>
+                        <h2>Turning it all off</h2>
                         <p>
-                            Switching it off takes effect immediately: no report is generated, and
-                            none is sent. The crash log itself is still written to your own disk
-                            either way. The switch controls only whether a copy leaves your machine.
+                            All three switches live together in the launcher, under
+                            <strong>Settings &rarr; Privacy</strong>:
+                        </p>
+                        <div class="pp-switches">
+                            <div class="pp-path">Always send crash reports</div>
+                            <div class="pp-path">Enable Discord Rich Presence</div>
+                            <div class="pp-path">Notify server location</div>
+                        </div>
+                        <p style="margin-top:16px">
+                            Each one takes effect straight away, and each one is off until you turn
+                            it on. If you have never opened that page, none of the three has ever
+                            sent anything. The update check is the one thing that happens either
+                            way.
                         </p>
                     </section>
 
                     <section class="pp-section" id="logs">
-                        <h2>Server logs</h2>
+                        <h2>Logs and how long we keep them</h2>
                         <p>
-                            Separately from crash reports, anything you request from our
-                            infrastructure gets logged: the website, the CDN that TuxBlox fetches
-                            launcher and compatibility layer builds from, and the crash reporting
-                            endpoint above.
+                            <strong>Every connection to a tuxblox.net subdomain is logged</strong>,
+                            whichever one it is and whether TuxBlox or your browser made it. This
+                            website is the exception, because it runs on GitHub Pages behind
+                            Cloudflare and those requests never reach us at all. The one part of it
+                            that does is the releases page asking for the version list, which is
+                            logged like anything else.
                         </p>
                         <p>
-                            Like effectively any web server, ours records each request's
-                            <strong>timestamp, IP address, user agent, request method and URL</strong>.
-                            This is retained for security purposes, such as detecting abuse and
-                            intrusion attempts, and is <strong>deleted automatically after 30
-                            days</strong>. It is not linked to crash reports and is not used to track
-                            anyone.
+                            For everything else, each request is recorded with:
+                        </p>
+                        <ul class="pp-list">
+                            <li><span class="k">IP address</span><span class="v">The address the request came from</span></li>
+                            <li><span class="k">User agent</span><span class="v">What the request said it was, such as the launcher or a web browser</span></li>
+                            <li><span class="k">Headers</span><span class="v">The rest of what the request sent along with it</span></li>
+                            <li><span class="k">URL and request type</span><span class="v">What was asked for, and how it was asked for</span></li>
+                            <li><span class="k">HTTP code and response</span><span class="v">What our server answered</span></li>
+                            <li><span class="k">Which server answered</span><span class="v">The machine of ours that handled it</span></li>
+                            <li><span class="k">Time of the request</span><span class="v">When it reached us</span></li>
+                        </ul>
+                        <p>
+                            We keep this to spot abuse and intrusion attempts, and it is
+                            <strong>deleted automatically after 30 days</strong>. The logs stay on
+                            our own servers and cannot be reached from outside them. They are not
+                            linked to crash reports and they are not used to track anyone.
+                        </p>
+                        <p>
+                            Crash reports themselves are <strong>deleted after 90 days</strong>.
+                        </p>
+                        <p>
+                            <strong><code>geo.tuxblox.net</code> keeps one extra record.</strong>
+                            Everything above applies to it, and on top of that a lookup for an
+                            address that is <strong>not</strong> a Roblox server is stored against
+                            the address it came from. That exists to rate limit those lookups, so
+                            the service cannot be used as a general address lookup tool. Ordinary
+                            use never reaches it: asking about the Roblox server you joined is not
+                            recorded there at all. What does get recorded is held apart from the
+                            ordinary logs and is <strong>deleted automatically after 24
+                            hours</strong>.
+                        </p>
+                        <p>
+                            Cloudflare sits in front of <code>geo.tuxblox.net</code> and
+                            <code>telemetry.tuxblox.net</code>, so it handles those requests too and
+                            keeps its own records under its own retention policy. The same applies
+                            to this website, where GitHub and Cloudflare are the ones who see your
+                            visits rather than us.
                         </p>
                     </section>
 
                     <section class="pp-section" id="changes">
                         <h2>Changes to this policy</h2>
                         <p>
-                            If what gets collected changes, the "last updated" date at the top of this
-                            page moves, and the change is called out in that release's changelog.
+                            If what gets collected changes, the "last updated" date at the top of
+                            this page moves, and the change is called out in that release's
+                            changelog.
                         </p>
                     </section>
 
@@ -419,7 +731,7 @@
 
     <div class="wrap" data-include="footer"></div>
 
-    <script src="/static/scripts/include.js?v=20260904" defer></script>
+    <script src="/static/scripts/include.js?v=20261016" defer></script>
     <script>
     (function () {
         'use strict';
