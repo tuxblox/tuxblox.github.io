@@ -39,6 +39,20 @@ function stripMdExtension(url) {
     return path.replace(/\.md$/i, '') + tail;
 }
 
+// GitHub's heading slug, not a choice: the docs carry #fragment links written
+// against it, and the same files are read on GitHub where those anchors
+// already work. Underscores survive -- TUXBLOX_LOG_LIMIT is a real target.
+function slugify(text) {
+    const slug = String(text)
+        .replace(/`/g, '')
+        .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+        .trim()
+        .toLowerCase()
+        .replace(/[^\p{L}\p{N} _-]/gu, '')
+        .replace(/ +/g, '-');
+    return slug || 'section';
+}
+
 function renderInline(text, softBreaks = false) {
     const codeStore = [];
 
@@ -449,6 +463,16 @@ function renderMarkdown(markdown, options = {}) {
     // alerts carry their own inline styling unless you opt out
     const inlineStyles = options.inlineStyles !== false;
 
+    // one counter per render, so two "## Examples" on a page become
+    // examples and examples-1 the way GitHub numbers them
+    const slugCounts = new Map();
+    function uniqueSlug(text) {
+        const base = slugify(text);
+        const seen = slugCounts.get(base) || 0;
+        slugCounts.set(base, seen + 1);
+        return seen ? `${base}-${seen}` : base;
+    }
+
     const src = String(markdown).replace(/\r\n/g, '\n');
     const lines = src.split('\n');
 
@@ -492,7 +516,10 @@ function renderMarkdown(markdown, options = {}) {
         if (headerMatch) {
             flushParagraph();
             const level = headerMatch[1].length;
-            html += `<h${level}>${renderInline(headerMatch[2].trim())}</h${level}>\n`;
+            const text = headerMatch[2].trim();
+            const id = uniqueSlug(text);
+            if (Array.isArray(options.headings)) options.headings.push({ level, text, id });
+            html += `<h${level} id="${escapeHtml(id)}">${renderInline(text)}</h${level}>\n`;
             i++;
             continue;
         }
@@ -901,6 +928,7 @@ const api = {
     renderPage,
     renderInline,
     escapeHtml,
+    slugify,
     highlightCode,
     registerLanguage,
     setHighlighter,
