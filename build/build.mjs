@@ -1,5 +1,7 @@
 // Builds the site into _site/: site/ copied as is, the docs rendered with the
 // old server's markdown.js and template, a search index, and a sitemap.
+// markdown.js lives under site/ because the download page loads it in the
+// browser to render a release's CHANGELOGS.md.
 //
 //   node build/build.mjs
 //
@@ -16,17 +18,18 @@ import {
 import { renderSitemap } from './sitemap.mjs';
 
 const require = createRequire(import.meta.url);
-const { renderMarkdown } = require('./markdown.js');
+const { renderMarkdown } = require('../site/static/scripts/markdown.js');
 const { stripMarkdown } = require('../site/static/scripts/docs-search.js');
 
-export const TOP_PAGES = ['/', '/releases', '/privacy'];
+export const TOP_PAGES = ['/', '/releases', '/privacy', '/terms'];
 
 // Files the TuxBlox app, its build, its READMEs or the pages themselves
 // depend on. A build without any of them is not deployed.
 export const REQUIRED_FILES = [
-    'index.html', 'releases.html', 'privacy.html', '404.html',
+    'index.html', 'releases.html', 'privacy.html', 'terms.html', '404.html',
     'install.sh', 'robots.txt', 'favicon.ico', '.well-known/security.txt',
     'static/scripts/include.js', 'static/scripts/docs-search.js', 'static/scripts/docs-nav.js',
+    'static/scripts/markdown.js',
     'static/images/icon/tuxblox-icon.png', 'static/images/banner/tuxblox-banner.png',
     'docs/index.html', 'docs/search-index.json', 'sitemap.xml',
 ];

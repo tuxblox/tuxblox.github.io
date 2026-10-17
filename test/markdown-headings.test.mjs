@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
 
-const { renderMarkdown, slugify } = createRequire(import.meta.url)('../build/markdown.js');
+const { renderMarkdown, slugify } = createRequire(import.meta.url)('../site/static/scripts/markdown.js');
 
 test('slugs match GitHub for the anchors already in the docs', () => {
     assert.equal(slugify('TUXBLOX_LOG_LIMIT'), 'tuxblox_log_limit');

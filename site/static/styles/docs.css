@@ -355,7 +355,7 @@ article pre code:not([class*="language-"]) {
     color: var(--text-color);
 }
 
-/* syntax highlighting for fenced blocks. build/markdown.js tokenises a fence
+/* syntax highlighting for fenced blocks. markdown.js tokenises a fence
    that names a language and wraps each token in .hljs-*; inline `code` is
    never tokenised, so a backticked span stays plain by design */
 article pre .hljs-comment {

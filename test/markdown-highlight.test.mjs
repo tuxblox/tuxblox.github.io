@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
 
-const { renderMarkdown } = createRequire(import.meta.url)('../build/markdown.js');
+const { renderMarkdown } = createRequire(import.meta.url)('../site/static/scripts/markdown.js');
 
 const fence = body => renderMarkdown('```bash\n' + body + '\n```\n');
 const token = (html, cls, text) => html.includes(`<span class="hljs-${cls}">${text}</span>`);

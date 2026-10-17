@@ -93,6 +93,13 @@
             border: 1px solid var(--divider);
             color: var(--text-3);
         }
+        .channel-note {
+            margin: -12px 0 24px;
+            font-size: 13.5px;
+            line-height: 1.6;
+            color: var(--text-3);
+            max-width: 68ch;
+        }
 
         /* ---- badges ---- */
         .badge {
@@ -149,8 +156,23 @@
             margin-top: 18px;
         }
         .installer .btn { flex: 0 0 auto; height: 38px; padding: 0 18px; font-size: 14px; }
-        .hrow-body .installer { margin: 0 0 18px; }
-        .hrow-body .installer + .files { margin-top: 0; }
+        .installer-size { font: 400 12.5px var(--font-mono); color: var(--text-3); }
+        .hrow-body .installer { margin: 0; }
+
+        /* Once per release, under whatever downloads it offers. */
+        .dl-terms {
+            flex: 1 1 100%;
+            font-size: 12.5px;
+            line-height: 1.6;
+            color: var(--text-3);
+        }
+        .dl-terms a {
+            color: var(--text-2);
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+        .dl-terms a:hover { color: var(--brand); }
+        .dl-install .dl-terms { margin-top: 10px; }
 
         /* First thing in the card, above the "Latest … build" line. */
         .runs {
@@ -189,6 +211,33 @@
 
         /* ---- files ---- */
         .files { padding: 22px 28px; }
+        .files-toggle {
+            appearance: none;
+            border: 0;
+            background: transparent;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font: 600 12.5px var(--font-sans);
+            color: var(--text-3);
+            transition: color var(--transition-fast);
+        }
+        .files-toggle:hover { color: var(--text-1); }
+        .files-toggle .files-count { font-weight: 500; opacity: .8; }
+        .files-toggle .files-chev { display: flex; transition: transform var(--t-mid); }
+        .files-toggle .files-chev svg { width: 14px; height: 14px; }
+        .files-toggle[aria-expanded="true"] .files-chev { transform: rotate(180deg); }
+        .files-list { margin-top: 14px; }
+        .files-list[hidden] { display: none; }
+        .files-hint {
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--text-3);
+            margin-bottom: 6px;
+        }
+        .files-list .dl-terms { margin-top: 16px; }
         .block-title {
             font-size: 12.5px;
             font-weight: 600;
@@ -203,36 +252,80 @@
             border-top: 1px solid var(--divider);
         }
         .file-row:last-child { padding-bottom: 0; }
-        .file-info { flex: 1 1 auto; min-width: 0; }
+        .file-info { flex: 1 0 215px; min-width: 0; }
         .file-name {
             font: 500 14.5px var(--font-mono);
             color: var(--text-1);
-            word-break: break-word;
+            overflow-wrap: anywhere;
         }
         .file-desc { font-size: 13px; color: var(--text-3); margin-top: 2px; }
+        /* A fixed column, so the checksums beside it start at the same place
+           in every row rather than wherever that row's size text began. */
         .file-size {
+            flex: 0 0 110px;
             font: 400 12.5px var(--font-mono);
             color: var(--text-3);
             white-space: nowrap;
             display: flex;
             align-items: center;
+            justify-content: flex-start;
             gap: 4px;
         }
         .file-size .arrow { opacity: .45; }
         .file-row .btn { flex: 0 0 auto; height: 34px; padding: 0 16px; font-size: 13.5px; }
 
+        /* The checksum reads as data until you hover it, which is most of what
+           it is -- but it is long enough that nobody should retype it. It takes
+           the slack in the middle of the row and gives the end back first. */
+        .file-hash {
+            appearance: none;
+            flex: 0 1 auto;
+            min-width: 0;
+            display: flex;
+            align-items: center;
+            padding: 0;
+            border: 0;
+            background: transparent;
+            text-align: left;
+            cursor: pointer;
+        }
+        .file-hash .hash-value {
+            min-width: 0;
+            padding: 5px 9px;
+            border: 1px solid var(--divider);
+            border-radius: 4px;
+            background: var(--bg-alt);
+            font: 400 12.5px/1.4 var(--font-mono);
+            color: var(--text-2);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            transition: color var(--transition-fast), border-color var(--transition-fast);
+        }
+        .file-hash:hover .hash-value {
+            color: var(--text-1);
+            border-color: var(--text-3);
+        }
+        /* No room for a "copied" label beside 64 characters, so the box itself
+           says it. */
+        .file-hash.copied .hash-value,
+        .file-hash.copied:hover .hash-value {
+            color: var(--ok);
+            border-color: var(--ok);
+        }
+
         /* ---- changelog ---- */
         .changelog { padding: 22px 28px; border-top: 1px solid var(--divider); }
-        .changelog ul { list-style: none; }
-        .changelog li {
+        .changelog-plain { list-style: none; }
+        .changelog-plain li {
             position: relative;
             padding-left: 20px;
             font-size: 14.5px;
             line-height: 1.7;
             color: var(--text-2);
         }
-        .changelog li + li { margin-top: 6px; }
-        .changelog li::before {
+        .changelog-plain li + li { margin-top: 6px; }
+        .changelog-plain li::before {
             content: "";
             position: absolute;
             left: 5px; top: 11px;
@@ -241,6 +334,96 @@
             background: var(--brand);
             opacity: .7;
         }
+        .changelog-status { font-size: 13.5px; color: var(--text-3); }
+
+        /* A release's CHANGELOGS.md, rendered by markdown.js. Sized for a
+           card rather than a page, and styled here because the sanitiser
+           drops the renderer's own inline styles. */
+        .changelog-md { font-size: 14.5px; line-height: 1.7; color: var(--text-2); }
+        .changelog-md > :first-child { margin-top: 0; }
+        .changelog-md > :last-child { margin-bottom: 0; }
+        .changelog-md h1,
+        .changelog-md h2,
+        .changelog-md h3,
+        .changelog-md h4,
+        .changelog-md h5,
+        .changelog-md h6 {
+            color: var(--text-1);
+            font-family: var(--font-display);
+            font-weight: 700;
+            letter-spacing: -0.015em;
+            line-height: 1.3;
+            margin: 22px 0 8px;
+        }
+        .changelog-md h1 { font-size: 17px; }
+        .changelog-md h2 { font-size: 15.5px; }
+        .changelog-md h3,
+        .changelog-md h4,
+        .changelog-md h5,
+        .changelog-md h6 { font-size: 14.5px; font-weight: 600; }
+        .changelog-md p { margin: 0 0 12px; }
+        .changelog-md ul, .changelog-md ol { margin: 0 0 12px; padding-left: 20px; }
+        .changelog-md li { margin: 4px 0; }
+        .changelog-md li::marker { color: var(--brand); }
+        .changelog-md strong { color: var(--text-1); font-weight: 600; }
+        .changelog-md a { color: var(--brand); text-decoration: none; }
+        .changelog-md a:hover { text-decoration: underline; }
+        .changelog-md hr { border: 0; border-top: 1px solid var(--divider); margin: 20px 0; }
+        .changelog-md img { max-width: 100%; height: auto; border-radius: var(--radius-md); border: 1px solid var(--divider); }
+        .changelog-md code {
+            background: var(--bg-alt);
+            border: 1px solid var(--divider);
+            border-radius: 4px;
+            padding: 1px 5px;
+            font: 400 0.88em var(--font-mono);
+            color: var(--text-1);
+        }
+        .changelog-md pre {
+            background: var(--bg-alt);
+            border: 1px solid var(--divider);
+            border-radius: var(--radius-md);
+            padding: 12px 14px;
+            overflow-x: auto;
+            margin: 0 0 14px;
+        }
+        .changelog-md pre code { background: none; border: 0; padding: 0; font-size: 13px; white-space: pre; }
+        .changelog-md pre .hljs-comment { color: var(--code-comment); font-style: italic; }
+        .changelog-md pre .hljs-string   { color: var(--code-string); }
+        .changelog-md pre .hljs-number,
+        .changelog-md pre .hljs-literal  { color: var(--code-number); }
+        .changelog-md pre .hljs-keyword  { color: var(--code-keyword); }
+        .changelog-md pre .hljs-built_in,
+        .changelog-md pre .hljs-name     { color: var(--code-built-in); }
+        .changelog-md pre .hljs-variable { color: var(--code-variable); }
+        .changelog-md pre .hljs-operator { color: var(--code-operator); }
+        .changelog-md pre .hljs-attr     { color: var(--code-attr); }
+        .changelog-md pre .hljs-meta     { color: var(--code-meta); }
+        .changelog-md table { width: 100%; border-collapse: collapse; margin: 0 0 14px; font-size: 13.5px; }
+        .changelog-md th, .changelog-md td { border: 1px solid var(--divider); padding: 6px 10px; text-align: left; }
+        .changelog-md th { background: var(--surface-hover-soft); color: var(--text-1); font-weight: 600; }
+        .changelog-md blockquote {
+            margin: 0 0 14px;
+            padding: 2px 14px;
+            border-left: 3px solid var(--brand);
+            background: var(--bg-alt);
+            border-radius: 0 6px 6px 0;
+        }
+        .changelog-md blockquote p { margin: 10px 0; }
+        .changelog-md .markdown-alert { border-left-color: var(--md-alert-accent, var(--brand)); }
+        .changelog-md .markdown-alert-note      { --md-alert-accent: #4493f8; }
+        .changelog-md .markdown-alert-tip       { --md-alert-accent: #3fb950; }
+        .changelog-md .markdown-alert-important { --md-alert-accent: #ab7df8; }
+        .changelog-md .markdown-alert-warning   { --md-alert-accent: #d29922; }
+        .changelog-md .markdown-alert-caution   { --md-alert-accent: #f85149; }
+        .changelog-md .markdown-alert-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 10px 0 2px;
+            font-weight: 600;
+            color: var(--md-alert-accent, var(--brand));
+        }
+        .changelog-md .markdown-alert-icon { width: 15px; height: 15px; flex: 0 0 auto; }
 
         /* ---- history ---- */
         .history-head {
@@ -256,7 +439,28 @@
             font-weight: 600;
             letter-spacing: -0.02em;
         }
-        .history-head span { font-size: 13px; color: var(--text-3); }
+        .history-tools { display: flex; align-items: center; gap: 14px; }
+        .history-tools span { font-size: 13px; color: var(--text-3); white-space: nowrap; }
+        .history-filter {
+            appearance: none;
+            width: 170px;
+            height: 32px;
+            padding: 0 10px;
+            border: 1px solid var(--divider);
+            border-radius: var(--radius-sm);
+            background: var(--bg-soft);
+            color: var(--text-1);
+            font: 400 13.5px var(--font-sans);
+            transition: border-color var(--transition-fast);
+        }
+        .history-filter::placeholder { color: var(--text-3); }
+        .history-filter:focus { outline: none; border-color: var(--brand); }
+        .history-filter[hidden] { display: none; }
+        .history-empty {
+            padding: 20px 8px;
+            font-size: 14px;
+            color: var(--text-3);
+        }
 
         .hrow { border-bottom: 1px solid var(--divider); }
         .hrow-head {
@@ -300,6 +504,7 @@
         .hrow.open .hrow-body { display: block; }
         .hrow-body .changelog,
         .hrow-body .files { padding: 0; border: 0; }
+        .hrow-body .changelog,
         .hrow-body .files { margin-top: 18px; }
 
         /* ---- states ---- */
@@ -347,6 +552,9 @@
             .dl-hero { padding-top: 28px; }
             .dl-install { max-width: none; }
             .featured-head, .files, .changelog { padding-left: 18px; padding-right: 18px; }
+            .history-head { flex-wrap: wrap; }
+            .history-filter { width: 100%; }
+            .history-tools { flex: 1 1 100%; }
             .featured-title h2 { font-size: 22px; }
             .channels { margin: 36px 0 20px; overflow-x: auto; }
             .channel-tab { white-space: nowrap; }
@@ -355,6 +563,8 @@
 
             .file-row { flex-wrap: wrap; gap: 10px; }
             .file-info { flex: 1 1 100%; }
+            .file-size { flex: 0 0 auto; }
+            .file-hash { flex: 1 1 100%; }
             .file-row .btn { flex: 1 1 auto; }
 
             .hrow-head { flex-wrap: wrap; gap: 8px 12px; padding: 14px 4px; }
@@ -387,7 +597,8 @@
             <section class="hero dl-hero">
                 <h1>Download TuxBlox</h1>
                 <p class="hero-subtitle">
-                    This page contains latest and previous versions of TuxBlox.
+                    Every published build of TuxBlox, newest first. The installer is all you
+                    need &mdash; it downloads and sets up everything else for you.
                 </p>
 
                 <div class="dl-install">
@@ -396,10 +607,13 @@
                         <code id="install-cmd"><span class="prompt">$</span>curl -fsSL https://tuxblox.net/install.sh | bash</code>
                         <button type="button" class="copy-btn" id="copy-btn">Copy</button>
                     </div>
+                    <p class="dl-terms">By downloading any TuxBlox binary, you agree to TuxBlox's
+                        <a href="/terms">Terms of Use</a> and <a href="/privacy">Privacy Policy</a>.</p>
                 </div>
             </section>
 
             <div class="channels" id="channels" role="tablist" aria-label="Release channel"></div>
+            <p class="channel-note" id="channel-note" hidden></p>
 
             <div id="loader">
                 <div class="skeleton" aria-hidden="true">
@@ -423,9 +637,15 @@
                 <div id="history-wrap" hidden>
                     <div class="history-head">
                         <h2>Earlier versions</h2>
-                        <span id="history-count"></span>
+                        <div class="history-tools">
+                            <input type="search" id="history-filter" class="history-filter"
+                                   placeholder="Filter by version" aria-controls="history"
+                                   aria-label="Filter earlier versions" hidden>
+                            <span id="history-count"></span>
+                        </div>
                     </div>
                     <div id="history"></div>
+                    <div class="history-empty" id="history-empty" hidden>No version matches that.</div>
                 </div>
             </div>
         </div>
@@ -434,6 +654,8 @@
     <div class="wrap" data-include="footer"></div>
 
     <script src="/static/scripts/include.js?v=20261016" defer></script>
+    <!-- Renders a release's CHANGELOGS.md. The docs are built from the same file. -->
+    <script src="/static/scripts/markdown.js?v=20261017" defer></script>
     <script>
     (function () {
         'use strict';
@@ -449,27 +671,36 @@
                 label: 'Stable',
                 badge: 'badge-stable',
                 badgeText: 'stable',
+                note: 'Finished, tested builds. Pick this one if you are not sure.',
                 empty: 'No stable builds are published yet.'
             },
             canary: {
                 label: 'Canary',
                 badge: 'badge-canary',
                 badgeText: 'pre-release',
+                note: 'The next release, early. Newer fixes, less testing behind them.',
                 empty: 'No canary builds right now. Try the stable channel.'
             },
             experimental: {
                 label: 'Experimental',
                 badge: 'badge-experimental',
                 badgeText: 'experimental',
+                note: 'Work in progress, published to be tried out. Expect things to break.',
                 empty: 'No experimental builds right now. Try the stable channel.'
             },
             other: {
                 label: 'Other',
                 badge: 'badge-canary',
                 badgeText: 'unstable',
+                note: '',
                 empty: 'Nothing here right now.'
             }
         };
+
+        /* Shown once under every set of downloads. */
+        var TERMS_NOTE =
+            '<p class="dl-terms">By downloading any TuxBlox binary, you agree to TuxBlox\'s ' +
+            '<a href="/terms">Terms of Use</a> and <a href="/privacy">Privacy Policy</a>.</p>';
 
         var state = { data: {}, order: [], active: null };
 
@@ -568,11 +799,13 @@
         function installerHtml(installers) {
             if (!installers.length) return '';
             var buttons = installers.map(function (file) {
+                var size = file.storage ? String(file.storage).trim() : '';
                 return '<a class="btn btn-brand" href="' + esc(file.pointer) + '" download>' +
                          ICON.download + 'Download installer' +
-                       '</a>';
+                       '</a>' +
+                       (size ? '<span class="installer-size">' + esc(size) + '</span>' : '');
             }).join('');
-            return '<div class="installer">' + buttons + '</div>';
+            return '<div class="installer">' + buttons + TERMS_NOTE + '</div>';
         }
 
         /* ---------------------------------------------------------- files */
@@ -588,10 +821,13 @@
             return '<span class="file-size">' + esc(storage) + '</span>';
         }
 
-        function filesHtml(content, heading) {
+        // Folded away by default: the installer is the only thing most people
+        // need, and the raw artefacts are five rows of noise above the changelog.
+        function filesHtml(content, withTerms) {
             if (!Array.isArray(content) || !content.length) return '';
+            var manifest = releaseFileUrl(content, 'manifest.json');
             var rows = content.map(function (file) {
-                return '<div class="file-row">' +
+                return '<div class="file-row" data-file="' + esc(pointerName(file.pointer)) + '">' +
                          '<div class="file-info">' +
                            '<div class="file-name">' + esc(file.name) + '</div>' +
                            (file.description ? '<div class="file-desc">' + esc(file.description) + '</div>' : '') +
@@ -602,19 +838,228 @@
                          '</a>' +
                        '</div>';
             }).join('');
-            return '<div class="files">' +
-                     (heading ? '<div class="block-title">' + esc(heading) + '</div>' : '') +
-                     rows +
+            var n = content.length;
+            return '<div class="files"' + (manifest ? ' data-manifest="' + esc(manifest) + '"' : '') + '>' +
+                     '<button type="button" class="files-toggle" aria-expanded="false">' +
+                       '<span class="files-chev">' + ICON.chevron + '</span>' +
+                       'Individual files' +
+                       '<span class="files-count">' + n + (n === 1 ? ' file' : ' files') + '</span>' +
+                     '</button>' +
+                     '<div class="files-list" hidden>' +
+                       '<p class="files-hint">The installer downloads these for you. ' +
+                         'They are here for manual installs and offline updates.</p>' +
+                       rows +
+                       (withTerms ? TERMS_NOTE : '') +
+                     '</div>' +
                    '</div>';
         }
 
-        function changelogHtml(changelogs, heading) {
-            if (!Array.isArray(changelogs) || !changelogs.length) return '';
-            var items = changelogs.map(function (c) { return '<li>' + esc(c) + '</li>'; }).join('');
-            return '<div class="changelog">' +
+        /* ------------------------------------------------------ changelog */
+
+        function pointerName(pointer) {
+            if (!pointer) return '';
+            var url;
+            try { url = new URL(pointer, window.location.href); } catch (e) { return ''; }
+            return url.pathname.slice(url.pathname.lastIndexOf('/') + 1);
+        }
+
+        // A release's changelog and its manifest sit beside the files it ships,
+        // so the channel and version come from a file's own URL rather than
+        // from guessing at the release name.
+        function releaseFileUrl(content, name) {
+            var files = Array.isArray(content) ? content : [];
+            for (var i = 0; i < files.length; i++) {
+                if (!files[i] || !files[i].pointer) continue;
+                var url;
+                try { url = new URL(files[i].pointer, window.location.href); } catch (e) { continue; }
+                if (url.protocol !== 'https:' && url.protocol !== 'http:') continue;
+                var cut = url.pathname.lastIndexOf('/');
+                if (cut < 0) continue;
+                return url.origin + url.pathname.slice(0, cut + 1) + name;
+            }
+            return null;
+        }
+
+        // Three sources, in order: CHANGELOGS.md, the list in releases.json,
+        // then nothing at all. The list renders first so the card is never
+        // empty while the file is still in flight.
+        function changelogHtml(item, heading) {
+            var url = releaseFileUrl(item.content, 'CHANGELOGS.md');
+            var lines = (Array.isArray(item.changelogs) ? item.changelogs : []).filter(function (c) {
+                return c != null && String(c).trim() !== '';
+            });
+            if (!url && !lines.length) return '';
+
+            var body = lines.length
+                ? '<ul class="changelog-plain">' +
+                    lines.map(function (c) { return '<li>' + esc(c) + '</li>'; }).join('') +
+                  '</ul>'
+                : '<p class="changelog-status">Loading the changelog&hellip;</p>';
+
+            return '<div class="changelog"' + (url ? ' data-changelog="' + esc(url) + '"' : '') + '>' +
                      (heading ? '<div class="block-title">' + esc(heading) + '</div>' : '') +
-                     '<ul>' + items + '</ul>' +
+                     '<div class="changelog-body">' + body + '</div>' +
                    '</div>';
+        }
+
+        // CHANGELOGS.md comes from the release server, so the HTML markdown.js
+        // makes of it is filtered through an allow-list before it reaches the
+        // page: anything not named here is unwrapped or dropped, and style, id
+        // and every on* attribute go with it.
+        var MD_TAGS = {
+            p: [], br: [], hr: [], div: [], span: [],
+            strong: [], em: [], b: [], i: [], u: [], s: [], del: [], ins: [], small: [], sup: [], sub: [],
+            h1: [], h2: [], h3: [], h4: [], h5: [], h6: [],
+            ul: [], ol: ['start'], li: [], dl: [], dt: [], dd: [],
+            blockquote: [], pre: ['data-lang'], code: [], kbd: [],
+            a: ['href', 'title'],
+            img: ['src', 'alt', 'title', 'width', 'height', 'loading'],
+            table: [], thead: [], tbody: [], tfoot: [], tr: [],
+            th: ['colspan', 'rowspan', 'align'], td: ['colspan', 'rowspan', 'align']
+        };
+        var MD_DROP = {
+            script: 1, style: 1, iframe: 1, object: 1, embed: 1, template: 1, noscript: 1,
+            link: 1, meta: 1, base: 1, form: 1, input: 1, textarea: 1, select: 1, button: 1
+        };
+        var SVG_ATTRS = ['viewbox', 'width', 'height', 'fill', 'stroke', 'stroke-width',
+                         'stroke-linecap', 'stroke-linejoin', 'fill-rule', 'clip-rule',
+                         'd', 'points', 'transform', 'cx', 'cy', 'r', 'x', 'y', 'rx', 'ry',
+                         'x1', 'y1', 'x2', 'y2', 'aria-hidden'];
+        'svg g path circle ellipse rect line polyline polygon'.split(' ').forEach(function (tag) {
+            MD_TAGS[tag] = SVG_ATTRS;
+        });
+        var SAFE_URL = /^(?:https?:|mailto:|[./#])/i;
+
+        function scrubAttributes(el) {
+            var allowed = MD_TAGS[el.tagName.toLowerCase()] || [];
+            var attrs = Array.prototype.slice.call(el.attributes);
+            for (var i = 0; i < attrs.length; i++) {
+                var name = attrs[i].name.toLowerCase();
+                if (name !== 'class' && allowed.indexOf(name) === -1) {
+                    el.removeAttribute(attrs[i].name);
+                } else if ((name === 'href' || name === 'src') && !SAFE_URL.test(String(attrs[i].value).trim())) {
+                    el.removeAttribute(attrs[i].name);
+                }
+            }
+        }
+
+        function scrubTree(parent) {
+            var node = parent.firstChild;
+            while (node) {
+                var next = node.nextSibling;
+                if (node.nodeType === 1) {
+                    var tag = node.tagName.toLowerCase();
+                    if (MD_DROP[tag]) {
+                        parent.removeChild(node);
+                    } else if (!MD_TAGS[tag]) {
+                        next = node.firstChild || next;
+                        while (node.firstChild) parent.insertBefore(node.firstChild, node);
+                        parent.removeChild(node);
+                    } else {
+                        scrubAttributes(node);
+                        scrubTree(node);
+                    }
+                } else if (node.nodeType !== 3) {
+                    parent.removeChild(node);
+                }
+                node = next;
+            }
+        }
+
+        // Parsed into an inert document, so nothing in it loads or runs before
+        // the allow-list has been over it.
+        function renderMarkdownSafely(text) {
+            if (!window.markdown || typeof window.markdown.renderMarkdown !== 'function') return '';
+            var doc;
+            try {
+                var html = window.markdown.renderMarkdown(text, { inlineStyles: false });
+                doc = new DOMParser().parseFromString(html, 'text/html');
+            } catch (e) {
+                console.error('[releases] could not render a changelog:', e);
+                return '';
+            }
+            scrubTree(doc.body);
+            return doc.body.innerHTML;
+        }
+
+        /* ------------------------------------------------------ checksums */
+
+        var manifestCache = {};
+        var SHA256 = /^[0-9a-f]{64}$/i;
+
+        function fetchManifest(url) {
+            if (!manifestCache[url]) {
+                manifestCache[url] = fetch(url, { headers: { 'Accept': 'application/json' } })
+                    .then(function (r) { return r.ok ? r.json() : null; })
+                    .catch(function () { return null; });
+            }
+            return manifestCache[url];
+        }
+
+        // Every file's checksum is in the release's manifest, so it costs one
+        // request per release, made the first time somebody opens its files.
+        function loadChecksums(block) {
+            var url = block.getAttribute('data-manifest');
+            if (!url || block.getAttribute('data-checksums')) return;
+            block.setAttribute('data-checksums', '1');
+
+            fetchManifest(url).then(function (manifest) {
+                var artifacts = (manifest && manifest.artifacts) || null;
+                if (!artifacts) return;
+
+                var sums = {};
+                Object.keys(artifacts).forEach(function (key) {
+                    var artifact = artifacts[key];
+                    if (!artifact || !artifact.url || !SHA256.test(String(artifact.sha256))) return;
+                    sums[String(artifact.url).slice(String(artifact.url).lastIndexOf('/') + 1)] = artifact.sha256;
+                });
+
+                Array.prototype.forEach.call(block.querySelectorAll('.file-row[data-file]'), function (row) {
+                    var sum = sums[row.getAttribute('data-file')];
+                    if (!sum || row.querySelector('.file-hash')) return;
+                    var button = document.createElement('button');
+                    button.type = 'button';
+                    button.className = 'file-hash';
+                    button.title = sum + '\nSHA-256 checksum, click to copy';
+                    button.innerHTML = '<span class="hash-value">' + esc(sum) + '</span>';
+                    row.insertBefore(button, row.querySelector('.file-size') || row.querySelector('.btn'));
+                });
+            });
+        }
+
+        var changelogCache = {};
+
+        function fetchChangelog(url) {
+            if (!changelogCache[url]) {
+                changelogCache[url] = fetch(url, { headers: { 'Accept': 'text/markdown, text/plain' } })
+                    .then(function (r) { return r.ok ? r.text() : null; })
+                    .catch(function () { return null; });
+            }
+            return changelogCache[url];
+        }
+
+        // Upgrades the changelogs inside `root` to their CHANGELOGS.md. A
+        // release without one keeps its list from releases.json; one with
+        // neither loses the block.
+        function loadChangelogs(root) {
+            Array.prototype.forEach.call(root.querySelectorAll('.changelog[data-changelog]'), function (block) {
+                if (block.getAttribute('data-loaded')) return;
+                block.setAttribute('data-loaded', '1');
+                fetchChangelog(block.getAttribute('data-changelog')).then(function (text) {
+                    var body = block.querySelector('.changelog-body');
+                    if (!body) return;
+                    var html = (text && text.trim()) ? renderMarkdownSafely(text) : '';
+                    if (html) {
+                        // The file brings its own headings, so the label above it would be a second one.
+                        var label = block.querySelector('.block-title');
+                        if (label) block.removeChild(label);
+                        body.className = 'changelog-body changelog-md';
+                        body.innerHTML = html;
+                    } else if (!body.querySelector('.changelog-plain') && block.parentNode) {
+                        block.parentNode.removeChild(block);
+                    }
+                });
+            });
         }
 
         function runChip(mark, label, supported) {
@@ -654,8 +1099,8 @@
                          (rel ? ' &middot; ' + esc(rel) : '') + '</div>' +
                        installerHtml(parts.installers) +
                      '</div>' +
-                     filesHtml(parts.files, 'Files') +
-                     changelogHtml(item.changelogs, 'Changelogs') +
+                     changelogHtml(item, 'Changelog') +
+                     filesHtml(parts.files, !parts.installers.length) +
                    '</div>';
         }
 
@@ -687,8 +1132,8 @@
                      '</button>' +
                      '<div class="hrow-body">' +
                        installerHtml(parts.installers) +
-                       changelogHtml(item.changelogs, 'Changelogs') +
-                       filesHtml(parts.files, 'Files') +
+                       changelogHtml(item, 'Changelog') +
+                       filesHtml(parts.files, !parts.installers.length) +
                      '</div>' +
                    '</div>';
         }
@@ -712,6 +1157,39 @@
                     writeUrl(state.active, null, true);
                 });
             });
+
+            // The tab names mean nothing on their own, so the selected one
+            // says what it is under the strip.
+            var note = document.getElementById('channel-note');
+            note.textContent = channelMeta(state.active).note || '';
+            note.hidden = !note.textContent;
+        }
+
+        // Sixteen stable builds is a long list to read through for one version.
+        function setupHistoryFilter(rest) {
+            var input = document.getElementById('history-filter');
+            var count = document.getElementById('history-count');
+            var empty = document.getElementById('history-empty');
+            var rows = document.getElementById('history').querySelectorAll('.hrow');
+
+            input.hidden = rest.length < 6;
+            input.value = '';
+
+            function apply() {
+                var query = input.value.trim().toLowerCase();
+                var shown = 0;
+                Array.prototype.forEach.call(rows, function (row, i) {
+                    var match = !query || String(rest[i].name).toLowerCase().indexOf(query) !== -1;
+                    row.hidden = !match;
+                    if (match) shown++;
+                });
+                var total = rest.length + (rest.length === 1 ? ' older build' : ' older builds');
+                count.textContent = shown === rest.length ? total : shown + ' of ' + total;
+                empty.hidden = shown !== 0;
+            }
+
+            input.oninput = apply;
+            apply();
         }
 
         function renderActiveChannel() {
@@ -730,6 +1208,7 @@
             }
 
             featured.innerHTML = renderFeatured(items[0], key);
+            loadChangelogs(featured);
 
             var rest = items.slice(1);
             if (!rest.length) {
@@ -738,17 +1217,17 @@
             }
 
             historyWrap.hidden = false;
-            document.getElementById('history-count').textContent =
-                rest.length + (rest.length === 1 ? ' older build' : ' older builds');
             history.innerHTML = rest.map(function (item, i) {
                 return renderHistoryRow(item, i);
             }).join('');
+            setupHistoryFilter(rest);
 
             Array.prototype.forEach.call(history.querySelectorAll('.hrow-head'), function (btn, i) {
                 btn.addEventListener('click', function () {
                     var row = btn.parentNode;
                     var open = row.classList.toggle('open');
                     btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+                    if (open) loadChangelogs(row);
 
                     var name = rest[i].name;
                     if (open) {
@@ -765,6 +1244,7 @@
             if (!row) return;
             row.classList.add('open');
             row.querySelector('.hrow-head').setAttribute('aria-expanded', 'true');
+            loadChangelogs(row);
             if (scroll) row.scrollIntoView({ block: 'center' });
         }
 
@@ -919,12 +1399,10 @@
             });
         }
 
-        function setupCopy() {
-            var btn = document.getElementById('copy-btn');
-            var cmd = document.getElementById('install-cmd');
-            if (!btn || !cmd) return;
-
-            function fallback(text, done) {
+        // navigator.clipboard needs a secure context, which a local copy of
+        // the page is not, so the textarea stays as the fallback.
+        function copyText(text, done) {
+            function fallback() {
                 var ta = document.createElement('textarea');
                 ta.value = text;
                 ta.setAttribute('readonly', '');
@@ -935,27 +1413,58 @@
                 try { document.execCommand('copy'); done(); } catch (e) {}
                 document.body.removeChild(ta);
             }
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(done, fallback);
+            } else {
+                fallback();
+            }
+        }
+
+        // One listener for every file list on the page, however often the
+        // cards are redrawn.
+        function setupFileActions() {
+            document.getElementById('download-content').addEventListener('click', function (event) {
+                if (!event.target.closest) return;
+
+                var hash = event.target.closest('.file-hash');
+                if (hash) {
+                    copyText(hash.querySelector('.hash-value').textContent, function () {
+                        hash.classList.add('copied');
+                        setTimeout(function () { hash.classList.remove('copied'); }, 1600);
+                    });
+                    return;
+                }
+
+                var toggle = event.target.closest('.files-toggle');
+                if (!toggle) return;
+                var open = toggle.getAttribute('aria-expanded') !== 'true';
+                var list = toggle.nextElementSibling;
+                toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+                if (list) list.hidden = !open;
+                if (open) loadChecksums(toggle.parentNode);
+            });
+        }
+
+        function setupCopy() {
+            var btn = document.getElementById('copy-btn');
+            var cmd = document.getElementById('install-cmd');
+            if (!btn || !cmd) return;
 
             btn.addEventListener('click', function () {
-                var text = cmd.textContent.replace(/^\s*\$\s*/, '');
-                function done() {
+                copyText(cmd.textContent.replace(/^\s*\$\s*/, ''), function () {
                     btn.textContent = 'Copied';
                     btn.classList.add('copied');
                     setTimeout(function () {
                         btn.textContent = 'Copy';
                         btn.classList.remove('copied');
                     }, 1600);
-                }
-                if (navigator.clipboard && navigator.clipboard.writeText) {
-                    navigator.clipboard.writeText(text).then(done, function () { fallback(text, done); });
-                } else {
-                    fallback(text, done);
-                }
+                });
             });
         }
 
         function init() {
             setupCopy();
+            setupFileActions();
             load();
 
             // Back/Forward after switching tabs.
