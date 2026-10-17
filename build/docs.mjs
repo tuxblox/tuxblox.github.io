@@ -271,12 +271,15 @@ export function renderDocNav(prevNode, nextNode) {
 export function renderDocPage(template, tree, page, contentHtml, docNavHtml = '', tocHtml = '') {
     const values = {
         TITLE: escapeHtml(page.title),
+        // every page carried the homepage's URL before this, which told a
+        // crawler the whole of /docs was a duplicate of /
+        CANONICAL: escapeHtml(SITE_ORIGIN + encodeURI(getFullUrl(page.urlPath))),
         SIDEBAR: renderSidebar(tree, page.urlPath),
         CONTENT: contentHtml,
         DOCNAV: docNavHtml,
         TOC: tocHtml,
     };
-    return template.replace(/{{(TITLE|SIDEBAR|CONTENT|DOCNAV|TOC)}}/g, (_, key) => values[key]);
+    return template.replace(/{{(TITLE|CANONICAL|SIDEBAR|CONTENT|DOCNAV|TOC)}}/g, (_, key) => values[key]);
 }
 
 // Pages has no server-side redirects, so /docs and /docs/<section> get a page
