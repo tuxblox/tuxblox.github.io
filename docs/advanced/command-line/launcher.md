@@ -43,9 +43,12 @@ Three more arguments install and update **Roblox**, not TuxBlox. They are the pr
 
 You will usually never run these yourself. The launcher runs `--update-roblox` before every launch while **Auto-Update Roblox** is on, which is the default — see [Updates](../../using-tuxblox/settings/updates.md). They are here because they are normal arguments you can pass, and because scripting an install needs them.
 
+> [!WARNING]
+> Do not run these with `sudo`. Roblox would be installed into the virtual drive as the root user, which leaves files your own account cannot write to afterwards, and every later launch fails in a way that looks like a broken install.
+
 `--update-roblox` is the quiet one: it checks whether the channel has a newer build than the one you have and fetches it only if it is missing, showing no window when there is nothing to do. `--preview-rbxinstaller` is the opposite — it opens the window and touches nothing, which is the one to reach for if you want to see what it looks like.
 
-Two of them on the same line is an error, and so is a stray argument or a typo, so a mistake cannot quietly change what gets written to your disk. That matches the installer, and it is deliberate: these write to your disk.
+Two of them on the same line is an error, and so is a stray argument after one of them, so a mistake cannot quietly change what gets written to your disk. A mistyped flag name is a different matter: it is not recognised as one of these at all, and opens the launcher window like any other unknown option.
 
 ### The environment is the argument
 
@@ -64,7 +67,7 @@ Two of them on the same line is an error, and so is a stray argument or a typo, 
 
 When the launcher updates Roblox before a launch it sets only two of the five — the app to fetch, and where the versions folder is — and lets the rest default. That is worth knowing if you are reproducing what it does: you need far less than the full set.
 
-Leave `INSTALL_DIR` alone unless you mean to install somewhere unusual. Without it the folder is worked out from the launcher's own location, which lands on the versions folder inside the virtual drive — `…/pfx/drive_c/users/<user>/AppData/Local/Roblox/Versions`, which is where TuxBlox looks. Naming a plain path like `~/.tuxblox/roblox` installs Roblox somewhere TuxBlox will never find it.
+Leave `INSTALL_DIR` alone unless you mean to install somewhere unusual. Without it the folder is worked out from the launcher's own location, which on a normal install lands on the versions folder inside the virtual drive — `…/pfx/drive_c/users/<user>/AppData/Local/Roblox/Versions`, which is where TuxBlox looks. Set it explicitly if you want to be certain, and note that naming a plain path like `~/.tuxblox/roblox` installs Roblox somewhere TuxBlox will never find it.
 
 ```bash
 # Fetch the newest Studio build into the folder TuxBlox already uses
