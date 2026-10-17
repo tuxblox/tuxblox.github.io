@@ -127,6 +127,26 @@
     --shadow-md:     0 8px 24px rgba(0, 0, 0, 0.35);
     --shadow-header: 0 1px 0 var(--divider);
 
+    /* ---- syntax tokens ---- */
+    /* these resolve to palette variables, so [data-theme="light"] redefining
+       --brand/--accent/--text-* carries the highlighting with it. only the
+       diff pair needs its own value per theme, since the palette has no
+       green or red of its own */
+    --code-comment:     var(--text-3);
+    --code-meta:        var(--text-3);
+    --code-punctuation: var(--text-3);
+    --code-operator:    var(--text-2);
+    --code-section:     var(--text-1);
+    --code-string:      var(--accent);
+    --code-number:      var(--accent);
+    --code-variable:    var(--accent);
+    --code-keyword:     var(--brand);
+    --code-built-in:    var(--brand-2);
+    --code-attr:        var(--brand-2);
+    --code-type:        var(--brand-2);
+    --code-addition:    #5fb382;
+    --code-deletion:    #d9697c;
+
     color-scheme: dark;
 }
 
@@ -168,6 +188,9 @@
     --shadow-sm:     0 1px 2px rgba(15, 23, 42, 0.06);
     --shadow-md:     0 8px 24px rgba(15, 23, 42, 0.08);
     --shadow-header: 0 1px 0 var(--divider);
+
+    --code-addition:    #2f7d55;
+    --code-deletion:    #b03a4b;
 
     color-scheme: light;
 }

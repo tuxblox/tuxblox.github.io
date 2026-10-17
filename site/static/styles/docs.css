@@ -355,6 +355,35 @@ article pre code:not([class*="language-"]) {
     color: var(--text-color);
 }
 
+/* syntax highlighting for fenced blocks. build/markdown.js tokenises a fence
+   that names a language and wraps each token in .hljs-*; inline `code` is
+   never tokenised, so a backticked span stays plain by design */
+article pre .hljs-comment {
+    color: var(--code-comment);
+    font-style: italic;
+}
+
+article pre .hljs-meta        { color: var(--code-meta); }
+article pre .hljs-punctuation { color: var(--code-punctuation); }
+article pre .hljs-operator    { color: var(--code-operator); }
+article pre .hljs-string      { color: var(--code-string); }
+article pre .hljs-number      { color: var(--code-number); }
+article pre .hljs-literal     { color: var(--code-number); }
+article pre .hljs-variable    { color: var(--code-variable); }
+article pre .hljs-keyword     { color: var(--code-keyword); }
+article pre .hljs-built_in    { color: var(--code-built-in); }
+article pre .hljs-name        { color: var(--code-built-in); }
+article pre .hljs-attr        { color: var(--code-attr); }
+article pre .hljs-type        { color: var(--code-type); }
+article pre .hljs-addition    { color: var(--code-addition); }
+article pre .hljs-deletion    { color: var(--code-deletion); }
+
+article pre .hljs-section {
+    color: var(--code-section);
+    font-weight: 600;
+}
+
+
 article ul,
 article ol {
     margin: 0 0 16px;
