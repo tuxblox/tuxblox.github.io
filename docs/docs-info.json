@@ -108,7 +108,25 @@
             "command-line": {
                 "Title": "Command Line Reference",
                 "Sort": 1,
-                "Icon": "terminal"
+                "Icon": "terminal",
+                "Content": {
+                    "launcher": {
+                        "Title": "TuxBloxLauncher",
+                        "Sort": 1
+                    },
+                    "installer": {
+                        "Title": "TuxBloxInstaller",
+                        "Sort": 2
+                    },
+                    "compatibility-layer": {
+                        "Title": "The compatibility layer",
+                        "Sort": 3
+                    },
+                    "studio-mcp": {
+                        "Title": "studio-mcp",
+                        "Sort": 5
+                    }
+                }
             },
             "environment-variables": {
                 "Title": "Environment Variables",
