@@ -45,7 +45,7 @@ A window opens and walks you through the rest. It has a normal title bar and fol
 The installer is one file of about 13.9 MB, up from about 4.3 MB in earlier versions, because it now carries its own interface inside it. Nothing extra has to be installed first. The first time you open the window, it unpacks that interface into `~/.cache/tuxblox` (see [Files and Folders](../advanced/files-and-folders.md#the-cache-folder)), which takes a moment; later runs reuse it. It also opens on machines whose graphics driver could not run the old installer.
 
 > [!TIP]
-> On a machine with no desktop, such as a server you are testing on over SSH, run `./TuxBloxInstaller --headless` instead. It reports progress in the terminal and never tries to open a window. See [Command Line Reference](../advanced/command-line.md) for the other flags.
+> On a machine with no desktop, such as a server you are testing on over SSH, run `./TuxBloxInstaller --headless` instead. It reports progress in the terminal and never tries to open a window. See [Command Line Reference](../advanced/command-line/installer.md) for the other flags.
 
 ## What the installer actually does
 
@@ -81,7 +81,7 @@ Next: [Your First Launch](first-launch.md).
 
 ## Updating
 
-You do not reinstall to update. The launcher checks for updates when it starts and, depending on your settings, either installs them or shows you a notification first. See [Settings](../using-tuxblox/settings.md#updates) to change which one it does.
+You do not reinstall to update. The launcher checks for updates when it starts and, depending on your settings, either installs them or shows you a notification first. See [Settings](../using-tuxblox/settings/updates.md) to change which one it does.
 
 ## Uninstalling
 

@@ -72,7 +72,7 @@ Yes, from the [Versions](../using-tuxblox/versions.md) tab. You can install a sp
 
 ## Does my controller work?
 
-Yes. Controller vibration is a separate, experimental setting, off-by-default behaviour that varies by pad. See [Settings](../using-tuxblox/settings.md#enable-haptics).
+Yes. Controller vibration is a separate, experimental setting, off-by-default behaviour that varies by pad. See [Settings](../using-tuxblox/settings/controller.md#enable-haptics).
 
 ## Does Studio's Toolbox work? What about the Creator Hub pages?
 

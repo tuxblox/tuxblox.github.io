@@ -1,6 +1,6 @@
 # Environment Variables
 
-TuxBlox can be steered with environment variables. The launcher sets the important ones for you, and the **Environment variables** box in [Settings](../using-tuxblox/settings.md#environment-variables) is where you add your own.
+TuxBlox can be steered with environment variables. The launcher sets the important ones for you, and the **Environment variables** box in [Settings](../using-tuxblox/settings/environment.md#environment-variables) is where you add your own.
 
 You do not need anything on this page for TuxBlox to work. Reach for it when you are debugging, benchmarking, or working around a driver.
 
@@ -80,6 +80,20 @@ This is what the **Enable Haptics** setting writes.
 `1` or `0`, for GPU acceleration in the panels that are web pages. This is what the **GPU acceleration for web pages** setting writes.
 
 Unlike haptics, both values are sent explicitly, because the layer's own default differs from the launcher's.
+
+### TUXBLOX_VIRTUAL_DESKTOP
+
+Set to `1` to run Roblox inside a single window of its own instead of letting it place windows on your desktop. This is what the **Virtual Desktop Mode** setting writes.
+
+Only the non-default is sent, so a launch that never touched it carries nothing extra. The [setting](../using-tuxblox/settings/environment.md#virtual-desktop-mode) is the friendlier route, and explains when the mode is worth trying.
+
+### TUXBLOX_DEBUG
+
+Set to `1` for detailed logging, which is what the **Detailed logging** setting writes.
+
+The extra detail goes into the session log TuxBlox already writes for every launch rather than a file of its own, so reporting a problem still means sending one file. See the [setting](../using-tuxblox/settings/troubleshooting.md#detailed-logging) for what it costs in speed and log size.
+
+`TUXBLOX_LOG` above is the superset, so setting both does nothing extra — when `TUXBLOX_LOG` is on, this one is ignored. The difference between them is where the output lands, not how much of it there is: `TUXBLOX_LOG` can open a log file of its own, while this keeps everything in the session log the launcher already writes. That is the file you send with a report, which is why the setting uses this one.
 
 ### TUXBLOX_USE_MSWEBVIEW
 

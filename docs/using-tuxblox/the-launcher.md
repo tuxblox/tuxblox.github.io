@@ -73,7 +73,7 @@ See [FastFlags](fastflags.md).
 
 Whether the window closes when Roblox starts, update channel, automatic updates, graphics card selection, controller vibration, detailed logging, crash reporting, and the danger zone.
 
-See [Settings](settings.md).
+See [Settings](settings/launcher.md).
 
 ## About
 

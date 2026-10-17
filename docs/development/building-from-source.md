@@ -51,6 +51,22 @@ Then wait. The first build compiles the entire compatibility layer.
 
 `--log` is worth using every time. Without it there is no build log, so a failure leaves nothing to look at.
 
+### Build-time variables
+
+A few things are set through the environment rather than a flag. These affect the build only — none of them mean anything to a TuxBlox that is already installed, and none belong in [Environment Variables](../advanced/environment-variables.md).
+
+| Variable | What it does |
+|---|---|
+| `TUXBLOX_MAKE_JOBS` | How many compile jobs to run at once, instead of one per core |
+| `TUXBLOX_DEV_TOOLS` | Include the development tooling in the build |
+| `TUXBLOX_HEADLESS_ONLY` | Build the installer without its window, for a machine with no display |
+
+```bash
+TUXBLOX_MAKE_JOBS=4 ./build.sh --log --nodebug
+```
+
+There is a fourth, `TUXBLOX_SKIP_DEPS`, but it is not for you to set here: `build.sh` does its own dependency check regardless, and passes this variable down to each component's build script so they do not each repeat it. It only does something if you run a component script such as `./launcher/build.sh` directly.
+
 ### 3. Install what you built
 
 Everything lands in `build/`. To use it:

@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import {
     DocsError, buildDocTree, flattenPages, findUnindexed, renderSidebar, renderToc,
     renderDocNav, renderDocPage, renderRedirectPage, checkDocLinks,
@@ -189,7 +190,11 @@ test('the link check accepts real targets and reports missing ones', () => {
         // Pages serve <page>.html only, so a page URL with a trailing slash is a 404.
         '<a href="/docs/b/z/">', '<a href="z/">',
     ].join('');
-    const broken = checkDocLinks([{ urlPath: '/docs/b/a', html }], known);
+    // ids for the one link here that carries a fragment, as the real caller
+    // supplies them: a page with no entry is treated as a directory, and a
+    // fragment aimed at a directory is reported.
+    const ids = new Map([['/docs/b/z', new Set(['install'])]]);
+    const broken = checkDocLinks([{ urlPath: '/docs/b/a', html }], known, ids);
     assert.deepEqual(broken.map(b => b.href), ['../b/missing', 'https://tuxblox.net/docs/nope', '/docs/b/z/', 'z/']);
 });
 
@@ -211,10 +216,23 @@ test('a fragment that matches no heading is reported', () => {
         [{ page: '/docs/a/one', href: '#nope' }, { page: '/docs/a/one', href: 'two#gone' }]);
 });
 
-test('fragments are ignored where the page has no recorded ids', () => {
-    const known = new Set(['/docs/a/', '/docs/a/one']);
+// A directory redirect page holds no headings, so a fragment aimed at one can
+// never resolve. Splitting a page into a subcategory turns its old URL into
+// exactly such a directory, which is how an anchor written against the old
+// page would otherwise survive the build with nothing to land on.
+test('a fragment aimed at a directory is reported', () => {
+    const known = new Set(['/docs/a/', '/docs/a/one', '/docs/advanced/']);
+    const ids = new Map([['/docs/a/one', new Set(['intro'])]]);
     assert.deepEqual(
-        checkDocLinks([{ urlPath: '/docs/a/one', html: '<a href="/docs/a/#x">' }], known, new Map()),
+        checkDocLinks([{ urlPath: '/docs/a/one', html: '<a href="/docs/a/#x">' }], known, ids),
+        [{ page: '/docs/a/one', href: '/docs/a/#x' }]);
+    // a section directory, not only a subcategory directory
+    assert.deepEqual(
+        checkDocLinks([{ urlPath: '/docs/a/one', html: '<a href="/docs/advanced/#y">' }], known, ids),
+        [{ page: '/docs/a/one', href: '/docs/advanced/#y' }]);
+    // a directory link with no fragment is still fine
+    assert.deepEqual(
+        checkDocLinks([{ urlPath: '/docs/a/one', html: '<a href="/docs/a/">' }], known, ids),
         []);
 });
 
@@ -223,4 +241,30 @@ test('redirect pages point at their target three ways', () => {
     assert.ok(html.includes('<meta http-equiv="refresh" content="0; url=/docs/getting-started/welcome">'));
     assert.ok(html.includes('<link rel="canonical" href="https://tuxblox.net/docs/getting-started/welcome">'));
     assert.ok(html.includes('location.replace("/docs/getting-started/welcome" + location.search + location.hash)'));
+});
+
+// Reads the real docs/ tree, not a fixture: the order these appear in is the
+// order a reader meets them in the launcher, and a page silently dropped from
+// docs-info.json would otherwise only show up as a missing sidebar row.
+test('the settings subcategory publishes its seven pages in launcher order', () => {
+    const tree = buildDocTree(fileURLToPath(new URL('../docs', import.meta.url)));
+    const using = tree.find(s => s.slug === 'using-tuxblox');
+    const group = using.items.find(i => i.kind === 'group' && i.slug === 'settings');
+    assert.deepEqual(group.pages.map(p => p.slug),
+        ['launcher', 'updates', 'environment', 'controller', 'troubleshooting', 'privacy', 'danger-zone']);
+    assert.equal(group.icon, 'settings');
+    // only rows directly under a category carry an icon
+    assert.deepEqual(group.pages.map(p => p.icon), Array(7).fill(undefined));
+});
+
+// One page per binary a reader can type. 'bootstrapper' is the one that was
+// missing from the docs entirely; this expects it, so the test is red from the
+// moment the group exists until that page is written.
+test('the command line subcategory publishes one page per binary', () => {
+    const tree = buildDocTree(fileURLToPath(new URL('../docs', import.meta.url)));
+    const advanced = tree.find(s => s.slug === 'advanced');
+    const group = advanced.items.find(i => i.kind === 'group' && i.slug === 'command-line');
+    assert.deepEqual(group.pages.map(p => p.slug),
+        ['launcher', 'installer', 'compatibility-layer', 'bootstrapper', 'studio-mcp']);
+    assert.equal(group.icon, 'terminal');
 });
