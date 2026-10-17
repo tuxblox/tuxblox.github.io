@@ -86,9 +86,19 @@ You still have to set up the Studio side first, following [Roblox's guide](https
 
 ## Does TuxBlox collect data about me?
 
-Only crash reports, and only if you turn that setting on yourself or press **Report** on a crash. It is off unless you do. A crash report contains the exit code, your Roblox and TuxBlox versions, basic system information, and the session log.
+There are no trackers and no analytics anywhere, and nothing about your login or your files is ever sent.
 
-You can turn it off in Settings at any time. The full policy is at [tuxblox.net/privacy](https://tuxblox.net/privacy).
+One thing happens every time TuxBlox starts and no setting turns it off: it asks our server which version your channel serves and that version's file list, so it can tell whether your copy is up to date and still intact.
+
+Everything else is a feature that is off until you turn it on, under **Settings → Privacy**:
+
+- **Crash reports** — sent only if you switch them on or press **Report** on a crash. A report carries basic system information, version and exit codes, and the tail of that session's log. Roblox writes its own log into the end of that same file, so that part travels too, and it can name the place you had open and your Roblox account's ID. That is why the setting starts off and why sending one is left to you.
+- **Discord Rich Presence** — shows what you are playing on your Discord profile. This is handed to the Discord app on your own computer and never reaches us.
+- **Server location** — looks up the region of the Roblox server you joined. It is the *server's* address that gets looked up, never yours.
+
+TuxBlox also answers the hardware questions the Roblox client asks, the same as a Windows machine would. Those answers go to the client, not to us.
+
+The full policy, including what each report contains in detail and how long anything is kept, is at [tuxblox.net/privacy](https://tuxblox.net/privacy).
 
 ## Where can I get help?
 
