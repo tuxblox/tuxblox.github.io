@@ -257,14 +257,13 @@ test('the settings subcategory publishes its seven pages in launcher order', () 
     assert.deepEqual(group.pages.map(p => p.icon), Array(7).fill(undefined));
 });
 
-// One page per binary a reader can type. 'bootstrapper' is the one that was
-// missing from the docs entirely; this expects it, so the test is red from the
-// moment the group exists until that page is written.
+// One page per binary a reader can type. The bootstrapper is not one: it is
+// folded into the launcher, and its flags are documented on that page.
 test('the command line subcategory publishes one page per binary', () => {
     const tree = buildDocTree(fileURLToPath(new URL('../docs', import.meta.url)));
     const advanced = tree.find(s => s.slug === 'advanced');
     const group = advanced.items.find(i => i.kind === 'group' && i.slug === 'command-line');
     assert.deepEqual(group.pages.map(p => p.slug),
-        ['launcher', 'installer', 'compatibility-layer', 'bootstrapper', 'studio-mcp']);
+        ['launcher', 'installer', 'compatibility-layer', 'studio-mcp']);
     assert.equal(group.icon, 'terminal');
 });
