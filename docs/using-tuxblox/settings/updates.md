@@ -53,3 +53,23 @@ Before each launch, TuxBlox checks whether Roblox has put out a newer build and 
 When off, you keep whichever build you have until you install another one yourself from the Versions tab.
 
 On is the default because this is what happens on Windows too, and a Roblox that is behind can refuse to join an experience. If the check cannot finish, TuxBlox starts the Roblox you already have rather than stopping, and says so in a desktop notification.
+
+## norollback
+
+**Default: off. No switch in the launcher.**
+
+This one is only in the settings file. Add it to `~/.tuxblox/settings.json` by hand:
+
+```json
+{
+  "norollback": true
+}
+```
+
+The key is lowercase `norollback`, exactly as written. TuxBlox will not recognise it spelled any other way, and an unrecognised key is ignored rather than reported, so a typo here looks like the setting doing nothing.
+
+It stops TuxBlox moving you *backwards*. Normally, if the version you are running is ahead of the one your channel asks for, TuxBlox treats that as an install to repair and brings it back in line. With `norollback` on, an install that is deliberately ahead is left alone.
+
+That matters for one case: a TuxBlox you [built yourself](../../development/building-from-source.md) rather than downloaded. Your own build is usually ahead of what any channel publishes, and without this it gets replaced by a release the first time the launcher checks.
+
+If you downloaded TuxBlox, you do not want this. Being ahead of your channel is not something that happens on its own, and turning it on means a genuinely broken install stops being repaired.

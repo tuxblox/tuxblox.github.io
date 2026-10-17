@@ -81,6 +81,20 @@ This is what the **Enable Haptics** setting writes.
 
 Unlike haptics, both values are sent explicitly, because the layer's own default differs from the launcher's.
 
+### TUXBLOX_VIRTUAL_DESKTOP
+
+Set to `1` to run Roblox inside a single window of its own instead of letting it place windows on your desktop. This is what the **Virtual Desktop Mode** setting writes.
+
+Only the non-default is sent, so a launch that never touched it carries nothing extra. The [setting](../using-tuxblox/settings/environment.md#virtual-desktop-mode) is the friendlier route, and explains when the mode is worth trying.
+
+### TUXBLOX_DEBUG
+
+Set to `1` for detailed logging, which is what the **Detailed logging** setting writes.
+
+The extra detail goes into the session log TuxBlox already writes for every launch rather than a file of its own, so reporting a problem still means sending one file. See the [setting](../using-tuxblox/settings/troubleshooting.md#detailed-logging) for what it costs in speed and log size.
+
+This is not the same as `TUXBLOX_LOG` above, which turns logging on at all. `TUXBLOX_DEBUG` makes the logging that is already happening much more detailed.
+
 ### TUXBLOX_USE_MSWEBVIEW
 
 Set to `1` to make TuxBlox stand aside, so a copy of Microsoft's own browser runtime installed in the virtual drive is used for web pages instead of the one TuxBlox provides.
