@@ -46,7 +46,6 @@ if [[ "${2:-}" == "--redirects" ]]; then
   redirect https://tuxblox.net/discord 302 https://discord.gg/QkgBMMMwdW
   redirect https://tuxblox.net/github 302 https://github.com/cherrypath0/tuxblox
   redirect https://tuxblox.net/github/issues 302 https://github.com/cherrypath0/tuxblox/issues
-  redirect https://tuxblox.net/gitlab/-/issues 302 https://gitlab.com/cherrypath0/tuxblox/-/issues
   redirect https://tuxblox.net/security.txt 302 https://tuxblox.net/.well-known/security.txt
   redirect https://www.tuxblox.net/releases 301 https://tuxblox.net/releases
   redirect https://static.tuxblox.net/images/icon/tuxblox-icon.png 301 https://tuxblox.net/static/images/icon/tuxblox-icon.png

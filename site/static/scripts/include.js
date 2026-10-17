@@ -95,7 +95,6 @@
         </button>
 
         <a href="https://tuxblox.net/discord" target="_blank" rel="noopener" class="nav-icon-btn" title="Discord" aria-label="Discord"><span class="icon" data-icon="discord"></span></a>
-        <a href="https://tuxblox.net/gitlab" target="_blank" rel="noopener" class="nav-icon-btn" title="Source code on GitLab" aria-label="Source code on GitLab"><span class="icon" data-icon="gitlab"></span></a>
         <a href="https://tuxblox.net/github" target="_blank" rel="noopener" class="nav-icon-btn" title="Source code on GitHub" aria-label="Source code on GitHub"><span class="icon" data-icon="github"></span></a>
 
         <button type="button" class="nav-icon-btn nav-toggle" id="nav-toggle" title="Menu" aria-label="Menu" aria-expanded="false" aria-controls="nav-panel">

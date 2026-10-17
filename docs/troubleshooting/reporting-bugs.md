@@ -67,17 +67,11 @@ That report can be acted on immediately. "Toolbox broken pls fix" cannot.
 
 Best for anything you are not sure is a bug, and for anything where a back and forth will help.
 
-### GitLab
-
-[gitlab.com/cherrypath0/tuxblox/-/issues](https://gitlab.com/cherrypath0/tuxblox/-/issues)
-
-Best for a clear, reproducible bug you can describe in one go. Search existing issues first.
-
 ### GitHub
 
 [github.com/cherrypath0/tuxblox/issues](https://github.com/cherrypath0/tuxblox/issues)
 
-The same project. Every change is pushed to GitLab and GitHub together, so the code is identical on both. Use whichever you already have an account on, there is no need to post in both. Search existing issues first.
+Best for a clear, reproducible bug you can describe in one go. Search existing issues first.
 
 ## After reporting
 

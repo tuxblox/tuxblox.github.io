@@ -14,7 +14,7 @@ The authoritative guide is [`CONTRIBUTING.md`](https://github.com/cherrypath0/tu
 ## Submitting a change
 
 1. Fork, clone, branch.
-2. One logical change per request. A merge request on GitLab or a pull request on GitHub, either is fine. One that does four unrelated things is four times harder to review.
+2. One logical change per pull request. One that does four unrelated things is four times harder to review.
 3. Write commit messages in the imperative mood: "Fix launcher crash on missing config", not "fixed stuff".
 4. Reference the issue number if there is one.
 5. Stay responsive to review. Requests that go quiet may be closed.

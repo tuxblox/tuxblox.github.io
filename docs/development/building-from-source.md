@@ -24,11 +24,9 @@ Building inside WSL or a virtual machine is not supported.
 ### 1. Clone the repository
 
 ```bash
-git clone https://gitlab.com/cherrypath0/tuxblox
+git clone https://github.com/cherrypath0/tuxblox
 cd tuxblox
 ```
-
-The same repository is on [GitHub](https://github.com/cherrypath0/tuxblox) if you would rather clone from there. Every change is pushed to both, so neither one lags behind the other.
 
 ### 2. Run the build script
 
