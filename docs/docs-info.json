@@ -132,13 +132,9 @@
                         "Title": "The compatibility layer",
                         "Sort": 3
                     },
-                    "bootstrapper": {
-                        "Title": "The bootstrapper",
-                        "Sort": 4
-                    },
                     "studio-mcp": {
                         "Title": "studio-mcp",
-                        "Sort": 5
+                        "Sort": 4
                     }
                 }
             },

@@ -12,7 +12,6 @@ Nothing is installed system wide, and nothing needs root. TuxBlox will in fact r
 ~/.tuxblox/
 ├── TuxBloxLauncher        the launcher you use
 ├── TuxBloxInstaller       kept around for updates and uninstalling
-├── TuxBloxBootstrapper    downloads and updates Roblox itself
 ├── studio-mcp             the Studio MCP helper
 ├── settings.json          your settings and FastFlags
 ├── versions.json          which Roblox builds are installed
@@ -73,7 +72,7 @@ This folder is replaced wholesale by updates. Anything you put in it goes away.
 
 Interface libraries the launcher and the window TuxBlox shows while it updates Roblox need, so they look and behave the same regardless of what your distribution ships.
 
-It has to stay next to `TuxBloxLauncher` and `TuxBloxBootstrapper`. If it goes missing, they use your system's own libraries when it has them and cannot start without them. Reinstalling TuxBlox puts the folder back.
+It has to stay next to `TuxBloxLauncher`. If it goes missing, the launcher uses your system's own libraries when it has them and cannot start without them. Reinstalling TuxBlox puts the folder back.
 
 ### logs/
 

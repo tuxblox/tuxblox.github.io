@@ -34,7 +34,7 @@ These pages are published to [tuxblox.net/docs](https://tuxblox.net/docs) on eve
 
 | Page | What it covers |
 |---|---|
-| [Command Line Reference](advanced/command-line/launcher.md) | Every program and every flag, a page each: launcher, installer, compatibility layer, bootstrapper, studio-mcp |
+| [Command Line Reference](advanced/command-line/launcher.md) | Every program and every flag, a page each: launcher, installer, compatibility layer, studio-mcp |
 | [Environment Variables](advanced/environment-variables.md) | What you can tune, and what not to |
 | [Files and Folders](advanced/files-and-folders.md) | Where everything lives |
 
