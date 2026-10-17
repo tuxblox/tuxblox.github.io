@@ -41,7 +41,7 @@ A stock Wine or Proton install is built to run thousands of different programs r
 - Removal of the pieces Roblox never touches, which makes the download smaller and startup faster.
 - Behaviour matched closely to real Windows in the places Roblox actually checks.
 
-This is also why the layer is offered as a separate download but comes with no promise about other software. It was not built for other software.
+This is also why the layer will not run other software at all: it only starts programs signed by Roblox, and refuses anything else. It was not built for other software.
 
 ## What the launcher does
 

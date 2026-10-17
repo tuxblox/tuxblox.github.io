@@ -48,9 +48,9 @@ No. TuxBlox ships its own, and it does not use or interfere with any Wine or Pro
 
 ## Can I use the compatibility layer for other Windows programs?
 
-You can try. It is offered as a separate download on the [releases page](https://tuxblox.net/releases).
+No. The compatibility layer only runs programs signed by Roblox, and it refuses to start anything else. Pointing it at another Windows program gets you an error instead of a running program, and that is deliberate rather than a bug.
 
-It is built and tuned for Roblox specifically, though, with plenty of general purpose pieces removed. If something else does not work under it, that is expected rather than a bug. Use regular Wine or Proton for general Windows software.
+It is also built and tuned for Roblox specifically, with plenty of general purpose pieces removed, so even without that check most other software would not work under it. Use regular Wine or Proton for general Windows programs.
 
 ## Where does TuxBlox install things?
 
