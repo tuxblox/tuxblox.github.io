@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import {
-    DocsError, buildDocTree, flattenPages, findUnindexed, renderSidebar,
+    DocsError, buildDocTree, flattenPages, findUnindexed, renderSidebar, renderToc,
     renderDocNav, renderDocPage, renderRedirectPage, checkDocLinks,
 } from '../build/docs.mjs';
 
@@ -30,11 +30,65 @@ const INFO = {
 };
 const FILES = ['b/z.md', 'b/a.md', 'a/first-page.md'];
 
+const NESTED = {
+    c: { Title: 'C', Sort: 1, Content: {
+        solo: { Title: 'Solo', Sort: 1 },
+        grp: { Title: 'Grp', Sort: 2, Content: { b: { Title: 'B', Sort: 2 }, a: { Title: 'A', Sort: 1 } } },
+    } },
+};
+const NESTED_FILES = ['c/solo.md', 'c/grp/a.md', 'c/grp/b.md'];
+
 test('sections and pages sort by Sort then title, with titleized fallbacks', () => {
     const tree = buildDocTree(makeDocs(INFO, FILES));
     assert.deepEqual(tree.map(s => [s.slug, s.title]), [['a', 'A'], ['b', 'B']]);
-    assert.deepEqual(tree[1].pages.map(p => [p.slug, p.title, p.urlPath, p.sectionTitle]),
+    assert.deepEqual(tree[1].items.map(p => [p.slug, p.title, p.urlPath, p.sectionTitle]),
         [['z', 'Zed', '/b/z', 'B'], ['a', 'A', '/b/a', 'B']]);
+});
+
+test('a subcategory nests pages and keeps display order when flattened', () => {
+    const tree = buildDocTree(makeDocs(NESTED, NESTED_FILES));
+    assert.deepEqual(tree[0].items.map(i => [i.kind, i.slug]), [['page', 'solo'], ['group', 'grp']]);
+    assert.deepEqual(flattenPages(tree).map(p => p.urlPath), ['/c/solo', '/c/grp/a', '/c/grp/b']);
+    assert.equal(flattenPages(tree)[1].groupTitle, 'Grp');
+    assert.equal(flattenPages(tree)[0].groupTitle, null);
+});
+
+// Turning a page into a subcategory of the same name is the migration this
+// level exists for. The old .md goes unnamed by the index rather than
+// clashing, because one Content key cannot be both.
+test('a page replaced by a subcategory of the same name is reported, not published', () => {
+    const info = { c: { Title: 'C', Content: { s: { Content: { p: { Title: 'P' } } } } } };
+    const dir = makeDocs(info, ['c/s/p.md', 'c/s.md']);
+    const tree = buildDocTree(dir);
+    assert.deepEqual(flattenPages(tree).map(p => p.urlPath), ['/c/s/p']);
+    assert.deepEqual(findUnindexed(dir, tree), ['c/s.md']);
+});
+
+// Review Focus 4
+test('a malformed or over-nested Content entry fails', () => {
+    assert.throws(
+        () => buildDocTree(makeDocs({ c: { Content: { g: { Content: { h: { Content: { p: {} } } } } } } }, [])),
+        /c\/g\/h: subcategories cannot contain subcategories/);
+    assert.throws(
+        () => buildDocTree(makeDocs({ c: { Content: { p: 'nope' } } }, [])),
+        /page c\/p is not an object/);
+});
+
+test('reserved and unusable subcategory slugs fail', () => {
+    assert.throws(() => buildDocTree(makeDocs({ c: { Content: { index: { Content: { p: {} } } } } }, [])),
+        /reserved subcategory slug: c\/index/);
+    assert.throws(() => buildDocTree(makeDocs({ c: { Content: { '../x': { Content: { p: {} } } } } }, [])),
+        /unusable subcategory slug: c\/\.\.\/x/);
+});
+
+test('an empty subcategory is skipped, like an empty section', () => {
+    const tree = buildDocTree(makeDocs({ c: { Content: { solo: {}, empty: { Content: {} } } } }, ['c/solo.md']));
+    assert.deepEqual(tree[0].items.map(i => i.slug), ['solo']);
+});
+
+test('unindexed Markdown inside a subcategory is reported', () => {
+    const dir = makeDocs(NESTED, [...NESTED_FILES, 'c/grp/extra.md']);
+    assert.deepEqual(findUnindexed(dir, buildDocTree(dir)), ['c/grp/extra.md']);
 });
 
 test('a page named in the index but missing on disk fails', () => {
@@ -62,11 +116,52 @@ test('Markdown files the index does not name are reported, README.md is not', ()
     assert.deepEqual(findUnindexed(dir, buildDocTree(dir)), ['b/extra.md']);
 });
 
-test('the sidebar marks the current page', () => {
-    const tree = buildDocTree(makeDocs({ a: { Title: 'A', Content: { p: { Title: 'P' } } } }, ['a/p.md']));
-    assert.equal(renderSidebar(tree, '/a/p'),
-        '<ul>\n<li class="folder"><span>A</span>\n<ul>\n' +
-        '<li><a href="/docs/a/p" class="active">P</a></li>\n</ul>\n</li>\n</ul>\n');
+test('the sidebar renders categories, icon rows, and a collapsible subcategory', () => {
+    const tree = buildDocTree(makeDocs(NESTED, NESTED_FILES));
+    const html = renderSidebar(tree, '/c/grp/a');
+    assert.ok(html.startsWith('<ul class="docs-tree" data-current-group="c/grp">\n'
+        + '<li class="docs-cat"><span>C</span>\n<ul>\n'));
+    assert.ok(html.includes('<li><a class="docs-link" href="/docs/c/solo"><svg'));
+    assert.ok(html.includes('<li class="docs-group"><details open data-group="c/grp">'));
+    assert.ok(html.includes('<a class="docs-link docs-sub active" href="/docs/c/grp/a">A</a>'));
+    assert.ok(!html.includes('<a class="docs-link docs-sub active" href="/docs/c/grp/b">'));
+});
+
+test('a subcategory not holding the current page renders closed', () => {
+    const html = renderSidebar(buildDocTree(makeDocs(NESTED, NESTED_FILES)), '/c/solo');
+    assert.ok(html.includes('<li class="docs-group"><details data-group="c/grp">'));
+    assert.ok(html.startsWith('<ul class="docs-tree" data-current-group="">'));
+});
+
+test('an unknown icon name stops the build', () => {
+    const info = { c: { Content: { p: { Icon: 'no-such-icon' } } } };
+    assert.throws(() => renderSidebar(buildDocTree(makeDocs(info, ['c/p.md'])), '/c/p'), /no-such-icon/);
+});
+
+test('the page TOC keeps h2 and h3 and marks the nested ones', () => {
+    const html = renderToc([
+        { level: 1, text: 'Title', id: 'title' },
+        { level: 2, text: 'Theme', id: 'theme' },
+        { level: 3, text: 'Pinning a theme', id: 'pinning-a-theme' },
+        { level: 4, text: 'Deep', id: 'deep' },
+    ]);
+    assert.ok(html.includes('<li><a href="#theme">Theme</a></li>'));
+    assert.ok(html.includes('<li class="docs-toc-sub"><a href="#pinning-a-theme">Pinning a theme</a></li>'));
+    assert.ok(!html.includes('#title'));
+    assert.ok(!html.includes('#deep'));
+});
+
+// Review Focus 5
+test('a page with fewer than two headings gets no TOC', () => {
+    assert.equal(renderToc([{ level: 2, text: 'Only', id: 'only' }]), '');
+    assert.equal(renderToc([{ level: 1, text: 'Title', id: 'title' }]), '');
+    assert.equal(renderToc([]), '');
+});
+
+test('TOC text is escaped', () => {
+    assert.ok(renderToc([
+        { level: 2, text: 'A & B', id: 'a--b' }, { level: 2, text: 'C', id: 'c' },
+    ]).includes('>A &amp; B<'));
 });
 
 test('the first page gets an empty slot where the previous link would be', () => {
@@ -77,10 +172,10 @@ test('the first page gets an empty slot where the previous link would be', () =>
 
 test('page content is inserted literally, $ sequences included', () => {
     const tree = buildDocTree(makeDocs(INFO, FILES));
-    const page = tree[0].pages[0];
+    const page = tree[0].items[0];
     const content = "<p>awk '{print $1}' then $& and $' and $$</p>";
     const html = renderDocPage('<title>{{TITLE}}</title>{{SIDEBAR}}<main>{{CONTENT}}</main>{{DOCNAV}}', tree, page, content, '<nav></nav>');
-    assert.ok(html.startsWith('<title>First</title><ul>'));
+    assert.ok(html.startsWith('<title>First</title><ul class="docs-tree"'));
     assert.ok(html.includes(`<main>${content}</main><nav></nav>`));
 });
 
@@ -96,6 +191,31 @@ test('the link check accepts real targets and reports missing ones', () => {
     ].join('');
     const broken = checkDocLinks([{ urlPath: '/docs/b/a', html }], known);
     assert.deepEqual(broken.map(b => b.href), ['../b/missing', 'https://tuxblox.net/docs/nope', '/docs/b/z/', 'z/']);
+});
+
+test('a fragment that matches no heading is reported', () => {
+    const known = new Set(['/docs/a/one', '/docs/a/two', '/docs/a', '/docs/a/']);
+    const ids = new Map([
+        ['/docs/a/one', new Set(['intro', 'the-command'])],
+        ['/docs/a/two', new Set(['channels'])],
+    ]);
+    const html = [
+        '<a href="#the-command">',          // Review Focus 2: same page, real id
+        '<a href="#nope">',                 // same page, missing id
+        '<a href="two#channels">',          // cross page, real id
+        '<a href="two#gone">',              // cross page, missing id
+        '<a href="/docs/a/">',              // directory, no fragment
+    ].join('');
+    assert.deepEqual(
+        checkDocLinks([{ urlPath: '/docs/a/one', html }], known, ids),
+        [{ page: '/docs/a/one', href: '#nope' }, { page: '/docs/a/one', href: 'two#gone' }]);
+});
+
+test('fragments are ignored where the page has no recorded ids', () => {
+    const known = new Set(['/docs/a/', '/docs/a/one']);
+    assert.deepEqual(
+        checkDocLinks([{ urlPath: '/docs/a/one', html: '<a href="/docs/a/#x">' }], known, new Map()),
+        []);
 });
 
 test('redirect pages point at their target three ways', () => {

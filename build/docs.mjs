@@ -5,6 +5,9 @@
 // answering requests could not.
 import fs from 'node:fs';
 import path from 'node:path';
+import { createRequire } from 'node:module';
+
+const { renderIcon } = createRequire(import.meta.url)('./icons.js');
 
 export const SITE_ORIGIN = 'https://tuxblox.net';
 export const URL_PREFIX = '/docs';
@@ -13,6 +16,9 @@ const INFO_NAME = 'docs-info.json';
 // Slugs that would land on a file the build writes itself.
 const RESERVED_PAGE_SLUGS = new Set(['index']);
 const RESERVED_SECTION_SLUGS = new Set(['index.html', 'search-index.json']);
+// A subcategory is a directory that also gets an index.html, so it is barred
+// from both lists.
+const RESERVED_GROUP_SLUGS = new Set([...RESERVED_PAGE_SLUGS, ...RESERVED_SECTION_SLUGS]);
 
 export class DocsError extends Error {}
 
@@ -45,9 +51,64 @@ function sortKey(a, b) {
     return sa - sb || a.title.localeCompare(b.title);
 }
 
-// Same shape and ordering as the server's buildDocTree. Stricter: a bad slug,
-// a page missing on disk, or an index with no pages is an error, where the
-// server skipped the entry and served what was left.
+// One page of a section, or of a subcategory inside it. A page nested in a
+// subcategory carries no icon: only rows directly under a category get one.
+function buildPage(docsDir, section, group, pageSlug, pageRaw) {
+    const where = group ? `${section.slug}/${group.slug}/${pageSlug}` : `${section.slug}/${pageSlug}`;
+    if (!isSafeSlug(pageSlug)) throw new DocsError(`unusable page slug: ${where}`);
+    if (RESERVED_PAGE_SLUGS.has(pageSlug)) throw new DocsError(`reserved page slug: ${where}`);
+    if (!pageRaw || typeof pageRaw !== 'object') throw new DocsError(`page ${where} is not an object`);
+
+    const fsPath = path.join(docsDir, `${where}.md`);
+    if (!fs.existsSync(fsPath)) {
+        throw new DocsError(`${INFO_NAME} names ${where} but ${where}.md does not exist`);
+    }
+
+    return {
+        kind: 'page',
+        slug: pageSlug,
+        title: pageRaw.Title || titleize(pageSlug),
+        sort: Number(pageRaw.Sort),
+        icon: group ? undefined : pageRaw.Icon,
+        urlPath: `/${where}`,
+        fsPath,
+        sectionTitle: section.title,
+        groupTitle: group ? group.title : null,
+    };
+}
+
+// A subcategory: one level only, and empty ones are dropped the way an empty
+// section is. Returns null when it names no pages.
+function buildGroup(docsDir, section, groupSlug, groupRaw) {
+    const where = `${section.slug}/${groupSlug}`;
+    if (!isSafeSlug(groupSlug)) throw new DocsError(`unusable subcategory slug: ${where}`);
+    if (RESERVED_GROUP_SLUGS.has(groupSlug)) throw new DocsError(`reserved subcategory slug: ${where}`);
+
+    const group = { slug: groupSlug, title: groupRaw.Title || titleize(groupSlug) };
+    const pages = [];
+    for (const [pageSlug, pageRaw] of Object.entries(groupRaw.Content)) {
+        if (pageRaw && typeof pageRaw === 'object' && pageRaw.Content && typeof pageRaw.Content === 'object') {
+            throw new DocsError(`${where}/${pageSlug}: subcategories cannot contain subcategories`);
+        }
+        pages.push(buildPage(docsDir, section, group, pageSlug, pageRaw));
+    }
+
+    if (pages.length === 0) return null;
+    pages.sort(sortKey);
+    return {
+        kind: 'group',
+        slug: groupSlug,
+        title: group.title,
+        sort: Number(groupRaw.Sort),
+        icon: groupRaw.Icon,
+        pages,
+    };
+}
+
+// Same ordering as the server's buildDocTree. Stricter: a bad slug, a page
+// missing on disk, or an index with no pages is an error, where the server
+// skipped the entry and served what was left. A Content entry is a
+// subcategory when it has a Content of its own, and a page otherwise.
 export function buildDocTree(docsDir) {
     let info;
     try {
@@ -62,31 +123,20 @@ export function buildDocTree(docsDir) {
         if (RESERVED_SECTION_SLUGS.has(sectionSlug)) throw new DocsError(`reserved section slug: ${sectionSlug}`);
         if (!sectionRaw || typeof sectionRaw !== 'object') throw new DocsError(`section ${sectionSlug} is not an object`);
 
-        const sectionTitle = sectionRaw.Title || titleize(sectionSlug);
-        const pages = [];
-        for (const [pageSlug, pageRaw] of Object.entries(sectionRaw.Content || {})) {
-            if (!isSafeSlug(pageSlug)) throw new DocsError(`unusable page slug: ${sectionSlug}/${pageSlug}`);
-            if (RESERVED_PAGE_SLUGS.has(pageSlug)) throw new DocsError(`reserved page slug: ${sectionSlug}/${pageSlug}`);
-            if (!pageRaw || typeof pageRaw !== 'object') throw new DocsError(`page ${sectionSlug}/${pageSlug} is not an object`);
-
-            const fsPath = path.join(docsDir, sectionSlug, `${pageSlug}.md`);
-            if (!fs.existsSync(fsPath)) {
-                throw new DocsError(`${INFO_NAME} names ${sectionSlug}/${pageSlug} but ${sectionSlug}/${pageSlug}.md does not exist`);
+        const section = { slug: sectionSlug, title: sectionRaw.Title || titleize(sectionSlug) };
+        const items = [];
+        for (const [slug, raw] of Object.entries(sectionRaw.Content || {})) {
+            if (raw && typeof raw === 'object' && raw.Content && typeof raw.Content === 'object') {
+                const group = buildGroup(docsDir, section, slug, raw);
+                if (group) items.push(group);
+            } else {
+                items.push(buildPage(docsDir, section, null, slug, raw));
             }
-
-            pages.push({
-                slug: pageSlug,
-                title: pageRaw.Title || titleize(pageSlug),
-                sort: Number(pageRaw.Sort),
-                urlPath: `/${sectionSlug}/${pageSlug}`,
-                fsPath,
-                sectionTitle,
-            });
         }
 
-        if (pages.length === 0) continue;
-        pages.sort(sortKey);
-        sections.push({ slug: sectionSlug, title: sectionTitle, sort: Number(sectionRaw.Sort), pages });
+        if (items.length === 0) continue;
+        items.sort(sortKey);
+        sections.push({ ...section, sort: Number(sectionRaw.Sort), items });
     }
 
     if (sections.length === 0) throw new DocsError(`${INFO_NAME} names no pages`);
@@ -94,9 +144,16 @@ export function buildDocTree(docsDir) {
     return sections;
 }
 
+// Display order, subcategories expanded where they sit. The prev/next links
+// are cut from this, so the order has to be the one the sidebar shows.
 export function flattenPages(tree) {
     const pages = [];
-    for (const section of tree) pages.push(...section.pages);
+    for (const section of tree) {
+        for (const item of section.items) {
+            if (item.kind === 'group') pages.push(...item.pages);
+            else pages.push(item);
+        }
+    }
     return pages;
 }
 
@@ -110,25 +167,83 @@ export function findUnindexed(docsDir, tree) {
         .map(e => e.name)
         .sort();
     for (const dir of dirs) {
-        for (const file of fs.readdirSync(path.join(docsDir, dir)).sort()) {
-            const rel = `${dir}/${file}`;
-            if (file.endsWith('.md') && !named.has(rel)) found.push(rel);
+        const entries = fs.readdirSync(path.join(docsDir, dir), { withFileTypes: true })
+            .sort((a, b) => a.name.localeCompare(b.name));
+        for (const entry of entries) {
+            const rel = `${dir}/${entry.name}`;
+            // one level further than the sections, for subcategory directories
+            if (entry.isDirectory()) {
+                for (const file of fs.readdirSync(path.join(docsDir, rel)).sort()) {
+                    const nested = `${rel}/${file}`;
+                    if (file.endsWith('.md') && !named.has(nested)) found.push(nested);
+                }
+            } else if (entry.name.endsWith('.md') && !named.has(rel)) {
+                found.push(rel);
+            }
         }
     }
     return found;
 }
 
+function pageLink(page, currentUrlPath, nested) {
+    const classes = ['docs-link'];
+    if (nested) classes.push('docs-sub');
+    if (page.urlPath === currentUrlPath) classes.push('active');
+    // a nested page is a plain text row; only rows directly under a category
+    // carry an icon
+    const icon = nested ? '' : renderIcon(page.icon);
+    return `<li><a class="${classes.join(' ')}" href="${encodeURI(getFullUrl(page.urlPath))}">`
+        + `${icon}${escapeHtml(page.title)}</a></li>\n`;
+}
+
+// The open/closed state is decided here rather than by script, so a page
+// arrives with the right subcategory already expanded and nothing flashes.
+// docs-nav.js reads data-group and data-current-group to layer a reader's
+// remembered choice on top.
 export function renderSidebar(tree, currentUrlPath) {
-    let html = '<ul>\n';
+    let currentGroup = '';
     for (const section of tree) {
-        html += `<li class="folder"><span>${escapeHtml(section.title)}</span>\n<ul>\n`;
-        for (const page of section.pages) {
-            const active = page.urlPath === currentUrlPath ? ' class="active"' : '';
-            html += `<li><a href="${encodeURI(getFullUrl(page.urlPath))}"${active}>${escapeHtml(page.title)}</a></li>\n`;
+        for (const item of section.items) {
+            if (item.kind !== 'group') continue;
+            if (item.pages.some(p => p.urlPath === currentUrlPath)) currentGroup = `${section.slug}/${item.slug}`;
+        }
+    }
+
+    let html = `<ul class="docs-tree" data-current-group="${escapeHtml(currentGroup)}">\n`;
+    for (const section of tree) {
+        html += `<li class="docs-cat"><span>${escapeHtml(section.title)}</span>\n<ul>\n`;
+        for (const item of section.items) {
+            if (item.kind !== 'group') {
+                html += pageLink(item, currentUrlPath, false);
+                continue;
+            }
+            const groupPath = `${section.slug}/${item.slug}`;
+            const open = groupPath === currentGroup ? ' open' : '';
+            html += `<li class="docs-group"><details${open} data-group="${escapeHtml(groupPath)}">`
+                + `<summary>${renderIcon(item.icon)}<span>${escapeHtml(item.title)}</span></summary>\n<ul>\n`;
+            for (const page of item.pages) html += pageLink(page, currentUrlPath, true);
+            html += '</ul>\n</details></li>\n';
         }
         html += '</ul>\n</li>\n';
     }
     html += '</ul>\n';
+    return html;
+}
+
+// The right-hand rail. Built here rather than discovered by script, so it is
+// there on first paint. One heading is not a table of contents, so a page
+// with fewer than two gets nothing and the column collapses.
+export function renderToc(headings) {
+    const wanted = headings.filter(h => h.level === 2 || h.level === 3);
+    if (wanted.length < 2) return '';
+
+    let html = '<nav class="docs-toc" aria-label="On this page">'
+        + '<div class="docs-toc-title">On this page</div>\n<ul>\n';
+    for (const heading of wanted) {
+        const cls = heading.level === 3 ? ' class="docs-toc-sub"' : '';
+        html += `<li${cls}><a href="#${encodeURIComponent(heading.id)}">${escapeHtml(heading.text)}</a></li>\n`;
+    }
+    html += '</ul>\n</nav>';
     return html;
 }
 
@@ -153,14 +268,15 @@ export function renderDocNav(prevNode, nextNode) {
 // One pass with a function replacement, so "$&", "$1" and friends in the
 // content are inserted literally. The server chained .replace() calls with
 // string replacements, which would have rewritten them.
-export function renderDocPage(template, tree, page, contentHtml, docNavHtml = '') {
+export function renderDocPage(template, tree, page, contentHtml, docNavHtml = '', tocHtml = '') {
     const values = {
         TITLE: escapeHtml(page.title),
         SIDEBAR: renderSidebar(tree, page.urlPath),
         CONTENT: contentHtml,
         DOCNAV: docNavHtml,
+        TOC: tocHtml,
     };
-    return template.replace(/{{(TITLE|SIDEBAR|CONTENT|DOCNAV)}}/g, (_, key) => values[key]);
+    return template.replace(/{{(TITLE|SIDEBAR|CONTENT|DOCNAV|TOC)}}/g, (_, key) => values[key]);
 }
 
 // Pages has no server-side redirects, so /docs and /docs/<section> get a page
@@ -192,10 +308,15 @@ function unescapeHtml(text) {
 }
 
 // Every link in the rendered content that lands under /docs on this site must
-// be one of knownPaths, exactly. Hash and query are ignored; a trailing slash
-// is not, because Pages serves a page as <page>.html, so /docs/a/page/ is a 404
-// while /docs/a/ (a section's redirect page) is fine. The caller lists both.
-export function checkDocLinks(rendered, knownPaths) {
+// be one of knownPaths, exactly. Query is ignored; a trailing slash is not,
+// because Pages serves a page as <page>.html, so /docs/a/page/ is a 404 while
+// /docs/a/ (a section's redirect page) is fine. The caller lists both.
+//
+// A #fragment is checked against idsByPath, the heading ids each page emitted,
+// so an anchor that points at nothing stops the build the way a missing page
+// does. Paths the map does not hold -- the directory redirect pages -- keep
+// the old behaviour and have their fragment ignored.
+export function checkDocLinks(rendered, knownPaths, idsByPath = new Map()) {
     const broken = [];
     for (const { urlPath, html } of rendered) {
         const base = new URL(urlPath, SITE_ORIGIN);
@@ -211,7 +332,19 @@ export function checkDocLinks(rendered, knownPaths) {
             if (target.origin !== SITE_ORIGIN) continue;
             const p = target.pathname;
             if (p !== URL_PREFIX && !p.startsWith(`${URL_PREFIX}/`)) continue;
-            if (!knownPaths.has(p)) broken.push({ page: urlPath, href });
+            if (!knownPaths.has(p)) {
+                broken.push({ page: urlPath, href });
+                continue;
+            }
+            const ids = idsByPath.get(p);
+            if (!ids || !target.hash) continue;
+            let fragment;
+            try {
+                fragment = decodeURIComponent(target.hash.slice(1));
+            } catch {
+                fragment = target.hash.slice(1);
+            }
+            if (!ids.has(fragment)) broken.push({ page: urlPath, href });
         }
     }
     return broken;

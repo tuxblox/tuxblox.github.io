@@ -28,9 +28,22 @@ test('builds the real site', () => {
 
     const welcome = read('docs/getting-started/welcome.html');
     assert.ok(welcome.includes('<title>Welcome | TuxBlox Docs</title>'));
-    assert.ok(welcome.includes('<a href="/docs/getting-started/welcome" class="active">Welcome</a>'));
-    assert.ok(welcome.includes('href="/static/styles/docs.css?v=20260904"'));
+    assert.ok(welcome.includes('<a class="docs-link active" href="/docs/getting-started/welcome">'));
+    assert.ok(welcome.includes('href="/static/styles/docs.css?v=20261017"'));
     assert.ok(welcome.includes('<a href="system-requirements">System Requirements</a>'));
+    assert.ok(welcome.includes('<nav class="docs-toc"'));
+    assert.ok(welcome.includes('id="docs-rail"'));
+    assert.ok(welcome.includes('id="docs-drawer-toggle"'));
+    assert.ok(welcome.includes('<noscript>'));
+    assert.ok(welcome.includes('/static/scripts/docs-nav.js?v=20261017'));
+
+    // Without this every anchor -- the 11 cross-page ones and every TOC
+    // click -- scrolls its heading under the fixed topbar.
+    const css = read('static/styles/docs.css');
+    assert.match(css, /scroll-margin-top:\s*calc\(var\(--header-h\)/);
+    // TUXBLOX_WEBVIEW_IPC_TIMEOUT is wider than the 232px rail
+    assert.match(css, /\.docs-toc a\s*\{[^}]*overflow-wrap:\s*anywhere/);
+    assert.ok(read('docs/advanced/environment-variables.html').includes('href="#tuxblox_log_limit"'));
 
     assert.ok(read('docs/index.html').includes('url=/docs/getting-started/welcome'));
     assert.ok(read('docs/troubleshooting/index.html').includes('url=/docs/troubleshooting/common-problems'));
@@ -68,6 +81,25 @@ function fakeRoot(info, files) {
 test('a broken docs link fails the build', () => {
     const root = fakeRoot({ s: { Content: { p: {} } } }, { 's/p.md': '[gone](missing.md)\n' });
     assert.throws(() => build({ root, out: tmp('out-'), log: quiet }), /\/docs\/s\/p: broken link missing/);
+});
+
+test('a subcategory gets a redirect page and nests its pages', () => {
+    const root = fakeRoot(
+        { s: { Title: 'S', Content: { g: { Title: 'G', Content: { p: { Title: 'P' } } } } } },
+        { 's/g/p.md': '# p\n' });
+    const out = tmp('out-');
+    build({ root, out, log: quiet });
+    assert.ok(fs.existsSync(path.join(out, 'docs/s/g/p.html')));
+    assert.ok(fs.readFileSync(path.join(out, 'docs/s/g/index.html'), 'utf8').includes('url=/docs/s/g/p'));
+    const index = JSON.parse(fs.readFileSync(path.join(out, 'docs/search-index.json'), 'utf8'));
+    assert.equal(index[0].section, 'S › G');
+});
+
+test('a link to a heading that does not exist fails the build', () => {
+    const root = fakeRoot({ s: { Content: { p: {}, q: {} } } },
+        { 's/p.md': '# p\n\n[bad](q.md#nope)\n', 's/q.md': '# q\n\n## Real\n' });
+    // the href is reported as rendered, so the .md is already gone
+    assert.throws(() => build({ root, out: tmp('out-'), log: quiet }), /broken link q#nope/);
 });
 
 test('a missing required file fails the build', () => {
