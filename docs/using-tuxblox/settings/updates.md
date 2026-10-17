@@ -58,18 +58,25 @@ On is the default because this is what happens on Windows too, and a Roblox that
 
 **Default: off. No switch in the launcher.**
 
-This one is only in the settings file. Add it to `~/.tuxblox/settings.json` by hand:
+This one is only in the settings file. Add the key to the object that is already in `~/.tuxblox/settings.json`, alongside whatever is there:
 
 ```json
 {
+  "channel": "stable",
+  "send_crash_reports": false,
   "norollback": true
 }
 ```
 
+> [!CAUTION]
+> Add it to the existing file rather than replacing the file with just this key. A `settings.json` missing the fields TuxBlox expects is treated as damaged, and a damaged file falls back to defaults wholesale — so you would lose every other setting, and `norollback` itself would come back off.
+
+Close the launcher first. It rewrites the file whenever you change anything in the window, so an edit made while it is open is simply overwritten. [Files and Folders](../../advanced/files-and-folders.md#settingsjson) describes the rest of the file.
+
 The key is lowercase `norollback`, exactly as written. TuxBlox will not recognise it spelled any other way, and an unrecognised key is ignored rather than reported, so a typo here looks like the setting doing nothing.
 
-It stops TuxBlox moving you *backwards*. Normally, if the version you are running is ahead of the one your channel asks for, TuxBlox treats that as an install to repair and brings it back in line. With `norollback` on, an install that is deliberately ahead is left alone.
+It stops TuxBlox moving you *backwards*. If the version you are running is ahead of the one your channel asks for, TuxBlox offers to bring it back in line — the same ordinary update prompt as any other, which you can decline. With `norollback` on, it is not offered at all, and an install that is deliberately ahead is left alone.
 
-That matters for one case: a TuxBlox you [built yourself](../../development/building-from-source.md) rather than downloaded. Your own build is usually ahead of what any channel publishes, and without this it gets replaced by a release the first time the launcher checks.
+That matters for one case: a TuxBlox you [built yourself](../../development/building-from-source.md) rather than downloaded. Your own build is usually ahead of what any channel publishes, so you would otherwise be asked to replace it with a release every time the launcher checks.
 
-If you downloaded TuxBlox, you do not want this. Being ahead of your channel is not something that happens on its own, and turning it on means a genuinely broken install stops being repaired.
+If you downloaded TuxBlox, you do not need this. Being ahead of your channel does happen on its own — it is exactly what a withdrawn release looks like, as described under **Automatic updates** above — and that is a case where going backwards is the right outcome. Turning this on does not affect the mismatched-component repair, which is a different check and still runs.

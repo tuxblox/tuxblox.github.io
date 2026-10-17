@@ -51,11 +51,11 @@ Unknown options, stray arguments, and two modes on the same line are all errors 
 
 When the launcher calls it, it sets only two of the five — the app to fetch, and where the versions folder is — and lets the rest default. That is worth knowing if you are reproducing what the launcher does: you need far less than the full set.
 
+Leave `INSTALL_DIR` alone unless you mean to install somewhere unusual. Without it the bootstrapper works the folder out from its own location, which lands on the versions folder inside the virtual drive — `…/pfx/drive_c/users/<user>/AppData/Local/Roblox/Versions`, which is where the launcher looks. Naming a plain path like `~/.tuxblox/roblox` installs Roblox somewhere TuxBlox will never find it.
+
 ```bash
-# Fetch the newest Studio build into the usual versions folder
-TUXBLOX_BOOTSTRAPPER_DOWNLOAD_APP=studio \
-TUXBLOX_BOOTSTRAPPER_INSTALL_DIR=~/.tuxblox/roblox \
-~/.tuxblox/TuxBloxBootstrapper --install
+# Fetch the newest Studio build into the folder TuxBlox already uses
+TUXBLOX_BOOTSTRAPPER_DOWNLOAD_APP=studio ~/.tuxblox/TuxBloxBootstrapper --install
 ```
 
 `--version` prints the TuxBlox version, the same way every other TuxBlox program answers, because the bootstrapper ships with TuxBlox rather than being versioned alongside Roblox.

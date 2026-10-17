@@ -93,7 +93,7 @@ Set to `1` for detailed logging, which is what the **Detailed logging** setting 
 
 The extra detail goes into the session log TuxBlox already writes for every launch rather than a file of its own, so reporting a problem still means sending one file. See the [setting](../using-tuxblox/settings/troubleshooting.md#detailed-logging) for what it costs in speed and log size.
 
-This is not the same as `TUXBLOX_LOG` above, which turns logging on at all. `TUXBLOX_DEBUG` makes the logging that is already happening much more detailed.
+`TUXBLOX_LOG` above is the superset, so setting both does nothing extra — when `TUXBLOX_LOG` is on, this one is ignored. The difference between them is where the output lands, not how much of it there is: `TUXBLOX_LOG` can open a log file of its own, while this keeps everything in the session log the launcher already writes. That is the file you send with a report, which is why the setting uses this one.
 
 ### TUXBLOX_USE_MSWEBVIEW
 

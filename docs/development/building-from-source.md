@@ -58,7 +58,6 @@ A few things are set through the environment rather than a flag. These affect th
 | Variable | What it does |
 |---|---|
 | `TUXBLOX_MAKE_JOBS` | How many compile jobs to run at once, instead of one per core |
-| `TUXBLOX_SKIP_DEPS` | Skip the dependency check and install step |
 | `TUXBLOX_DEV_TOOLS` | Include the development tooling in the build |
 | `TUXBLOX_HEADLESS_ONLY` | Build the installer without its window, for a machine with no display |
 
@@ -66,7 +65,7 @@ A few things are set through the environment rather than a flag. These affect th
 TUXBLOX_MAKE_JOBS=4 ./build.sh --log --nodebug
 ```
 
-`TUXBLOX_SKIP_DEPS` is the one to reach for on a rebuild, once you know the dependencies are already there — the check is slow and it does not change between builds.
+There is a fourth, `TUXBLOX_SKIP_DEPS`, but it is not for you to set here: `build.sh` does its own dependency check regardless, and passes this variable down to each component's build script so they do not each repeat it. It only does something if you run a component script such as `./launcher/build.sh` directly.
 
 ### 3. Install what you built
 

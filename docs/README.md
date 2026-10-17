@@ -22,7 +22,7 @@ These pages are published to [tuxblox.net/docs](https://tuxblox.net/docs) on eve
 | Page | What it covers |
 |---|---|
 | [The Launcher](using-tuxblox/the-launcher.md) | The window and its five tabs |
-| [Settings](using-tuxblox/settings/launcher.md) | Every setting and what it does |
+| [Settings](using-tuxblox/settings/launcher.md) | Every setting and what it does, a page per group: launcher, updates, environment, controller, troubleshooting, privacy, danger zone |
 | [FastFlags](using-tuxblox/fastflags.md) | Roblox's internal settings, and the risks |
 | [Versions](using-tuxblox/versions.md) | Installing and pinning Roblox builds |
 | [Desktop Integration](using-tuxblox/desktop-integration.md) | Shortcuts, `roblox:` links, place files |
@@ -32,7 +32,7 @@ These pages are published to [tuxblox.net/docs](https://tuxblox.net/docs) on eve
 
 | Page | What it covers |
 |---|---|
-| [Command Line Reference](advanced/command-line/launcher.md) | Every program and every flag |
+| [Command Line Reference](advanced/command-line/launcher.md) | Every program and every flag, a page each: launcher, installer, compatibility layer, bootstrapper, studio-mcp |
 | [Environment Variables](advanced/environment-variables.md) | What you can tune, and what not to |
 | [Files and Folders](advanced/files-and-folders.md) | Where everything lives |
 
