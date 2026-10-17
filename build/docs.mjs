@@ -314,8 +314,11 @@ function unescapeHtml(text) {
 //
 // A #fragment is checked against idsByPath, the heading ids each page emitted,
 // so an anchor that points at nothing stops the build the way a missing page
-// does. Paths the map does not hold -- the directory redirect pages -- keep
-// the old behaviour and have their fragment ignored.
+// does. A path the map does not hold is a directory redirect page, which has
+// no headings of its own, so a fragment aimed at one can never resolve and is
+// reported rather than ignored: splitting a page into a subcategory turns its
+// old URL into exactly such a directory, and that is when anchors written
+// against the old page go stale.
 export function checkDocLinks(rendered, knownPaths, idsByPath = new Map()) {
     const broken = [];
     for (const { urlPath, html } of rendered) {
@@ -336,8 +339,12 @@ export function checkDocLinks(rendered, knownPaths, idsByPath = new Map()) {
                 broken.push({ page: urlPath, href });
                 continue;
             }
+            if (!target.hash) continue;
             const ids = idsByPath.get(p);
-            if (!ids || !target.hash) continue;
+            if (!ids) {
+                broken.push({ page: urlPath, href });
+                continue;
+            }
             let fragment;
             try {
                 fragment = decodeURIComponent(target.hash.slice(1));
