@@ -1,6 +1,6 @@
 # Environment Variables
 
-TuxBlox can be steered with environment variables. The launcher sets the important ones for you, and the **Environment variables** box in [Settings](../using-tuxblox/settings.md#environment-variables) is where you add your own.
+TuxBlox can be steered with environment variables. The launcher sets the important ones for you, and the **Environment variables** box in [Settings](../using-tuxblox/settings/environment.md#environment-variables) is where you add your own.
 
 You do not need anything on this page for TuxBlox to work. Reach for it when you are debugging, benchmarking, or working around a driver.
 

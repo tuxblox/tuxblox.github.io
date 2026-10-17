@@ -22,7 +22,7 @@ These pages are published to [tuxblox.net/docs](https://tuxblox.net/docs) on eve
 | Page | What it covers |
 |---|---|
 | [The Launcher](using-tuxblox/the-launcher.md) | The window and its five tabs |
-| [Settings](using-tuxblox/settings.md) | Every setting and what it does |
+| [Settings](using-tuxblox/settings/launcher.md) | Every setting and what it does |
 | [FastFlags](using-tuxblox/fastflags.md) | Roblox's internal settings, and the risks |
 | [Versions](using-tuxblox/versions.md) | Installing and pinning Roblox builds |
 | [Desktop Integration](using-tuxblox/desktop-integration.md) | Shortcuts, `roblox:` links, place files |

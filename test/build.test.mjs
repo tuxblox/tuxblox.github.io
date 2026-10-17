@@ -23,7 +23,7 @@ test('builds the real site', () => {
     const result = build({ root: ROOT, out, log: quiet });
     const read = (f) => fs.readFileSync(path.join(out, f), 'utf8');
 
-    assert.equal(result.pages, 23);
+    assert.equal(result.pages, 29);
     assert.equal(result.sections, 5);
 
     const welcome = read('docs/getting-started/welcome.html');
@@ -49,13 +49,24 @@ test('builds the real site', () => {
     assert.ok(read('docs/troubleshooting/index.html').includes('url=/docs/troubleshooting/common-problems'));
 
     const index = JSON.parse(read('docs/search-index.json'));
-    assert.equal(index.length, 23);
+    assert.equal(index.length, 29);
     assert.deepEqual(Object.keys(index[0]), ['title', 'section', 'urlPath', 'text']);
     assert.equal(index[0].urlPath, '/docs/getting-started/welcome');
     assert.equal(index[0].section, 'Getting Started');
 
+    // A nested page names its subcategory, which is the only thing telling
+    // Settings > Launcher apart from the top-level The Launcher page in a
+    // search result, and Settings > Troubleshooting from that whole section.
+    const privacy = index.find(e => e.urlPath === '/docs/using-tuxblox/settings/privacy');
+    assert.equal(privacy.section, 'Using TuxBlox › Settings');
+
+    // The old flat URL is now a directory, so it carries a redirect on to the
+    // group's first page rather than 404ing for anyone holding the old link.
+    assert.ok(read('docs/using-tuxblox/settings/index.html')
+        .includes('url=/docs/using-tuxblox/settings/launcher'));
+
     const sitemap = read('sitemap.xml');
-    assert.equal(sitemap.match(/<loc>/g).length, 26);
+    assert.equal(sitemap.match(/<loc>/g).length, 32);
     assert.ok(sitemap.includes('<loc>https://tuxblox.net/</loc>'));
     assert.ok(sitemap.includes('<loc>https://tuxblox.net/docs/development/contributing</loc>'));
 

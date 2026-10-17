@@ -47,7 +47,37 @@
             "settings": {
                 "Title": "Settings",
                 "Sort": 2,
-                "Icon": "settings"
+                "Icon": "settings",
+                "Content": {
+                    "launcher": {
+                        "Title": "Launcher",
+                        "Sort": 1
+                    },
+                    "updates": {
+                        "Title": "Updates",
+                        "Sort": 2
+                    },
+                    "environment": {
+                        "Title": "Environment",
+                        "Sort": 3
+                    },
+                    "controller": {
+                        "Title": "Controller",
+                        "Sort": 4
+                    },
+                    "troubleshooting": {
+                        "Title": "Troubleshooting",
+                        "Sort": 5
+                    },
+                    "privacy": {
+                        "Title": "Privacy",
+                        "Sort": 6
+                    },
+                    "danger-zone": {
+                        "Title": "Danger zone",
+                        "Sort": 7
+                    }
+                }
             },
             "fastflags": {
                 "Title": "FastFlags",

@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import {
     DocsError, buildDocTree, flattenPages, findUnindexed, renderSidebar, renderToc,
     renderDocNav, renderDocPage, renderRedirectPage, checkDocLinks,
@@ -240,4 +241,18 @@ test('redirect pages point at their target three ways', () => {
     assert.ok(html.includes('<meta http-equiv="refresh" content="0; url=/docs/getting-started/welcome">'));
     assert.ok(html.includes('<link rel="canonical" href="https://tuxblox.net/docs/getting-started/welcome">'));
     assert.ok(html.includes('location.replace("/docs/getting-started/welcome" + location.search + location.hash)'));
+});
+
+// Reads the real docs/ tree, not a fixture: the order these appear in is the
+// order a reader meets them in the launcher, and a page silently dropped from
+// docs-info.json would otherwise only show up as a missing sidebar row.
+test('the settings subcategory publishes its seven pages in launcher order', () => {
+    const tree = buildDocTree(fileURLToPath(new URL('../docs', import.meta.url)));
+    const using = tree.find(s => s.slug === 'using-tuxblox');
+    const group = using.items.find(i => i.kind === 'group' && i.slug === 'settings');
+    assert.deepEqual(group.pages.map(p => p.slug),
+        ['launcher', 'updates', 'environment', 'controller', 'troubleshooting', 'privacy', 'danger-zone']);
+    assert.equal(group.icon, 'settings');
+    // only rows directly under a category carry an icon
+    assert.deepEqual(group.pages.map(p => p.icon), Array(7).fill(undefined));
 });

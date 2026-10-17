@@ -81,7 +81,7 @@ Next: [Your First Launch](first-launch.md).
 
 ## Updating
 
-You do not reinstall to update. The launcher checks for updates when it starts and, depending on your settings, either installs them or shows you a notification first. See [Settings](../using-tuxblox/settings.md#updates) to change which one it does.
+You do not reinstall to update. The launcher checks for updates when it starts and, depending on your settings, either installs them or shows you a notification first. See [Settings](../using-tuxblox/settings/updates.md) to change which one it does.
 
 ## Uninstalling
 
