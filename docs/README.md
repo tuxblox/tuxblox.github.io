@@ -16,6 +16,7 @@ These pages are published to [tuxblox.net/docs](https://tuxblox.net/docs) on eve
 | [Your First Launch](getting-started/first-launch.md) | What to expect the first time |
 | [How TuxBlox Works](getting-started/how-it-works.md) | The machinery, explained plainly |
 | [Frequently Asked Questions](getting-started/faq.md) | The questions we get most |
+| [Releases and Updates](getting-started/releases-and-updates.md) | When releases happen, and how they reach you |
 
 ### Using TuxBlox
 
@@ -26,6 +27,7 @@ These pages are published to [tuxblox.net/docs](https://tuxblox.net/docs) on eve
 | [FastFlags](using-tuxblox/fastflags.md) | Roblox's internal settings, and the risks |
 | [Versions](using-tuxblox/versions.md) | Installing and pinning Roblox builds |
 | [Desktop Integration](using-tuxblox/desktop-integration.md) | Shortcuts, `roblox:` links, place files |
+| [Display and Scaling](using-tuxblox/display-and-scaling.md) | Interface scale, fonts, and what is not a scaling problem |
 | [Studio MCP](using-tuxblox/studio-mcp.md) | Connecting an AI assistant to Studio |
 
 ### Advanced
@@ -44,6 +46,7 @@ These pages are published to [tuxblox.net/docs](https://tuxblox.net/docs) on eve
 | [Known Issues](troubleshooting/known-issues.md) | What is broken and being worked on |
 | [Logs and Diagnostics](troubleshooting/logs.md) | Finding, reading and sharing logs |
 | [Reporting Bugs](troubleshooting/reporting-bugs.md) | How to report something usefully |
+| [Reporting a Security Issue](troubleshooting/security.md) | Where a vulnerability goes instead |
 
 ### Development
 

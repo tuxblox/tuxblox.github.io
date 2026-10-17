@@ -90,3 +90,7 @@ If entries still do not appear, your desktop may be caching aggressively. Loggin
 If TuxBlox is installed inside a Distrobox container, it also exports its entries to the host system so they appear in the host's applications menu rather than being trapped inside the container.
 
 TuxBlox checks on startup whether the container has access to your graphics card and warns you if it does not. See [Common Problems](../troubleshooting/common-problems.md#distrobox-gpu-passthrough-warning) for what to do about that.
+
+## Discord
+
+Roblox appearing on your Discord profile is integration of a different kind: it is a setting rather than something installed, and it is off until you turn it on. [Enable Discord Rich Presence](settings/environment.md#enable-discord-rich-presence) covers what it shows, what that reveals to anyone who can see your profile, and the two switches underneath it.

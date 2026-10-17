@@ -32,6 +32,11 @@
                 "Title": "Frequently Asked Questions",
                 "Sort": 6,
                 "Icon": "help-circle"
+            },
+            "releases-and-updates": {
+                "Title": "Releases and Updates",
+                "Sort": 7,
+                "Icon": "calendar"
             }
         }
     },
@@ -96,8 +101,13 @@
             },
             "studio-mcp": {
                 "Title": "Studio MCP",
-                "Sort": 6,
+                "Sort": 7,
                 "Icon": "plug"
+            },
+            "display-and-scaling": {
+                "Title": "Display and Scaling",
+                "Sort": 6,
+                "Icon": "maximize"
             }
         }
     },
@@ -167,6 +177,11 @@
                 "Title": "Reporting Bugs",
                 "Sort": 4,
                 "Icon": "bug"
+            },
+            "security": {
+                "Title": "Reporting a Security Issue",
+                "Sort": 5,
+                "Icon": "shield"
             }
         }
     },
