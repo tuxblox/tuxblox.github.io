@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TuxBlox - Terms of Use</title>
+
+    <!-- THEME BOOT. Must be inline and blocking, before first paint.
+         include.js is deferred and cross-origin, so it runs too late to set
+         the theme without a visible flash. Keep in sync across pages. -->
+    <script>
+    (function () {
+        var KEY = 'tuxblox_theme', t;
+        try { t = localStorage.getItem(KEY); } catch (e) {}
+        if (t !== 'light' && t !== 'dark') {
+            t = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        }
+        document.documentElement.setAttribute('data-theme', t);
+        document.documentElement.classList.add('theme-init');
+    })();
+    </script>
+
+    <meta name="description" content="TuxBlox is free software and its licence governs the code. These terms cover the servers we run for it: what they are for, what we ask of you, and what we do not promise.">
+    <link rel="canonical" href="https://tuxblox.net/terms">
+
+    <link rel="icon" type="image/x-icon" href="https://tuxblox.net/favicon.ico">
+    <link rel="apple-touch-icon" href="/static/images/icon/tuxblox-icon.png">
+
+    <link rel="stylesheet" href="/static/styles/style.css?v=20261016">
+
+    <style>
+        :root {
+            --ok:      #22c55e;
+            --ok-soft: rgba(34, 197, 94, 0.12);
+            --no:      #f87171;
+            --no-soft: rgba(248, 113, 113, 0.10);
+        }
+        [data-theme="light"] {
+            --ok:      #15803d;
+            --ok-soft: rgba(21, 128, 61, 0.10);
+            --no:      #dc2626;
+            --no-soft: rgba(220, 38, 38, 0.08);
+        }
+
+        /* ---- header ---- */
+        .pp-hero { padding: 48px 0 0; }
+        .pp-updated {
+            margin-top: 14px;
+            font: 400 13px var(--font-mono);
+            color: var(--text-3);
+        }
+        .pp-claim {
+            margin-top: 20px;
+            font-family: var(--font-display);
+            font-size: 22px;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            line-height: 1.4;
+            color: var(--text-1);
+            max-width: 46ch;
+        }
+        .pp-lede {
+            margin-top: 16px;
+            font-size: 18px;
+            line-height: 1.7;
+            color: var(--text-2);
+            max-width: 62ch;
+        }
+
+        /* ---- summary tiles ---- */
+        .pp-summary {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            margin: 40px 0 8px;
+        }
+        .pp-tile {
+            border: 1px solid var(--divider);
+            border-radius: var(--radius-card);
+            background: var(--bg-soft);
+            padding: 18px;
+        }
+        .pp-tile h3 {
+            font-family: var(--font-display);
+            font-size: 14.5px;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            margin-bottom: 6px;
+            color: var(--text-1);
+        }
+        .pp-tile p { font-size: 13.5px; line-height: 1.6; color: var(--text-2); }
+
+        /* ---- two-column body with a sticky contents rail ---- */
+        .pp-body {
+            display: grid;
+            grid-template-columns: 190px minmax(0, 1fr);
+            gap: 64px;
+            margin-top: 64px;
+            align-items: start;
+        }
+        .pp-toc { position: sticky; top: calc(var(--nav-h) + 28px); }
+        .pp-toc-title {
+            font-size: 11.5px;
+            font-weight: 600;
+            letter-spacing: .06em;
+            color: var(--text-3);
+            margin-bottom: 12px;
+        }
+        .pp-toc a {
+            display: block;
+            padding: 6px 0 6px 12px;
+            border-left: 2px solid var(--divider);
+            font-size: 13.5px;
+            line-height: 1.45;
+            color: var(--text-3);
+            text-decoration: none;
+            transition: color var(--transition-fast), border-color var(--transition-fast);
+        }
+        .pp-toc a:hover { color: var(--text-1); }
+        .pp-toc a.active {
+            color: var(--text-1);
+            border-left-color: var(--brand);
+            font-weight: 500;
+        }
+
+        .pp-section {
+            /* Anchor links must clear the fixed navbar. */
+            scroll-margin-top: calc(var(--nav-h) + 24px);
+        }
+        .pp-section + .pp-section { margin-top: 52px; }
+        .pp-section h2 {
+            font-family: var(--font-display);
+            font-size: 21px;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            line-height: 1.3;
+            margin-bottom: 12px;
+        }
+        .pp-section p {
+            font-size: 15.5px;
+            line-height: 1.75;
+            color: var(--text-2);
+            max-width: 72ch;
+        }
+        .pp-section p + p { margin-top: 14px; }
+        .pp-section strong { color: var(--text-1); font-weight: 600; }
+        .pp-section a { color: var(--brand); }
+
+        /* ---- one feature inside a section ---- */
+        .pp-section h3 {
+            font-family: var(--font-display);
+            font-size: 16.5px;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            line-height: 1.35;
+            margin: 34px 0 10px;
+            color: var(--text-1);
+        }
+        .pp-badge {
+            display: inline-block;
+            margin-left: 8px;
+            padding: 2px 9px;
+            border: 1px solid var(--divider);
+            border-radius: 20px;
+            background: var(--bg-alt);
+            font: 500 11px var(--font-sans);
+            letter-spacing: .02em;
+            color: var(--text-3);
+            vertical-align: 2px;
+            white-space: nowrap;
+        }
+
+        .pp-badge-always {
+            border-color: var(--brand);
+            color: var(--brand);
+            background: var(--brand-soft);
+        }
+
+        /* ---- a point that needs to stand apart from the prose ---- */
+        .pp-box {
+            margin-top: 18px;
+            border: 1px solid var(--divider);
+            border-radius: var(--radius-card);
+            background: var(--bg-soft);
+            padding: 20px 22px;
+        }
+        .pp-box p { max-width: none; }
+        .pp-box .pp-list { margin: 16px 0 4px; }
+        .pp-box .pp-list li:last-child { border-bottom: 0; }
+        .pp-box p + p { margin-top: 12px; }
+
+        /* The switches read as a row of names, wrapping on a narrow screen. */
+        .pp-switches { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0 4px; }
+        .pp-switches .pp-path { margin: 0; }
+
+        /* ---- data tables ---- */
+        .pp-list { list-style: none; margin-top: 18px; }
+        .pp-list li {
+            display: grid;
+            grid-template-columns: 260px minmax(0, 1fr);
+            gap: 20px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--divider);
+            font-size: 14.5px;
+            line-height: 1.6;
+        }
+        .pp-list li:first-child { border-top: 1px solid var(--divider); }
+        .pp-list .k { color: var(--text-1); font-weight: 500; }
+        .pp-list .v { color: var(--text-3); }
+
+        /* ---- never-sent callout ---- */
+        .pp-never {
+            margin-top: 18px;
+            border: 1px solid var(--divider);
+            border-radius: var(--radius-card);
+            background: var(--bg-soft);
+            padding: 6px 20px;
+        }
+        .pp-never ul { list-style: none; }
+        .pp-never li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 13px 0;
+            font-size: 14.5px;
+            line-height: 1.6;
+            color: var(--text-2);
+            border-bottom: 1px solid var(--divider);
+        }
+        .pp-never li:last-child { border-bottom: 0; }
+        .pp-never svg {
+            width: 15px; height: 15px;
+            flex: 0 0 auto;
+            margin-top: 3px;
+            color: var(--no);
+        }
+
+        /* ---- toggle instruction ---- */
+        .pp-path {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 16px 0 4px;
+            padding: 10px 14px;
+            border: 1px solid var(--divider);
+            border-radius: var(--radius-card);
+            background: var(--bg-alt);
+            font: 500 13.5px var(--font-mono);
+            color: var(--text-1);
+        }
+        .pp-path .sep { color: var(--text-3); }
+
+        /* ---- contact ---- */
+        .pp-contact {
+            margin-top: 18px;
+            border: 1px solid var(--divider);
+            border-radius: var(--radius-card);
+            background: var(--bg-soft);
+            padding: 22px 24px;
+        }
+        .pp-contact p { max-width: none; }
+        .pp-contact p + p { margin-top: 12px; }
+
+        code {
+            font-family: var(--font-mono);
+            font-size: 13px;
+            background-color: var(--bg-alt);
+            border: 1px solid var(--divider);
+            padding: 1px 6px;
+            border-radius: 4px;
+            color: var(--text-1);
+            white-space: nowrap;
+        }
+
+        @media (max-width: 1000px) {
+            .pp-summary { grid-template-columns: repeat(2, 1fr); }
+            .pp-body { grid-template-columns: 1fr; gap: 36px; }
+            .pp-toc { position: static; }
+            .pp-toc-inner {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 6px;
+            }
+            .pp-toc a {
+                border-left: 0;
+                border: 1px solid var(--divider);
+                border-radius: 20px;
+                padding: 5px 12px;
+            }
+            .pp-toc a.active { border-color: var(--brand); }
+        }
+
+        @media (max-width: 780px) {
+            .pp-hero { padding-top: 28px; }
+            .pp-claim { font-size: 19px; }
+            .pp-lede { font-size: 16.5px; }
+            .pp-summary { grid-template-columns: 1fr; gap: 10px; }
+            .pp-list li { grid-template-columns: 1fr; gap: 2px; }
+            .pp-section h2 { font-size: 19px; }
+            .pp-section h3 { font-size: 15.5px; margin-top: 28px; }
+        }
+    </style>
+
+    <meta property="og:title" content="Terms of Use - TuxBlox 🐧" />
+    <meta property="og:site_name" content="tuxblox.net" />
+    <meta property="og:description" content="TuxBlox is free software and its licence governs the code. These terms cover the servers we run for it: what they are for, what we ask of you, and what we do not promise." />
+    <meta property="og:image" content="https://tuxblox.net/static/images/banner/tuxblox-banner.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://tuxblox.net/terms" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Terms of Use - TuxBlox" />
+    <meta name="twitter:description" content="TuxBlox is free software and its licence governs the code. These terms cover the servers we run for it: what they are for, what we ask of you, and what we do not promise." />
+    <meta name="twitter:image" content="https://tuxblox.net/static/images/banner/tuxblox-banner.png" />
+
+    <meta name="theme-color" content="#0e1117" />
+</head>
+<body>
+    <!-- Copyright © TuxBlox Project 2026 -->
+    <div data-include="topbar"></div>
+
+    <main>
+        <div class="wrap">
+
+            <section class="hero pp-hero">
+                <h1>Terms of Use</h1>
+                <div class="pp-updated">Last updated 17 October 2026</div>
+                <p class="pp-claim">The software is yours under its licence. This page is about the servers.</p>
+                <p class="pp-lede">
+                    TuxBlox is free software, and nothing here changes what its licence lets
+                    you do with it. What these terms cover is the handful of services we run
+                    alongside it: the server that tells your launcher about updates and hands
+                    it the files, the one that names the region of a Roblox server, the one
+                    that receives crash reports, and this website. They cost nothing, they
+                    promise nothing, and this page says what we ask in return.
+                </p>
+            </section>
+
+            <div class="pp-summary">
+                <div class="pp-tile">
+                    <h3>The code is not covered</h3>
+                    <p>Running, reading, changing and sharing TuxBlox is governed by its licence, not by this page.</p>
+                </div>
+                <div class="pp-tile">
+                    <h3>Nothing to pay, nothing promised</h3>
+                    <p>The services are free and best effort. They can be slow, down, moved or withdrawn.</p>
+                </div>
+                <div class="pp-tile">
+                    <h3>No account anywhere</h3>
+                    <p>There is nothing to sign up for and nothing to lose. Limits apply per address.</p>
+                </div>
+                <div class="pp-tile">
+                    <h3>Use them for what they are</h3>
+                    <p>They exist to serve TuxBlox installs. They are not general purpose infrastructure.</p>
+                </div>
+            </div>
+
+            <div class="pp-body">
+                <nav class="pp-toc" aria-label="On this page">
+                    <div class="pp-toc-inner">
+                        <div class="pp-toc-title">ON THIS PAGE</div>
+                        <a href="#scope">What this page covers</a>
+                        <a href="#software">The software has its own licence</a>
+                        <a href="#services">The services we run</a>
+                        <a href="#website">The website and documentation</a>
+                        <a href="#asks">What we ask of you</a>
+                        <a href="#limits">Rate limits and blocking</a>
+                        <a href="#availability">Availability and changes</a>
+                        <a href="#age">Who may use these services</a>
+                        <a href="#roblox">TuxBlox and Roblox</a>
+                        <a href="#warranty">No warranty, no liability</a>
+                        <a href="#changes">Changes to these terms</a>
+                        <a href="#contact">Contact</a>
+                    </div>
+                </nav>
+
+                <div>
+                    <section class="pp-section" id="scope">
+                        <h2>What this page covers</h2>
+                        <p>
+                            These terms apply to the three servers listed under
+                            <a href="#services">The services we run</a>, and to this website.
+                            Using any of them means these terms apply to you. If you would
+                            rather they did not, the program still runs without them: what you
+                            give up is update checks, downloads from us, crash reporting and
+                            the server region notification.
+                        </p>
+                        <p>
+                            <strong>TuxBlox is an open-source project rather than a company.</strong>
+                            These terms deliberately name no legal entity and no governing law,
+                            because we are not in a position to make claims about either. They
+                            are the rules for using the servers, written plainly, and nothing
+                            more than that.
+                        </p>
+                        <p>
+                            What each service sends and records is a separate question, and the
+                            <a href="/privacy">Privacy Policy</a> answers it. This page is about
+                            the terms on which you may use them.
+                        </p>
+                        <p>
+                            Our Discord server is not covered here. It has its own rules, and
+                            Discord's terms apply to it.
+                        </p>
+                    </section>
+
+                    <section class="pp-section" id="software">
+                        <h2>The software has its own licence</h2>
+                        <p>
+                            TuxBlox's own code is licensed under the <strong>GPLv3</strong>. The
+                            compatibility layer in <code>compat/</code> is <strong>LGPLv2.1</strong>,
+                            inherited from Wine and Proton. Those licences decide what you may do
+                            with the software: run it, read it, change it, build it, pass it on.
+                            <a href="/docs/development/repository-structure">Repository Structure</a>
+                            describes the split.
+                        </p>
+                        <div class="pp-box">
+                            <p>
+                                <strong>Nothing on this page restricts a right your licence
+                                grants you.</strong> If something here looks like it does, the
+                                licence wins and this page is wrong.
+                            </p>
+                        </div>
+                        <p>
+                            So you may redistribute TuxBlox, and you do not need to ask. The one
+                            thing we ask is that you do not use our download server as the
+                            delivery mechanism for doing it at scale — mirror the files onto
+                            your own host, or talk to us first. That is a request about our
+                            bandwidth, not a condition on the licence.
+                        </p>
+                    </section>
+
+                    <section class="pp-section" id="services">
+                        <h2>The services we run</h2>
+                        <p>
+                            Three servers, each with one job:
+                        </p>
+                        <ul class="pp-list">
+                            <li><span class="k">setup.tuxblox.net</span><span class="v">Which version your release channel serves and the file list for it, TuxBlox's own downloads, and the list of builds the releases page shows</span></li>
+                            <li><span class="k">geo.tuxblox.net</span><span class="v">The region of a Roblox server you joined, answered from a database held on that same machine</span></li>
+                            <li><span class="k">telemetry.tuxblox.net</span><span class="v">Crash reports, when one is sent</span></li>
+                        </ul>
+                        <p>
+                            <strong>Roblox's own files never come from us.</strong> The launcher
+                            downloads the Roblox client, and checks which Roblox version is
+                            current, from Roblox's servers. Those requests are between you and
+                            Roblox, under Roblox's terms.
+                        </p>
+                    </section>
+
+                    <section class="pp-section" id="website">
+                        <h2>The website and documentation</h2>
+                        <p>
+                            This site, the documentation included, is served by GitHub Pages
+                            behind Cloudflare. Their terms cover getting the pages to you; ours
+                            cover what is on them.
+                        </p>
+                        <p>
+                            <strong>The documentation is not a specification.</strong> It
+                            describes TuxBlox as it is meant to work, it can be out of date, and
+                            it can simply be wrong. A page saying something works is not a
+                            promise that it will, and a page is not a commitment to keep
+                            behaving the way it describes. Where a page and the program
+                            disagree, the program is what you have.
+                        </p>
+                        <p>
+                            Quoting these pages, linking to them or translating them is fine and
+                            needs no permission. Mirroring the site with a crawler that ignores
+                            <code>robots.txt</code> is the one thing we ask you not to do.
+                        </p>
+                    </section>
+
+                    <section class="pp-section" id="asks">
+                        <h2>What we ask of you</h2>
+                        <p>
+                            The services are small, free, and paid for by the people who run
+                            them. Keeping them up for everybody means a short list of things not
+                            to do with them:
+                        </p>
+                        <div class="pp-never">
+                            <ul>
+                                <li>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                    Do not use them as general purpose infrastructure. The region lookup answers questions about Roblox servers, not about any address you care to send it
+                                </li>
+                                <li>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                    Do not automate bulk downloads, and do not point another project's updater at our download server
+                                </li>
+                                <li>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                    Do not send crash reports that are not crash reports, and do not flood the endpoint with invented ones
+                                </li>
+                                <li>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                    Do not attack, probe or try to get into the servers, and do not interfere with anybody else's use of them
+                                </li>
+                                <li>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                    Do not use them to do anything that is illegal where you are
+                                </li>
+                            </ul>
+                        </div>
+                        <p style="margin-top:16px">
+                            Finding a security hole is not probing in the sense above, as long as
+                            you report it rather than use it.
+                            <a href="/docs/troubleshooting/security">Reporting a Security Issue</a>
+                            is the page for that, and a report made in good faith is welcome
+                            rather than a breach of these terms.
+                        </p>
+                    </section>
+
+                    <section class="pp-section" id="limits">
+                        <h2>Rate limits and blocking</h2>
+                        <p>
+                            We may rate limit a request, refuse it, or block an address
+                            altogether. When something is actively hurting a service we will do
+                            it immediately and without warning, because the alternative is the
+                            service going down for everybody.
+                        </p>
+                        <p>
+                            There is no account, so a block lands on an address rather than on a
+                            person, and it is not a judgement about you. Addresses are shared and
+                            reassigned, which means a block can catch somebody who did nothing —
+                            that is a limitation of having nothing to sign in to, not an
+                            intention.
+                        </p>
+                        <p>
+                            If you think you have been blocked wrongly, email
+                            <code>contact@tuxblox.net</code> and we will look.
+                        </p>
+                    </section>
+
+                    <section class="pp-section" id="availability">
+                        <h2>Availability and changes</h2>
+                        <p>
+                            The services are free and best effort. There is no uptime figure
+                            here, no promise that one answers tomorrow, and no promise that it
+                            stays at the same address or keeps answering the same way. Any of
+                            them can be taken down for maintenance, moved, changed or withdrawn.
+                        </p>
+                        <p>
+                            TuxBlox is built so that none of that stops you using what you
+                            already have. An update check that cannot finish does not prevent a
+                            launch, and the Roblox you have installed runs whether or not our
+                            servers answer.
+                        </p>
+                        <p>
+                            We do not promise that any particular release stays downloadable. If
+                            a version matters to you, keep your own copy of it.
+                        </p>
+                    </section>
+
+                    <section class="pp-section" id="age">
+                        <h2>Who may use these services</h2>
+                        <p>
+                            You need to be old enough to agree to these terms where you live. If
+                            you are not, a parent or legal guardian has to agree to them on your
+                            behalf, and they are responsible for your use of the services.
+                        </p>
+                        <p>
+                            There is nothing to sign up for, so nobody checks this. It is a
+                            condition of use rather than a gate.
+                        </p>
+                    </section>
+
+                    <section class="pp-section" id="roblox">
+                        <h2>TuxBlox and Roblox</h2>
+                        <p>
+                            TuxBlox is an independent project. It is
+                            <strong>not affiliated with, authorised by or endorsed by Roblox
+                            Corporation</strong>.
+                        </p>
+                        <p>
+                            Roblox's own terms and rules apply to your Roblox account exactly as
+                            they do anywhere else. Running Roblox through TuxBlox does not change
+                            them, does not exempt you from them, and enforcement of them is
+                            Roblox's decision alone. We cannot appeal a decision about your
+                            account and we cannot undo one.
+                        </p>
+                    </section>
+
+                    <section class="pp-section" id="warranty">
+                        <h2>No warranty, no liability</h2>
+                        <p>
+                            The licence already says the software comes with no warranty. The
+                            services are the same: they are provided as they are, with no
+                            warranty of any kind, express or implied.
+                        </p>
+                        <div class="pp-box">
+                            <p>
+                                <strong>To the fullest extent the law allows, we are not liable
+                                for what follows from using them.</strong> That includes lost
+                                work, lost time, a broken or unbootable install, data you cannot
+                                get back, a Roblox account that gets actioned, and anything a
+                                file you downloaded does once it is on your machine.
+                            </p>
+                            <p>
+                                Where the law you live under does not allow part of that, that
+                                part does not apply to you, and the rest of these terms still
+                                does.
+                            </p>
+                        </div>
+                    </section>
+
+                    <section class="pp-section" id="changes">
+                        <h2>Changes to these terms</h2>
+                        <p>
+                            When these terms change, the "last updated" date at the top of this
+                            page moves, and a change worth knowing about is called out in that
+                            release's changelog.
+                        </p>
+                        <p>
+                            Using the services after a change means the changed terms are the
+                            ones that apply. If you do not agree with them, stop using the
+                            services — the software itself is yours either way, under its
+                            licence.
+                        </p>
+                    </section>
+
+                    <section class="pp-section" id="contact">
+                        <h2>Contact</h2>
+                        <div class="pp-contact">
+                            <p>
+                                Anything about this page, including a block you think is wrong:
+                                <code>contact@tuxblox.net</code>.
+                            </p>
+                            <p>
+                                Security issues go to <code>security@tuxblox.net</code> instead,
+                                and <a href="/docs/troubleshooting/security">Reporting a Security
+                                Issue</a> describes what to put in one.
+                            </p>
+                            <p>
+                                Everything else — questions, bugs, help getting started — is
+                                best asked in <a href="/discord" target="_blank" rel="noopener">Discord</a>.
+                            </p>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="wrap" data-include="footer"></div>
+
+<script src="/static/scripts/include.js?v=20261016" defer></script>
+    <script>
+    (function () {
+        'use strict';
+
+        // Highlights the contents entry for whichever section is currently in
+        // view. Progressive enhancement: without it the links still work.
+        var links = Array.prototype.slice.call(document.querySelectorAll('.pp-toc a'));
+        var sections = links
+            .map(function (a) { return document.querySelector(a.getAttribute('href')); })
+            .filter(Boolean);
+
+        if (!sections.length || !('IntersectionObserver' in window)) return;
+
+        var visible = {};
+
+        function refresh() {
+            var current = null;
+            for (var i = 0; i < sections.length; i++) {
+                if (visible[sections[i].id]) { current = sections[i].id; break; }
+            }
+            links.forEach(function (a) {
+                a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+            });
+        }
+
+        var observer = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                visible[entry.target.id] = entry.isIntersecting;
+            });
+            refresh();
+        }, {
+            // Top offset clears the fixed navbar; the negative bottom margin
+            // means a section only counts as current once it reaches the
+            // upper part of the viewport.
+            rootMargin: '-' + (72) + 'px 0px -60% 0px',
+            threshold: 0
+        });
+
+        sections.forEach(function (s) { observer.observe(s); });
+    })();
+    </script>
+</body>
+</html>
