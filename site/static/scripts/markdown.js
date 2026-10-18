@@ -33,10 +33,40 @@ function escapeHtml(str) {
 // loses a trailing .md from its path; ?query and #hash are left alone, so
 // install.md#requirements becomes install#requirements. images are not
 // touched, only [text](url) links and bare URLs.
+//
+// only on this site, though. somewhere else, a .md is a real file that is
+// served under that name -- a GitHub blob URL is the one the docs reach for
+// -- and dropping it would turn a working link into a 404.
 
 function stripMdExtension(url) {
+    if (isOffSite(url)) return String(url);
     const [, path, tail = ''] = String(url).match(/^([^?#]*)([?#][\s\S]*)?$/);
     return path.replace(/\.md$/i, '') + tail;
+}
+
+// a link that leaves the site opens in a new tab, so a reader who follows a
+// reference out of a page still has the page they were reading. links that
+// stay on the site navigate in place, or reading the docs would cost a tab
+// per page. /discord and /github are redirects off the site, so they count
+// as leaving it even though they are written as tuxblox.net URLs.
+const SITE_HOSTS = new Set(['tuxblox.net', 'www.tuxblox.net', 'static.tuxblox.net']);
+const LEAVES_SITE = /^\/(discord|github)(?=[/?#]|$)/i;
+
+function isOffSite(url) {
+    // only http(s) and protocol-relative URLs are judged by host. mailto:
+    // and the like are left alone: they hand off to another application
+    // rather than replacing the page, and a new tab would be left blank.
+    const absolute = String(url).match(/^(?:https?:)?\/\/([^/?#]*)([^?#]*)/i);
+    if (absolute) {
+        const host = absolute[1].replace(/^[^@]*@/, '').replace(/:\d+$/, '').toLowerCase();
+        return SITE_HOSTS.has(host) ? LEAVES_SITE.test(absolute[2]) : true;
+    }
+    return LEAVES_SITE.test(String(url));
+}
+
+// written after href, so anything matching on <a href="..."> still does
+function linkAttrs(url) {
+    return isOffSite(url) ? ' target="_blank" rel="noopener noreferrer"' : '';
 }
 
 // GitHub's heading slug, not a choice: the docs carry #fragment links written
@@ -81,7 +111,7 @@ function renderInline(text, softBreaks = false) {
     // links [text](url)
     text = text.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (_, label, url) => {
         const safeUrl = escapeHtml(stripMdExtension(url));
-        return `<a href="${safeUrl}">${escapeHtml(label)}</a>`;
+        return `<a href="${safeUrl}"${linkAttrs(url)}>${escapeHtml(label)}</a>`;
     });
 
     // bold+underline combos: __**text**__ or **__text__**
@@ -105,7 +135,7 @@ function renderInline(text, softBreaks = false) {
     // goes from the label too, so the text and the target don't disagree
     text = text.replace(/(^|[^"'>=])(https?:\/\/[^\s<]+)/g, (m, pre, url) => {
         const href = stripMdExtension(url);
-        return `${pre}<a href="${escapeHtml(href)}">${escapeHtml(href)}</a>`;
+        return `${pre}<a href="${escapeHtml(href)}"${linkAttrs(url)}>${escapeHtml(href)}</a>`;
     });
 
     // line handling. done here, while inline code is still parked, so a
@@ -949,6 +979,7 @@ const api = {
     registerLanguage,
     setHighlighter,
     stripMdExtension,
+    isOffSite,
     STYLES,
     styleTag,
     injectStyles,

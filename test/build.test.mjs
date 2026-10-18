@@ -51,7 +51,7 @@ test('builds the real site', () => {
     // The download page renders a release's CHANGELOGS.md in the browser from
     // the same markdown.js the docs are built with, so it has to be published
     // under the name the page asks for.
-    assert.ok(read('releases.html').includes('src="/static/scripts/markdown.js?v=20261017"'));
+    assert.ok(read('releases.html').includes('src="/static/scripts/markdown.js?v=20261018"'));
     assert.match(read('static/scripts/markdown.js'), /globalThis\.markdown = api/);
 
     assert.ok(read('docs/index.html').includes('url=/docs/getting-started/welcome'));
