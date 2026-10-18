@@ -19,6 +19,12 @@ The colours TuxBlox uses. Roblox looks exactly the same whichever you pick.
 
 The launcher changes the moment you pick one, so there is nothing to close and reopen. The installer and the window that updates Roblox follow your choice too, from the next time each one opens.
 
+### Window buttons
+
+The minimise, maximise and close buttons in the launcher's title bar use your desktop's own icons, so the window looks like the rest of your screen rather than bringing its own set. There is nothing to turn on: TuxBlox reads whichever icon set your desktop is using and follows it when you change it.
+
+Where those icons cannot be read, TuxBlox draws its own instead, which is what older versions always did. That is the only difference you would notice, and nothing else about the window changes.
+
 ## Minimize to background
 
 **Default: on**
