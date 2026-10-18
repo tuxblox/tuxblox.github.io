@@ -77,7 +77,7 @@ See [Settings](settings/launcher.md).
 
 ## About
 
-Your TuxBlox version, the copyright notice, and links to the website, documentation, GitHub, Discord and privacy policy.
+Your TuxBlox version, the copyright notice, and links to the website, documentation, GitHub, Discord, privacy policy and terms of use.
 
 If you are reporting a bug, the version number here is the one to quote.
 
