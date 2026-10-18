@@ -51,6 +51,6 @@ Those live elsewhere, because they are not about how large anything is drawn:
 
 | Question | Where it is answered |
 |---|---|
-| Which card is Roblox rendering on? | [Graphics card](settings/environment.md#graphics-card) |
+| Which card is Roblox rendering on? | [Preferred graphics card](settings/environment.md#preferred-graphics-card) |
 | Why is performance worse than I expected? | [Performance is worse than I expected](../troubleshooting/common-problems.md#performance-is-worse-than-i-expected) |
 | What can I measure or override? | [Graphics variables](../advanced/environment-variables.md#graphics-variables) |

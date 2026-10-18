@@ -85,11 +85,11 @@ Usually a driver issue rather than a TuxBlox one. In order of how often they wor
 
 1. Update your graphics drivers, and Mesa if you are on AMD or Intel.
 2. Confirm Vulkan works at all: `vulkaninfo --summary`, from the `vulkan-tools` package.
-3. If your machine has two graphics cards, set the right one under **Graphics card** in Settings.
+3. If your machine has two graphics cards, set the right one under **Preferred graphics card** in Settings.
 
 ### Roblox runs on the wrong graphics card
 
-Pick the right one under **Graphics card** in Settings. The dropdown lists every card TuxBlox can see.
+Pick the right one under **Preferred graphics card** in Settings. The dropdown lists every card TuxBlox can see.
 
 If that does not take effect, set the variables by hand in **Environment variables**, which override the picker. See [Environment Variables](../advanced/environment-variables.md#picking-a-card).
 

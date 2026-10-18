@@ -1,8 +1,29 @@
 # Environment
 
-What TuxBlox hands to Roblox when it starts: which graphics card, what the web panels do, what gets shared, and your own variables.
+What TuxBlox hands to Roblox when it starts: which renderer and graphics card, what the web panels do, what gets shared, and your own variables.
 
-## Graphics card
+## Graphics
+
+**Default: Automatic**
+
+Which renderer Roblox draws with.
+
+| Option | What you get |
+|---|---|
+| Automatic | TuxBlox asks for nothing and Roblox chooses for itself. |
+| DirectX 11 | Roblox draws through DirectX 11, which the compatibility layer translates to Vulkan for your driver. |
+| Vulkan | Roblox draws through Vulkan directly. |
+| OpenGL | Roblox draws through OpenGL. |
+
+TuxBlox applies this by writing FastFlags, the same hidden Roblox settings the [FastFlags](../fastflags.md) page edits. It writes the flag for the renderer you chose set to True and the other two set to False, so Roblox is asked for one rather than only steered away from the others. The three flags are `FFlagDebugGraphicsPreferD3D11`, `FFlagDebugGraphicsPreferVulkan` and `FFlagDebugGraphicsPreferOpenGL`.
+
+**This setting wins over the FastFlags page.** If a row there sets one of those three flags, the value chosen here replaces it. A renderer picked in Settings is meant to be the one that applies, without you having to go and find the row that disagrees with it.
+
+On **Automatic** nothing is written at all, so the FastFlags page is left to decide, and so is Roblox where the page says nothing either.
+
+Takes effect the next time Roblox starts.
+
+## Preferred graphics card
 
 **Default: Automatic**
 

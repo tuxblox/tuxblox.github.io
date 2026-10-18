@@ -163,7 +163,7 @@ These are not TuxBlox's, they belong to the graphics stack underneath. They work
 
 ### Picking a card
 
-The **Graphics card** setting writes these for you. Set them yourself only if the picker gets your machine wrong.
+The **Preferred graphics card** setting writes these for you. Set them yourself only if the picker gets your machine wrong.
 
 **NVIDIA:**
 
