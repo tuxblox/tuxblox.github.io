@@ -38,7 +38,7 @@ test('builds the real site', () => {
     assert.ok(welcome.includes('id="docs-rail"'));
     assert.ok(welcome.includes('id="docs-drawer-toggle"'));
     assert.ok(welcome.includes('<noscript>'));
-    assert.ok(welcome.includes('/static/scripts/docs-nav.js?v=20261017'));
+    assert.ok(welcome.includes('/static/scripts/docs-nav.js?v=20261018'));
 
     // Without this every anchor -- the 11 cross-page ones and every TOC
     // click -- scrolls its heading under the fixed topbar.

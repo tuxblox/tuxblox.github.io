@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
 
 const {
-    readState, writeState, applyState, nextState, pickActive, focusWrap,
+    readState, writeState, applyState, nextState, pickActive, focusWrap, swapTarget,
 } = createRequire(import.meta.url)('../site/static/scripts/docs-nav.js');
 
 const fake = (initial) => {
@@ -74,4 +74,71 @@ test('focus wraps at both ends of the drawer', () => {
     assert.equal(focusWrap('last', false, 'first', 'last', true), 'first');
     assert.equal(focusWrap('first', true, 'first', 'last', true), 'last');
     assert.equal(focusWrap('elsewhere', false, 'first', 'last', false), 'first');
+});
+
+// --- taking over a click ----------------------------------------------
+//
+// swapTarget decides, from the link and the click alone, whether the page can
+// be swapped in place. Everything it returns null for stays an ordinary
+// navigation, which is what keeps the links real.
+
+const HERE = 'https://tuxblox.net/docs/getting-started/welcome';
+const plain = { button: 0, ctrlKey: false, metaKey: false, shiftKey: false, altKey: false, defaultPrevented: false };
+const to = (href, extra) => ({ href, target: '', download: false, ...extra });
+
+test('a plain left click on another docs page is taken over', () => {
+    assert.equal(
+        swapTarget(to('https://tuxblox.net/docs/using-tuxblox/fastflags'), plain, HERE),
+        'https://tuxblox.net/docs/using-tuxblox/fastflags');
+});
+
+test('a middle click or a modified click is left to the browser', () => {
+    const href = to('https://tuxblox.net/docs/using-tuxblox/fastflags');
+    assert.equal(swapTarget(href, { ...plain, button: 1 }, HERE), null);
+    assert.equal(swapTarget(href, { ...plain, ctrlKey: true }, HERE), null);
+    assert.equal(swapTarget(href, { ...plain, metaKey: true }, HERE), null);
+    assert.equal(swapTarget(href, { ...plain, shiftKey: true }, HERE), null);
+    assert.equal(swapTarget(href, { ...plain, altKey: true }, HERE), null);
+});
+
+test('a click something else already handled is left alone', () => {
+    assert.equal(
+        swapTarget(to('https://tuxblox.net/docs/using-tuxblox/fastflags'), { ...plain, defaultPrevented: true }, HERE),
+        null);
+});
+
+test('a link that opens somewhere else is left to the browser', () => {
+    assert.equal(swapTarget(to('https://tuxblox.net/docs/a/b', { target: '_blank' }), plain, HERE), null);
+    assert.equal(swapTarget(to('https://tuxblox.net/docs/a/b', { download: true }), plain, HERE), null);
+});
+
+test('a link off the site is left to the browser', () => {
+    assert.equal(swapTarget(to('https://github.com/cherrypath0/tuxblox'), plain, HERE), null);
+    assert.equal(swapTarget(to('https://tuxblox.net/discord'), plain, HERE), null);
+});
+
+test('a page on the site that is not a docs page is left to the browser', () => {
+    assert.equal(swapTarget(to('https://tuxblox.net/releases'), plain, HERE), null);
+    assert.equal(swapTarget(to('https://tuxblox.net/'), plain, HERE), null);
+});
+
+// /docs and /docs/<section> are redirect pages with no article of their own,
+// so swapping one in would leave the reader looking at nothing.
+test('the redirect pages are left to the browser', () => {
+    assert.equal(swapTarget(to('https://tuxblox.net/docs'), plain, HERE), null);
+    assert.equal(swapTarget(to('https://tuxblox.net/docs/'), plain, HERE), null);
+    assert.equal(swapTarget(to('https://tuxblox.net/docs/getting-started/'), plain, HERE), null);
+});
+
+// The browser already scrolls to a heading on the page you are reading, and
+// doing it here would push a duplicate entry onto the history stack.
+test('a fragment on the page you are already reading is left to the browser', () => {
+    assert.equal(swapTarget(to(`${HERE}#what-it-is`), plain, HERE), null);
+    assert.equal(swapTarget(to(HERE), plain, HERE), null);
+});
+
+test('a fragment on another docs page is taken over, fragment and all', () => {
+    assert.equal(
+        swapTarget(to('https://tuxblox.net/docs/using-tuxblox/fastflags#the-allowlist'), plain, HERE),
+        'https://tuxblox.net/docs/using-tuxblox/fastflags#the-allowlist');
 });
