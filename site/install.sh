@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+echo "Use of TuxBlox's online services is subject to the Terms of Use and Privacy Policy."
+
 URL="https://setup.tuxblox.net/v1/stable/3.4.0/installer"
 ARGS=(--headless --nolaunch)
 
