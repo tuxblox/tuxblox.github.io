@@ -4,6 +4,8 @@ The Versions tab is where you decide which build of Roblox you are actually runn
 
 Most people never need it. It is there for when a new Roblox release breaks a plugin you rely on, when you need to reproduce a bug against a specific build, or when you want to test your game on an older client.
 
+> **With Auto-Update Roblox on, this tab is read-only.** It still shows every build you have, but the buttons are turned off, because TuxBlox is keeping Roblox up to date and clearing out the builds you no longer run. Turn [Auto-Update Roblox](settings/updates.md#auto-update-roblox) off to use this tab.
+
 ## What a version looks like
 
 Roblox identifies each build with a hash, like `version-a1b2c3d4e5f6789a`. That is what you see everywhere in this tab.

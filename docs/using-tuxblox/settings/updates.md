@@ -50,7 +50,11 @@ This setting is about TuxBlox itself. Roblox has its own setting below.
 
 Before each launch, TuxBlox checks whether Roblox has put out a newer build and installs it if so. The check itself is silent; a window appears only when there is actually something to download.
 
-When off, you keep whichever build you have until you install another one yourself from the Versions tab.
+Once a newer build is in, TuxBlox removes the older builds of that app and the downloads they came from, so the versions folder holds the one you are playing on rather than every build of the last few months. Player and Studio are counted separately: updating one never removes builds of the other, and a build that is still open is left where it is.
+
+Because TuxBlox is choosing the build while this is on, the Versions tab only shows what is installed and its buttons are turned off. Turn this setting off to pick a build yourself again.
+
+When off, you keep whichever build you have until you install another one yourself from the Versions tab, and nothing is ever removed for you.
 
 On is the default because this is what happens on Windows too, and a Roblox that is behind can refuse to join an experience. If the check cannot finish, TuxBlox starts the Roblox you already have rather than stopping, and says so in a desktop notification.
 
