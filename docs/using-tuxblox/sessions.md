@@ -19,6 +19,8 @@ Roblox Studio
 
 The number after `PID` is how the rest of your system refers to that session. You rarely need it, but it is what a bug report will ask for.
 
+The sidebar's **Sessions** row carries a count of what is open, so you can see at a glance without coming here.
+
 **Ended this run** is the sessions that finished while the launcher was open, and how each one ended — closed normally, stopped by you, or crashed. A session that crashed is marked in red.
 
 Sessions that ended *before* you opened the launcher are not listed. The launcher only knows about what it watched happen.
@@ -37,19 +39,20 @@ A session actually writes **two** logs: one from TuxBlox, covering starting up a
 
 If Roblox has not written anything yet, the tab says so rather than showing you an empty box.
 
-Under the log it names the files it is reading. That is worth a glance if something looks wrong — see [When the log looks wrong](#when-the-log-looks-wrong) below.
+The log keeps itself at the newest line, wraps long lines rather than running them off the side, and hides the parts of each line only a machine wants — how long the session had been running, and which thread wrote it. None of that needs turning on.
+
+Scroll up and it stops following, so you can read back without being pulled to the bottom. It says so while it is paused, and offers **Jump to the end** to start following again.
 
 ### The buttons above the log
 
 | Button | What it does |
 | --- | --- |
-| **Follow** | Keeps the view at the newest line as it arrives. Turn it off to read back without being pulled to the bottom. |
-| **Wrap** | Wraps long lines instead of running them off the side. |
-| **Tidy** | Hides the parts of each line only a machine wants — how long the session had been running, and which thread wrote it. Turn it off to see lines exactly as written. |
-| **Errors** | Shows only warnings and errors. |
+| **Errors only** | Shows only warnings and errors. |
 | **Copy** | Copies the whole log to the clipboard. |
 | **Save** | Writes the log to a file in your home folder, ready to attach to a bug report. |
 | **Open folder** | Opens the folder the logs are kept in. |
+
+Beside them is how much the session has written so far.
 
 ### Finding something
 
@@ -81,9 +84,9 @@ Opening a game from a link or a desktop shortcut never opens the launcher window
 
 ## When the log looks wrong
 
-TuxBlox works out which of Roblox's logs belongs to which session by when each one started. That is almost always right, and the tab names the file it settled on underneath the session's details.
+TuxBlox works out which of Roblox's logs belongs to which session by when each one started. That is almost always right.
 
-With two Studio sessions started within the same second of each other, it can pair them the wrong way round. If a log does not match the session you picked, check the filename shown under the session's name — and if it is the wrong one, the other session's log is the one you want.
+With two Studio sessions started within the same second of each other, it can pair them the wrong way round. If a log does not look like the session you picked, hold the pointer over the session's name to see which file it settled on — and if it is the wrong one, the other session's log is the one you want.
 
 ## Where the logs live
 
