@@ -1,210 +1,215 @@
 {
-    "getting-started": {
-        "Title": "Getting Started",
-        "Sort": 1,
-        "Content": {
-            "welcome": {
-                "Title": "Welcome",
-                "Sort": 1,
-                "Icon": "rocket"
-            },
-            "system-requirements": {
-                "Title": "System Requirements",
-                "Sort": 2,
-                "Icon": "monitor"
-            },
-            "installing-tuxblox": {
-                "Title": "Installing TuxBlox",
-                "Sort": 3,
-                "Icon": "download"
-            },
-            "first-launch": {
-                "Title": "Your First Launch",
-                "Sort": 4,
-                "Icon": "play"
-            },
-            "how-it-works": {
-                "Title": "How TuxBlox Works",
-                "Sort": 5,
-                "Icon": "layers"
-            },
-            "faq": {
-                "Title": "Frequently Asked Questions",
-                "Sort": 6,
-                "Icon": "help-circle"
-            },
-            "releases-and-updates": {
-                "Title": "Releases and Updates",
-                "Sort": 7,
-                "Icon": "calendar"
-            }
-        }
-    },
-    "using-tuxblox": {
-        "Title": "Using TuxBlox",
-        "Sort": 2,
-        "Content": {
-            "the-launcher": {
-                "Title": "The Launcher",
-                "Sort": 1,
-                "Icon": "zap"
-            },
-            "settings": {
-                "Title": "Settings",
-                "Sort": 2,
-                "Icon": "settings",
-                "Content": {
-                    "launcher": {
-                        "Title": "Launcher",
-                        "Sort": 1
-                    },
-                    "updates": {
-                        "Title": "Updates",
-                        "Sort": 2
-                    },
-                    "environment": {
-                        "Title": "Environment",
-                        "Sort": 3
-                    },
-                    "controller": {
-                        "Title": "Controller",
-                        "Sort": 4
-                    },
-                    "troubleshooting": {
-                        "Title": "Troubleshooting",
-                        "Sort": 5
-                    },
-                    "privacy": {
-                        "Title": "Privacy",
-                        "Sort": 6
-                    },
-                    "danger-zone": {
-                        "Title": "Danger zone",
-                        "Sort": 7
-                    }
-                }
-            },
-            "fastflags": {
-                "Title": "FastFlags",
-                "Sort": 3,
-                "Icon": "flag"
-            },
-            "versions": {
-                "Title": "Versions",
-                "Sort": 4,
-                "Icon": "git-branch"
-            },
-            "desktop-integration": {
-                "Title": "Desktop Integration",
-                "Sort": 5,
-                "Icon": "app-window"
-            },
-            "studio-mcp": {
-                "Title": "Studio MCP",
-                "Sort": 7,
-                "Icon": "plug"
-            },
-            "display-and-scaling": {
-                "Title": "Display and Scaling",
-                "Sort": 6,
-                "Icon": "maximize"
-            }
-        }
-    },
-    "advanced": {
-        "Title": "Advanced",
-        "Sort": 3,
-        "Content": {
-            "command-line": {
-                "Title": "Command Line Reference",
-                "Sort": 1,
-                "Icon": "terminal",
-                "Content": {
-                    "launcher": {
-                        "Title": "TuxBloxLauncher",
-                        "Sort": 1
-                    },
-                    "installer": {
-                        "Title": "TuxBloxInstaller",
-                        "Sort": 2
-                    },
-                    "compatibility-layer": {
-                        "Title": "The compatibility layer",
-                        "Sort": 3
-                    },
-                    "studio-mcp": {
-                        "Title": "studio-mcp",
-                        "Sort": 4
-                    }
-                }
-            },
-            "environment-variables": {
-                "Title": "Environment Variables",
-                "Sort": 2,
-                "Icon": "variable"
-            },
-            "files-and-folders": {
-                "Title": "Files and Folders",
-                "Sort": 3,
-                "Icon": "folder"
-            }
-        }
-    },
-    "troubleshooting": {
-        "Title": "Troubleshooting",
-        "Sort": 4,
-        "Content": {
-            "common-problems": {
-                "Title": "Common Problems",
-                "Sort": 1,
-                "Icon": "life-buoy"
-            },
-            "known-issues": {
-                "Title": "Known Issues",
-                "Sort": 2,
-                "Icon": "triangle-alert"
-            },
-            "logs": {
-                "Title": "Logs and Diagnostics",
-                "Sort": 3,
-                "Icon": "file-text"
-            },
-            "reporting-bugs": {
-                "Title": "Reporting Bugs",
-                "Sort": 4,
-                "Icon": "bug"
-            },
-            "security": {
-                "Title": "Reporting a Security Issue",
-                "Sort": 5,
-                "Icon": "shield"
-            }
-        }
-    },
-    "development": {
-        "Title": "Development",
-        "Sort": 5,
-        "Content": {
-            "building-from-source": {
-                "Title": "Building From Source",
-                "Sort": 1,
-                "Icon": "hammer"
-            },
-            "repository-structure": {
-                "Title": "Repository Structure",
-                "Sort": 2,
-                "Icon": "folder-tree"
-            },
-            "contributing": {
-                "Title": "Contributing",
-                "Sort": 3,
-                "Icon": "git-pull-request"
-            },
-            "roblox-version-tracker": {
-                "Title": "Roblox Version Tracker",
-                "Sort": 4,
-                "Icon": "git-branch"
-            }
-        }
+ "getting-started": {
+  "Title": "Getting Started",
+  "Sort": 1,
+  "Content": {
+   "welcome": {
+    "Title": "Welcome",
+    "Sort": 1,
+    "Icon": "rocket"
+   },
+   "system-requirements": {
+    "Title": "System Requirements",
+    "Sort": 2,
+    "Icon": "monitor"
+   },
+   "installing-tuxblox": {
+    "Title": "Installing TuxBlox",
+    "Sort": 3,
+    "Icon": "download"
+   },
+   "first-launch": {
+    "Title": "Your First Launch",
+    "Sort": 4,
+    "Icon": "play"
+   },
+   "how-it-works": {
+    "Title": "How TuxBlox Works",
+    "Sort": 5,
+    "Icon": "layers"
+   },
+   "faq": {
+    "Title": "Frequently Asked Questions",
+    "Sort": 6,
+    "Icon": "help-circle"
+   },
+   "releases-and-updates": {
+    "Title": "Releases and Updates",
+    "Sort": 7,
+    "Icon": "calendar"
+   }
+  }
+ },
+ "using-tuxblox": {
+  "Title": "Using TuxBlox",
+  "Sort": 2,
+  "Content": {
+   "the-launcher": {
+    "Title": "The Launcher",
+    "Sort": 1,
+    "Icon": "zap"
+   },
+   "sessions": {
+    "Title": "Sessions",
+    "Sort": 2,
+    "Icon": "activity"
+   },
+   "settings": {
+    "Title": "Settings",
+    "Sort": 3,
+    "Icon": "settings",
+    "Content": {
+     "launcher": {
+      "Title": "Launcher",
+      "Sort": 1
+     },
+     "updates": {
+      "Title": "Updates",
+      "Sort": 2
+     },
+     "environment": {
+      "Title": "Environment",
+      "Sort": 3
+     },
+     "controller": {
+      "Title": "Controller",
+      "Sort": 4
+     },
+     "troubleshooting": {
+      "Title": "Troubleshooting",
+      "Sort": 5
+     },
+     "privacy": {
+      "Title": "Privacy",
+      "Sort": 6
+     },
+     "danger-zone": {
+      "Title": "Danger zone",
+      "Sort": 7
+     }
     }
+   },
+   "fastflags": {
+    "Title": "FastFlags",
+    "Sort": 4,
+    "Icon": "flag"
+   },
+   "versions": {
+    "Title": "Versions",
+    "Sort": 5,
+    "Icon": "git-branch"
+   },
+   "desktop-integration": {
+    "Title": "Desktop Integration",
+    "Sort": 6,
+    "Icon": "app-window"
+   },
+   "studio-mcp": {
+    "Title": "Studio MCP",
+    "Sort": 8,
+    "Icon": "plug"
+   },
+   "display-and-scaling": {
+    "Title": "Display and Scaling",
+    "Sort": 7,
+    "Icon": "maximize"
+   }
+  }
+ },
+ "advanced": {
+  "Title": "Advanced",
+  "Sort": 3,
+  "Content": {
+   "command-line": {
+    "Title": "Command Line Reference",
+    "Sort": 1,
+    "Icon": "terminal",
+    "Content": {
+     "launcher": {
+      "Title": "TuxBloxLauncher",
+      "Sort": 1
+     },
+     "installer": {
+      "Title": "TuxBloxInstaller",
+      "Sort": 2
+     },
+     "compatibility-layer": {
+      "Title": "The compatibility layer",
+      "Sort": 3
+     },
+     "studio-mcp": {
+      "Title": "studio-mcp",
+      "Sort": 4
+     }
+    }
+   },
+   "environment-variables": {
+    "Title": "Environment Variables",
+    "Sort": 2,
+    "Icon": "variable"
+   },
+   "files-and-folders": {
+    "Title": "Files and Folders",
+    "Sort": 3,
+    "Icon": "folder"
+   }
+  }
+ },
+ "troubleshooting": {
+  "Title": "Troubleshooting",
+  "Sort": 4,
+  "Content": {
+   "common-problems": {
+    "Title": "Common Problems",
+    "Sort": 1,
+    "Icon": "life-buoy"
+   },
+   "known-issues": {
+    "Title": "Known Issues",
+    "Sort": 2,
+    "Icon": "triangle-alert"
+   },
+   "logs": {
+    "Title": "Logs and Diagnostics",
+    "Sort": 3,
+    "Icon": "file-text"
+   },
+   "reporting-bugs": {
+    "Title": "Reporting Bugs",
+    "Sort": 4,
+    "Icon": "bug"
+   },
+   "security": {
+    "Title": "Reporting a Security Issue",
+    "Sort": 5,
+    "Icon": "shield"
+   }
+  }
+ },
+ "development": {
+  "Title": "Development",
+  "Sort": 5,
+  "Content": {
+   "building-from-source": {
+    "Title": "Building From Source",
+    "Sort": 1,
+    "Icon": "hammer"
+   },
+   "repository-structure": {
+    "Title": "Repository Structure",
+    "Sort": 2,
+    "Icon": "folder-tree"
+   },
+   "contributing": {
+    "Title": "Contributing",
+    "Sort": 3,
+    "Icon": "git-pull-request"
+   },
+   "roblox-version-tracker": {
+    "Title": "Roblox Version Tracker",
+    "Sort": 4,
+    "Icon": "git-branch"
+   }
+  }
+ }
 }

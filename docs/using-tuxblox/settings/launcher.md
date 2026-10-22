@@ -27,12 +27,16 @@ Where those icons cannot be read, TuxBlox draws its own instead, which is what o
 
 ## Minimize to background
 
-**Default: on**
+**Default: off**
 
 Closes the launcher window once Roblox is on its way.
 
-Roblox is watched by a separate part of TuxBlox either way, so nothing is lost by the window going. It is still there to tell you if Roblox crashes, and it still writes the session log.
+With it off, which is how a new install arrives, the launcher stays open and takes you to the new session's [log](../sessions.md) so you can watch what Roblox is doing. It is also still usable, which is worth having if you want to start Studio and the Player together, switch versions, or change a setting without opening it again.
 
-Turn it off to keep the window open and usable while you play. That is worth doing if you want to start Studio and the Player together, switch versions, or change a setting without opening the launcher again.
+Turn it on to get the older behaviour, where the window closes as soon as Roblox starts.
+
+> **If you had TuxBlox before this setting's default changed, your setting is kept as it was.** The new default only applies to a fresh install. Nothing was changed underneath you.
+
+Roblox is watched by a separate part of TuxBlox either way, so nothing is lost by the window going. It is still there to tell you if Roblox crashes, and it still writes the session log.
 
 This is not a tray icon. On, the window closes; off, it stays a normal window you can use.
