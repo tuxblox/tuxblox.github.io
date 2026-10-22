@@ -2,7 +2,7 @@
 
 What TuxBlox hands to Roblox when it starts: which renderer and graphics card, what the web panels do, what gets shared, and your own variables.
 
-## Graphics
+## Graphics API
 
 **Default: Automatic**
 

@@ -60,9 +60,9 @@ If you already have your flags as JSON, press **Import JSON** above the list you
 
 Values can be text, numbers, or `true` and `false`. The **Import** button stays greyed out while the text is not valid JSON, and the window says what is wrong. A flag that is already in the list takes the imported value; new flags are added at the end.
 
-### The Graphics setting wins
+### The Graphics API setting wins
 
-**Graphics** in [Settings](settings/environment.md#graphics) writes the three renderer flags itself, and what it writes replaces any row here that sets the same flag. Set it to **Automatic** if you would rather choose the renderer from this page.
+**Graphics API** in [Settings](settings/environment.md#graphics-api) writes the three renderer flags itself, and what it writes replaces any row here that sets the same flag. Set it to **Automatic** if you would rather choose the renderer from this page.
 
 ### Duplicates
 
