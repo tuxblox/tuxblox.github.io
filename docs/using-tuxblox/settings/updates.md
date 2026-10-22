@@ -83,4 +83,8 @@ It stops TuxBlox moving you *backwards*. If the version you are running is ahead
 
 That matters for one case: a TuxBlox you [built yourself](../../development/building-from-source.md) rather than downloaded. Your own build is usually ahead of what any channel publishes, so you would otherwise be asked to replace it with a release every time the launcher checks.
 
-If you downloaded TuxBlox, you do not need this. Being ahead of your channel does happen on its own — it is exactly what a withdrawn release looks like, as described under **Automatic updates** above — and that is a case where going backwards is the right outcome. Turning this on does not affect the mismatched-component repair, which is a different check and still runs.
+If you downloaded TuxBlox, you do not need this. Being ahead of your channel does happen on its own — it is exactly what a withdrawn release looks like, as described under **Automatic updates** above — and that is a case where going backwards is the right outcome.
+
+`norollback` covers the mismatched-component repair as well. When the pieces of an install disagree — the compatibility layer reporting one version while the launcher reports another — TuxBlox normally treats that as a damaged install and repairs it without asking, because a half-applied update leaves exactly that trail. On a build you made yourself the pieces disagree as a matter of course, since you replace them one at a time, and repairing it would fetch the published release over the top of what you built. With `norollback` on, TuxBlox writes what it found to its log and leaves the install alone.
+
+The trade-off is that a genuinely half-applied update is left alone too, and that is the main reason not to turn this on if you downloaded TuxBlox.
