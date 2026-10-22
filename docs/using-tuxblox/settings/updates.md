@@ -57,34 +57,3 @@ Because TuxBlox is choosing the build while this is on, the Versions tab only sh
 When off, you keep whichever build you have until you install another one yourself from the Versions tab, and nothing is ever removed for you.
 
 On is the default because this is what happens on Windows too, and a Roblox that is behind can refuse to join an experience. If the check cannot finish, TuxBlox starts the Roblox you already have rather than stopping, and says so in a desktop notification.
-
-## norollback
-
-**Default: off. No switch in the launcher.**
-
-This one is only in the settings file. Add the key to the object that is already in `~/.tuxblox/settings.json`, alongside whatever is there:
-
-```json
-{
-  "channel": "stable",
-  "send_crash_reports": false,
-  "norollback": true
-}
-```
-
-> [!CAUTION]
-> Add it to the existing file rather than replacing the file with just this key. A `settings.json` missing the fields TuxBlox expects is treated as damaged, and a damaged file falls back to defaults wholesale — so you would lose every other setting, and `norollback` itself would come back off.
-
-Close the launcher first. It rewrites the file whenever you change anything in the window, so an edit made while it is open is simply overwritten. [Files and Folders](../../advanced/files-and-folders.md#settingsjson) describes the rest of the file.
-
-The key is lowercase `norollback`, exactly as written. TuxBlox will not recognise it spelled any other way, and an unrecognised key is ignored rather than reported, so a typo here looks like the setting doing nothing.
-
-It stops TuxBlox moving you *backwards*. If the version you are running is ahead of the one your channel asks for, TuxBlox offers to bring it back in line — the same ordinary update prompt as any other, which you can decline. With `norollback` on, it is not offered at all, and an install that is deliberately ahead is left alone.
-
-That matters for one case: a TuxBlox you [built yourself](../../development/building-from-source.md) rather than downloaded. Your own build is usually ahead of what any channel publishes, so you would otherwise be asked to replace it with a release every time the launcher checks.
-
-If you downloaded TuxBlox, you do not need this. Being ahead of your channel does happen on its own — it is exactly what a withdrawn release looks like, as described under **Automatic updates** above — and that is a case where going backwards is the right outcome.
-
-`norollback` covers the mismatched-component repair as well. When the pieces of an install disagree — the compatibility layer reporting one version while the launcher reports another — TuxBlox normally treats that as a damaged install and repairs it without asking, because a half-applied update leaves exactly that trail. On a build you made yourself the pieces disagree as a matter of course, since you replace them one at a time, and repairing it would fetch the published release over the top of what you built. With `norollback` on, TuxBlox writes what it found to its log and leaves the install alone.
-
-The trade-off is that a genuinely half-applied update is left alone too, and that is the main reason not to turn this on if you downloaded TuxBlox.
