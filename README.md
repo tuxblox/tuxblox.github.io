@@ -29,19 +29,8 @@ Every push to `main` is tested, built and deployed. A failing test or build
 deploys nothing. Docs for a feature that is not released yet belong on a
 branch until release day.
 
-When the INSTALLER changes, update `INSTALLER_VERSION` in `site/install.sh`;
-nothing else does it. Not on every release: that script fetches a pinned
-installer, which resolves the current release itself once it runs, so it only
-has to be recent enough to understand the layout. Component bytes are never
-rewritten, so the URL it builds is stable indefinitely.
-
-It downloads from `setup-bunny.tuxblox.net` and falls back to
-`setup.tuxblox.net`, the same order the installer itself uses: the edge is
-faster nearly everywhere, and the origin is what it pulls from, so a path the
-edge has not pulled yet is still reachable behind it. The architecture is part
-of the path now, so the script refuses anything but x86_64 rather than
-downloading a binary that cannot run. Keep that file free of comments; it is
-served to users who read it before running it.
+When the installer changes, update `INSTALLER_VERSION` in `site/install.sh`;
+nothing else does it.
 
 ## Checking a live copy
 
