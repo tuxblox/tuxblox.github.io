@@ -27,18 +27,31 @@ case "$(uname -m)" in
         ;;
 esac
 
-URL="https://setup.tuxblox.net/client/installer/$INSTALLER_VERSION/$ARCH/TuxBloxInstaller"
+# The edge first, the origin as its fallback -- the same order the installer itself uses once it
+# runs, and for the same reason: the edge is faster nearly everywhere, and the origin is what it
+# pulls from, so anything missing from the edge is still reachable behind it.
+HOSTS=(setup-bunny.tuxblox.net setup.tuxblox.net)
+ARTIFACT="client/installer/$INSTALLER_VERSION/$ARCH/TuxBloxInstaller"
 
 tmpdir="$(mktemp -d)"
 trap 'rm -rf "$tmpdir"' EXIT
 installer="$tmpdir/installer"
 
-if ! curl -sSLf \
-        --retry 3 --retry-delay 2 \
-        --connect-timeout 15 --max-time 300 \
-        -o "$installer" \
-        "$URL"; then
-    echo "error: download failed from $URL" >&2
+downloaded=0
+for host in "${HOSTS[@]}"; do
+    if curl -sSLf \
+            --retry 3 --retry-delay 2 \
+            --connect-timeout 15 --max-time 300 \
+            -o "$installer" \
+            "https://$host/$ARTIFACT"; then
+        downloaded=1
+        break
+    fi
+    echo "notice: could not download from $host, trying the next one" >&2
+done
+
+if [[ $downloaded -eq 0 ]]; then
+    echo "error: download failed from every host: ${HOSTS[*]}" >&2
     exit 1
 fi
 
