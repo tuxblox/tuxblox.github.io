@@ -4,13 +4,30 @@ set -euo pipefail
 
 echo "Use of TuxBlox's online services is subject to the Terms of Use and Privacy Policy."
 
-URL="https://setup.tuxblox.net/v1/stable/3.4.0/installer"
+# A pinned installer, not the current release. The installer resolves the release itself once it
+# runs, so this only has to be recent enough to understand the layout -- which is why the number
+# below changes when the INSTALLER changes, not on every release.
+#
+# Component bytes are written once and never rewritten, so this URL is stable forever.
+INSTALLER_VERSION="3.1.0"
 ARGS=(--headless --nolaunch)
 
 if ! command -v curl >/dev/null 2>&1; then
     echo "error: curl is required but not found in PATH" >&2
     exit 127
 fi
+
+# Named in the download path, so the wrong one is a binary that cannot run rather than a clear
+# refusal. Only x86_64 is published today; arm64 is reserved in the layout and builds nothing yet.
+case "$(uname -m)" in
+    x86_64|amd64) ARCH="x86_64" ;;
+    *)
+        echo "error: TuxBlox is only published for x86_64, and this machine is $(uname -m)." >&2
+        exit 1
+        ;;
+esac
+
+URL="https://setup.tuxblox.net/client/installer/$INSTALLER_VERSION/$ARCH/TuxBloxInstaller"
 
 tmpdir="$(mktemp -d)"
 trap 'rm -rf "$tmpdir"' EXIT

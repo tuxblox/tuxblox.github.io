@@ -29,8 +29,10 @@ Every push to `main` is tested, built and deployed. A failing test or build
 deploys nothing. Docs for a feature that is not released yet belong on a
 branch until release day.
 
-When a new stable version is released, update the version in
-`site/install.sh`; nothing else does it.
+When the INSTALLER changes, update `INSTALLER_VERSION` in `site/install.sh`;
+nothing else does it. Not on every release: that script fetches a pinned
+installer, which resolves the current release itself once it runs, so it only
+has to be recent enough to understand the layout.
 
 ## Checking a live copy
 
