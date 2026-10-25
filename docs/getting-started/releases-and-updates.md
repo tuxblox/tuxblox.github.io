@@ -27,7 +27,7 @@ What the check does when it finds something depends on [Automatic updates](../us
 
 | Automatic updates | What happens |
 |---|---|
-| **Off** (the default) | The check runs as the window opens. A notification appears in the corner of the launcher and waits for you to click it. |
+| **Off** (the default) | The check runs as the window opens. TuxBlox asks first, naming the release and the parts of it that change, and waits for you to answer. |
 | **On** | The check runs before the window does, with up to five seconds allowed for an answer, so an update that is about to install does not flash the Home screen up first. |
 
 Dismissing the notification hides it for that run only. It is not a decision that gets remembered, so the next time you start the launcher the update is offered again.

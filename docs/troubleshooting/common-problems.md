@@ -134,7 +134,7 @@ Some USB headsets tell the system they are speakers, and there is no way for Tux
 
 ### TuxBlox says an update is available but nothing happens
 
-**Automatic updates** is off, which is the default. Click the notification in the corner of the launcher to apply it.
+**Automatic updates** is off, which is the default. TuxBlox asks before installing one, and the **Update** button at the bottom of the Home tab applies it whenever you are ready.
 
 ### An update failed halfway through
 

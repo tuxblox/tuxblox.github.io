@@ -34,7 +34,7 @@ The channel shown at the bottom of the Home tab is the one the version you are r
 
 When on, updates install themselves as soon as TuxBlox finds one.
 
-When off, you get a notification in the corner of the launcher instead, and nothing happens until you click it.
+When off, TuxBlox asks instead. A window names the release it found and lists which parts of TuxBlox it would change, each as the version you have and the version it would become. **Update** installs it; **Not now** closes the window and leaves the **Update** button at the bottom of the Home tab, so postponing it is not the same as refusing it.
 
 Off is the default because an update that starts on its own while you are about to open Studio is annoying. Turn it on if you would rather never think about it.
 

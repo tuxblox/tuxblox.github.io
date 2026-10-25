@@ -44,6 +44,8 @@ Speeds up the login screen, the Toolbox, and every other panel inside Roblox tha
 
 This has nothing to do with game or Studio viewport graphics. Turning it off will not affect your framerate.
 
+On some machines those panels are drawn on the processor even with this on. That is not a fault: TuxBlox uses your own graphics driver where it can reach it, and falls back rather than risk a blank panel. Your session log says which was used.
+
 Turn it off if those panels are blank, flickering, drawing garbage, or crashing. That is the most common fix for it, especially on older drivers and on llvmpipe software rendering.
 
 Takes effect the next time Roblox starts.

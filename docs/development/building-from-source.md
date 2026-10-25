@@ -48,6 +48,7 @@ Then wait. The first build compiles the entire compatibility layer.
 | `--nodebug` | Quieter. Only summaries, not every step's output. |
 | `--log` | Also write everything to `build.log`, and diagnose failures automatically |
 | `--stage-only` | Re-package the existing build without rebuilding it |
+| `--local` | Build and package, upload nothing. Only has an effect for a maintainer with the upload helper; a normal clone has nothing to upload to and skips it either way. |
 
 `--log` is worth using every time. Without it there is no build log, so a failure leaves nothing to look at.
 

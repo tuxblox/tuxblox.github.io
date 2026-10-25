@@ -96,6 +96,7 @@ Logs are written for debugging, not for publishing. Before attaching one:
 
 - Your Linux username appears in file paths throughout. Fine for most people, worth knowing about.
 - Place and experience names you opened appear in Roblox's half of the log.
+- A log written before 3.5.0.1 can also hold the contents of the messages Roblox's web panels exchanged, the sign-in screen's among them. Newer logs record only that a message happened, not what it said.
 
 > [!CAUTION]
 > Never share your virtual drive, `~/.tuxblox/runtime/`. It can contain your Roblox session cookies, which is equivalent to handing over your account. The log file is safe. The drive is not.
@@ -105,6 +106,8 @@ Logs are written for debugging, not for publishing. Before attaching one:
 When Roblox exits badly and **Always send crash reports** is on, TuxBlox sends a report containing the exit code, your Roblox and TuxBlox versions, basic system information, and the session log.
 
 That is the whole list. The setting is off unless you turn it on, and even then a report is sent only on a bad exit, never during normal use. With the setting off, the crash window offers a **Report** button, and a report is sent only if you press it. The full policy is at [tuxblox.net/privacy](https://tuxblox.net/privacy).
+
+With the setting on, the crash window offers **Copy** instead, which puts that session's whole log on the clipboard so you can paste it into a bug report. Read [Before you share a log](#before-you-share-a-log) first. A desktop that keeps no clipboard of its own can lose the copy when the window closes; if a paste comes out empty, the file is still in `~/.tuxblox/logs`.
 
 A crash report is not a bug report. Nobody is reading them one by one and following up. If you want your problem looked at, [report it](reporting-bugs.md).
 

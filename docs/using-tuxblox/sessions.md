@@ -6,11 +6,13 @@ Every time you open Roblox Player or Roblox Studio, that is a session. Studio le
 
 It is the first place to look when something goes wrong — a session that will not start, one that closed on its own, or one behaving oddly while it runs.
 
+Launching from the Home screen brings you here once the session is up, already showing that session rather than whichever one you were last reading.
+
 ## The list
 
 Sessions are grouped under two headings.
 
-**Running** is everything open right now. Each row shows the app, how long it has been going, and how much memory it is using:
+**Active** is everything open right now. Each row shows the app, how long it has been going, and how much memory it is using:
 
 ```
 Roblox Studio
@@ -21,7 +23,7 @@ The number after `PID` is how the rest of your system refers to that session. Yo
 
 The sidebar's **Sessions** row carries a count of what is open, so you can see at a glance without coming here.
 
-**Ended this run** is the sessions that finished while the launcher was open, and how each one ended — closed normally, stopped by you, or crashed. A session that crashed is marked in red.
+**Ended** is the sessions that finished while the launcher was open, and how long ago each one did. A session that crashed says so, and is marked in red; one that closed the way it was meant to has nothing more to say.
 
 Sessions that ended *before* you opened the launcher are not listed. The launcher only knows about what it watched happen.
 
@@ -37,22 +39,36 @@ Selecting a session shows its log on the right, updating as new lines arrive.
 
 A session actually writes **two** logs: one from TuxBlox, covering starting up and the virtual drive, and one from Roblox itself. The tab shows both together. TuxBlox's own lines are tinted green so you can tell which half a problem is in.
 
-If Roblox has not written anything yet, the tab says so rather than showing you an empty box.
-
 The log keeps itself at the newest line, wraps long lines rather than running them off the side, and hides the parts of each line only a machine wants — how long the session had been running, and which thread wrote it. None of that needs turning on.
 
-Scroll up and it stops following, so you can read back without being pulled to the bottom. It says so while it is paused, and offers **Jump to the end** to start following again.
+Scroll up and it stops following, so you can read back without being pulled to the bottom. **Jump to the end** appears while it is paused and sets it following again.
 
 ### The buttons above the log
 
 | Button | What it does |
 | --- | --- |
-| **Errors only** | Shows only warnings and errors. |
+| **Filter** | Chooses which kinds of line the log shows. |
 | **Copy** | Copies the whole log to the clipboard. |
 | **Save** | Writes the log to a file in your home folder, ready to attach to a bug report. |
 | **Open folder** | Opens the folder the logs are kept in. |
 
-Beside them is how much the session has written so far.
+Beside them is how much the session has written so far. While the filter is hiding something it says how many lines got through as well as how many there are, so a log with lines missing never looks like a log with nothing in it.
+
+### Choosing what the log shows
+
+The funnel button opens a list of the five kinds of line a session writes. All five start switched on, and switching one off hides those lines without losing them — switch it back on and they are there again.
+
+| Kind | What it covers |
+| --- | --- |
+| **Errors** | Errors from Roblox itself, not warnings. |
+| **Warnings** | Warnings from Roblox itself. |
+| **Game output** | What the game you are in printed itself, including its own warnings and errors. |
+| **Info** | Everything else Roblox wrote. |
+| **TuxBlox** | TuxBlox's own half of the log. |
+
+A line is only ever one of the five, so nothing can hide twice or turn up under two switches. A game's own warnings and errors count as game output rather than as warnings and errors, so turning game output off takes all of what the game said with it. Hiding a kind leaves the log exactly where it was — nothing is reloaded, so the view does not move and it is instant however long the log is. Find skips hidden lines too.
+
+What you choose lasts while the launcher is open and follows you between sessions, so you do not have to set it again for each log. It is not written to disk — every launcher starts showing everything.
 
 ### Finding something
 

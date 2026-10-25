@@ -661,6 +661,139 @@
         'use strict';
 
         var RELEASES_URL = 'https://setup.tuxblox.net/v2/releases.json';
+        var CDN = 'https://setup.tuxblox.net';
+        // Not Object.keys(CHANNELS): that list has an "Other" bucket for a channel this page does
+        // not know about, which the server has no directory for and would only ever answer 404.
+        var PUBLISHED_CHANNELS = ['stable', 'canary', 'experimental'];
+
+        // What a component is called in the Files table, and the file it is published as. The CDN
+        // path is client/{component}/{version}/{arch}/{file} -- no "components" segment, so
+        // "releases" is a reserved name there.
+        var COMPONENTS = {
+            launcher: { label: 'Launcher', file: 'TuxBloxLauncher' },
+            installer: { label: 'Installer', file: 'TuxBloxInstaller' },
+            'studio-mcp': { label: 'Studio MCP', file: 'studio-mcp' },
+            compat: { label: 'Runtime', file: 'compat.tar.zst' },
+            libtuxblox: { label: 'Libraries', file: 'libtuxblox.tar.zst' }
+        };
+
+        // The interface stack is GTK and libadwaita built from source: it moves when they move,
+        // which is nothing a reader of this page can act on. It still appears in the Files table,
+        // because it is still something an install downloads.
+        var NO_CHANGELOG = { libtuxblox: 1 };
+
+        function humanSize(bytes) {
+            if (typeof bytes !== 'number' || !isFinite(bytes) || bytes <= 0) return '';
+            var units = ['B', 'KB', 'MB', 'GB'];
+            var i = 0;
+            while (bytes >= 1024 && i < units.length - 1) { bytes /= 1024; i++; }
+            return (bytes >= 10 || i === 0 ? Math.round(bytes) : bytes.toFixed(1)) + ' ' + units[i];
+        }
+
+        function getJson(url) {
+            return fetch(url + '?source=browserjs&time=' + Date.now(), {
+                headers: { 'Accept': 'application/json' }
+            }).then(function (r) {
+                if (!r.ok) throw new Error('Server returned ' + r.status);
+                return r.json();
+            });
+        }
+
+        // MAJOR.MINOR.PATCH.BUILD, newest first. The server lists them this way already, but the
+        // changelog below is a comparison between neighbours, so the wrong order would quietly
+        // describe the wrong release instead of failing.
+        function byReleaseDesc(a, b) {
+            var left = String(a).split('.'), right = String(b).split('.');
+            for (var i = 0; i < 4; i++) {
+                var diff = (parseInt(right[i], 10) || 0) - (parseInt(left[i], 10) || 0);
+                if (diff) return diff;
+            }
+            return 0;
+        }
+
+        // A release names every component's version, and a component version's bytes are published
+        // once and never rewritten -- so a component took part in this release exactly when its
+        // version differs from the one the release before it named. An unchanged component carries
+        // the same number and therefore the same changelog, which is why listing it anyway would
+        // repeat the same notes under every release until it next moved.
+        function changedComponents(body, previous) {
+            return Object.keys(COMPONENTS).filter(function (name) {
+                if (NO_CHANGELOG[name]) return false;
+                var entry = body.components && body.components[name];
+                if (!entry || !entry.version) return false;
+                var before = previous && previous.components && previous.components[name];
+                return !before || before.version !== entry.version;
+            });
+        }
+
+        // One release file becomes one row, in the shape the rest of this page already renders --
+        // so the whole table, changelog and installer-button code below is untouched by the move
+        // to the new layout.
+        function itemFromRelease(channel, release, body, previous) {
+            var content = [];
+            Object.keys(COMPONENTS).forEach(function (name) {
+                var entry = body.components && body.components[name];
+                if (!entry || !entry.version) return;
+                var bytes = entry.arch && entry.arch.x86_64;
+                if (!bytes) return;   // null means not published for this architecture, not zero bytes
+                content.push({
+                    name: COMPONENTS[name].label,
+                    pointer: CDN + '/client/' + name + '/' + entry.version + '/x86_64/' +
+                             COMPONENTS[name].file,
+                    storage: humanSize(bytes.size)
+                });
+            });
+            if (!content.length) return null;
+            var parts = changedComponents(body, previous).map(function (name) {
+                var version = body.components[name].version;
+                return {
+                    label: COMPONENTS[name].label + ' ' + version,
+                    url: CDN + '/client/' + name + '/' + version + '/changelogs.md'
+                };
+            });
+            return {
+                name: 'TuxBlox ' + release,
+                date: body.published || '',
+                changelogs: [],
+                changelogParts: parts,
+                changelogUrl: CDN + '/client/releases/' + channel + '/' + release + '.md',
+                content: content
+            };
+        }
+
+        // The channel's own directory listing, then each release file it names. There is no index
+        // to read instead, deliberately: nothing maintains a second record that could disagree with
+        // the tree. A channel nobody has published to answers with an empty list rather than a 404.
+        function loadChannel(channel) {
+            var base = CDN + '/client/releases/' + channel + '/';
+            return getJson(base).then(function (listing) {
+                var releases = (listing && Array.isArray(listing.releases)) ? listing.releases : [];
+                if (!releases.length) return [];
+                releases = releases.slice().sort(byReleaseDesc);
+                return Promise.all(releases.map(function (release) {
+                    // One bad release must not blank the page.
+                    return getJson(base + release + '.json').catch(function () { return null; });
+                })).then(function (bodies) {
+                    return releases.map(function (release, i) {
+                        if (!bodies[i]) return null;
+                        // The next one down is the release this one followed. An unreadable
+                        // neighbour reads as "no previous release", so the card lists every
+                        // component rather than silently dropping the ones that moved.
+                        return itemFromRelease(channel, release, bodies[i], bodies[i + 1]);
+                    }).filter(Boolean);
+                });
+            }).catch(function () { return []; });
+        }
+
+        function loadFromClientLayout() {
+            return Promise.all(PUBLISHED_CHANNELS.map(loadChannel)).then(function (perChannel) {
+                var data = {};
+                PUBLISHED_CHANNELS.forEach(function (channel, i) {
+                    if (perChannel[i].length) data[channel] = perChannel[i];
+                });
+                return data;
+            });
+        }
 
         /* Content entries with this name are shown as a button under the
            release title instead of as a row in the Files list. */
@@ -717,6 +850,11 @@
             if (!dateStr || typeof dateStr !== 'string') return null;
             var trimmed = dateStr.trim();
             if (!trimmed) return null;
+
+            if (/^\d{4}-\d{2}-\d{2}T/.test(trimmed)) {
+                var iso = new Date(trimmed);
+                if (!isNaN(iso.getTime())) return iso;
+            }
 
             var spaceIdx = trimmed.indexOf(' ');
             if (spaceIdx !== -1) {
@@ -880,15 +1018,30 @@
             return null;
         }
 
-        // Three sources, in order: CHANGELOGS.md, the list in releases.json,
-        // then nothing at all. The list renders first so the card is never
-        // empty while the file is still in flight.
+        // A release's changelog is now the changelogs of the components that moved, merged into
+        // one document in the order the Files table lists them. The parts live here rather than in
+        // an attribute on the block: they are data, and a JSON blob inside HTML is one escaping
+        // mistake away from being markup.
+        var CHANGELOG_PARTS = {};
+        var nextChangelogId = 0;
+
+        // One component's share of a merged changelog: its own heading, then what it has to say.
+        // A component with nothing published contributes nothing at all, heading included -- a
+        // title over an empty section says less than no section does.
+        function changelogSection(label, text) {
+            return (text && text.trim()) ? '# ' + label + '\n\n' + text.trim() : '';
+        }
+
+        // Three sources, in order: the components' own changelogs, the release's own file, then the
+        // list in releases.json. The list renders first so the card is never empty while the files
+        // are still in flight.
         function changelogHtml(item, heading) {
-            var url = releaseFileUrl(item.content, 'CHANGELOGS.md');
+            var parts = Array.isArray(item.changelogParts) ? item.changelogParts : [];
+            var url = item.changelogUrl || releaseFileUrl(item.content, 'CHANGELOGS.md');
             var lines = (Array.isArray(item.changelogs) ? item.changelogs : []).filter(function (c) {
                 return c != null && String(c).trim() !== '';
             });
-            if (!url && !lines.length) return '';
+            if (!parts.length && !url && !lines.length) return '';
 
             var body = lines.length
                 ? '<ul class="changelog-plain">' +
@@ -896,7 +1049,14 @@
                   '</ul>'
                 : '<p class="changelog-status">Loading the changelog&hellip;</p>';
 
-            return '<div class="changelog"' + (url ? ' data-changelog="' + esc(url) + '"' : '') + '>' +
+            var id = '';
+            if (parts.length) {
+                id = String(++nextChangelogId);
+                CHANGELOG_PARTS[id] = parts;
+            }
+
+            return '<div class="changelog"' + (url ? ' data-changelog="' + esc(url) + '"' : '') +
+                     (id ? ' data-changelog-parts="' + id + '"' : '') + '>' +
                      (heading ? '<div class="block-title">' + esc(heading) + '</div>' : '') +
                      '<div class="changelog-body">' + body + '</div>' +
                    '</div>';
@@ -1042,10 +1202,23 @@
         // release without one keeps its list from releases.json; one with
         // neither loses the block.
         function loadChangelogs(root) {
-            Array.prototype.forEach.call(root.querySelectorAll('.changelog[data-changelog]'), function (block) {
+            Array.prototype.forEach.call(root.querySelectorAll('.changelog'), function (block) {
                 if (block.getAttribute('data-loaded')) return;
+                var parts = CHANGELOG_PARTS[block.getAttribute('data-changelog-parts')] || [];
+                var fallback = block.getAttribute('data-changelog');
+                if (!parts.length && !fallback) return;
                 block.setAttribute('data-loaded', '1');
-                fetchChangelog(block.getAttribute('data-changelog')).then(function (text) {
+
+                Promise.all(parts.map(function (part) {
+                    return fetchChangelog(part.url).then(function (text) {
+                        return changelogSection(part.label, text);
+                    });
+                })).then(function (sections) {
+                    var merged = sections.filter(Boolean).join('\n\n');
+                    // No component publishes one yet, so until they do the release's own file is
+                    // the whole changelog.
+                    return merged || (fallback ? fetchChangelog(fallback) : null);
+                }).then(function (text) {
                     var body = block.querySelector('.changelog-body');
                     if (!body) return;
                     var html = (text && text.trim()) ? renderMarkdownSafely(text) : '';
@@ -1344,20 +1517,28 @@
             loader.hidden = false;
             content.hidden = true;
 
-            fetch(RELEASES_URL + '?source=browserjs&time=' + Date.now(), {
-                headers: { 'Accept': 'application/json' }
+            // The new layout first, the frozen v2 list second. Both have to work at once: this
+            // page is served continuously, and until the bridge release is published there is
+            // nothing under client/ to show -- while afterwards v2 stops gaining releases.
+            loadFromClientLayout()
+            .then(function (fromClient) {
+                if (Object.keys(fromClient).length) return fromClient;
+                return fetch(RELEASES_URL + '?source=browserjs&time=' + Date.now(), {
+                    headers: { 'Accept': 'application/json' }
+                })
+                .then(function (r) {
+                    if (!r.ok) throw new Error('Server returned ' + r.status + ' ' + r.statusText);
+                    return r.text();
+                })
+                .then(function (text) {
+                    try {
+                        return JSON.parse(text);
+                    } catch (e) {
+                        throw new Error('The release list came back malformed.');
+                    }
+                });
             })
-            .then(function (r) {
-                if (!r.ok) throw new Error('Server returned ' + r.status + ' ' + r.statusText);
-                return r.text();
-            })
-            .then(function (text) {
-                var data;
-                try {
-                    data = JSON.parse(text);
-                } catch (e) {
-                    throw new Error('The release list came back malformed.');
-                }
+            .then(function (data) {
                 if (!data || typeof data !== 'object' || Array.isArray(data)) {
                     throw new Error('Unexpected data structure.');
                 }
