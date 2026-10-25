@@ -4,11 +4,6 @@ set -euo pipefail
 
 echo "Use of TuxBlox's online services is subject to the Terms of Use and Privacy Policy."
 
-# A pinned installer, not the current release. The installer resolves the release itself once it
-# runs, so this only has to be recent enough to understand the layout -- which is why the number
-# below changes when the INSTALLER changes, not on every release.
-#
-# Component bytes are written once and never rewritten, so this URL is stable forever.
 INSTALLER_VERSION="3.1.0"
 ARGS=(--headless --nolaunch)
 
@@ -17,8 +12,6 @@ if ! command -v curl >/dev/null 2>&1; then
     exit 127
 fi
 
-# Named in the download path, so the wrong one is a binary that cannot run rather than a clear
-# refusal. Only x86_64 is published today; arm64 is reserved in the layout and builds nothing yet.
 case "$(uname -m)" in
     x86_64|amd64) ARCH="x86_64" ;;
     *)
@@ -27,9 +20,6 @@ case "$(uname -m)" in
         ;;
 esac
 
-# The edge first, the origin as its fallback -- the same order the installer itself uses once it
-# runs, and for the same reason: the edge is faster nearly everywhere, and the origin is what it
-# pulls from, so anything missing from the edge is still reachable behind it.
 HOSTS=(setup-bunny.tuxblox.net setup.tuxblox.net)
 ARTIFACT="client/installer/$INSTALLER_VERSION/$ARCH/TuxBloxInstaller"
 
