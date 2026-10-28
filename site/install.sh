@@ -4,7 +4,7 @@ set -euo pipefail
 
 echo "Use of TuxBlox's online services is subject to the Terms of Use and Privacy Policy."
 
-INSTALLER_VERSION="3.1.0"
+INSTALLER_VERSION="3.1.1"
 ARGS=(--headless --nolaunch)
 
 if ! command -v curl >/dev/null 2>&1; then
