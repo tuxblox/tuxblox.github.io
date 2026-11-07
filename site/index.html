@@ -33,7 +33,7 @@
 
     <meta property="og:title" content="TuxBlox 🐧" />
     <meta property="og:site_name" content="tuxblox.net" />
-    <meta property="og:description" content="Run Roblox natively on Linux. A free, open-source launcher and compatibility layer." />
+    <meta property="og:description" content="Run Roblox Studio on Linux. Free, open source, and nothing else to install." />
     <meta property="og:image" content="https://tuxblox.net/static/images/banner/tuxblox-banner.png" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://tuxblox.net" />
@@ -56,7 +56,7 @@
                 <div>
                     <h1>Run <span class="blue-text">Roblox</span> natively on <span class="orange-text">Linux</span></h1>
                     <p class="hero-subtitle">
-                        TuxBlox is a free, open source launcher and compatibility layer that runs Roblox on Linux. It is designed for both beginners and experts, has a friendly launcher, and is in <strong>active development</strong>. 
+                        TuxBlox runs Roblox Studio on Linux. You get the real Studio, the same one Windows users get, not a copy or a lookalike. Everything it needs comes with it, so there is nothing else to install. TuxBlox is free, open source, and in <strong>active development</strong>. 
                     </p>
 
                     <div class="hero-actions">
@@ -154,37 +154,40 @@
                 </div>
                 <div class="how-body">
                     <p>
-                        Roblox is distributed as Windows binaries only; there is no Linux build.
-                        TuxBlox is a compatibility layer and launcher capable of running those
-                        binaries on Linux. It loads and executes the official Roblox binaries
-                        <strong>unmodified</strong>, implementing the Windows API calls they make
-                        using their Linux equivalents.
+                        Roblox only releases Studio for Windows. There is no Linux version of it,
+                        and that is the gap TuxBlox fills. Whenever Studio asks for something it
+                        would normally get from Windows, like a window to draw in or a file to
+                        open, TuxBlox answers instead, and Studio carries on as though it were
+                        running on Windows.
                     </p>
                     <p>
-                        Instead of simulating internal Windows logic like a virtual machine or an
-                        emulator, TuxBlox translates those calls as the process runs. This avoids the
-                        performance and memory penalties of those approaches, and leaves the Roblox
-                        installation byte for byte identical to the one Roblox publishes.
+                        There is no copy of Windows involved anywhere, and nothing is being
+                        imitated in software. Studio's own code runs directly on your processor at
+                        full speed, so you do not pay the performance and memory cost that a
+                        virtual machine or an emulator would ask of you. The Studio on your disk
+                        stays <strong>exactly the one Roblox published</strong>, down to the last
+                        byte.
                     </p>
                     <p>
-                        The compatibility layer is <strong>developed and maintained specifically for
-                        Roblox</strong>. Targeting a single application means defects can be fixed at
-                        the source rather than worked around through configuration, including cases
-                        that general purpose compatibility tools cannot reach.
+                        TuxBlox is built for <strong>Roblox and nothing else</strong>. That sounds
+                        like a limitation, and it is the reason things work properly: when
+                        something misbehaves it gets fixed at the cause, instead of being worked
+                        around with a setting. Tools that have to run thousands of different
+                        programs cannot afford to do that.
                     </p>
 
                     <div class="how-points">
                         <div class="row">
                             <span class="k">No Windows installation</span>
-                            <span class="v">No second operating system, no disk image, and no Windows licence to supply.</span>
+                            <span class="v">No second operating system, no disk image, and no Windows licence to buy.</span>
                         </div>
                         <div class="row">
-                            <span class="k">Unmodified binaries</span>
-                            <span class="v">The Studio files are exactly those Roblox publishes. TuxBlox neither patches nor repackages them.</span>
+                            <span class="k">Roblox stays untouched</span>
+                            <span class="v">The Studio files are exactly the ones Roblox publishes. TuxBlox does not patch them or repackage them.</span>
                         </div>
                         <div class="row">
-                            <span class="k">No resource reservation</span>
-                            <span class="v">Memory and GPU are used on demand, as with any native process. Nothing is pre-allocated.</span>
+                            <span class="k">Nothing set aside up front</span>
+                            <span class="v">Memory and graphics are used as they are needed, the same as any other program on your computer.</span>
                         </div>
                     </div>
                 </div>
