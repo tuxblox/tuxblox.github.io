@@ -17,6 +17,16 @@ Six tabs down the left side:
 | **Settings** | Everything about TuxBlox itself |
 | **About** | Version, links, license |
 
+## The first time you open it
+
+The first launch opens a **Welcome to TuxBlox** window. Three short pages:
+
+1. The launcher's colours, and an offer to download Roblox Studio there and then. The download is optional — you can do it later from the Home tab instead.
+2. The optional features, all off until you turn them on, each saying what it sends. See [Privacy](settings/privacy.md).
+3. Links to the website, the documentation, GitHub, Discord, the Privacy Policy and the Terms of Use.
+
+**Skip** jumps to the last page rather than closing, so the links are always there. However you leave it, it does not come back.
+
 ## Home
 
 Two cards, one for Roblox Player and one for Roblox Studio.
@@ -26,6 +36,13 @@ The button on each card tells you what state that app is in:
 - **Install & Launch** means Roblox is not in the virtual drive yet. Pressing it downloads and installs Roblox first, then starts it.
 - **Launch Studio** or **Launch Player** means it is installed and ready.
 - **Stop Player**, red, means a Player session is open. Pressing it closes that session.
+- **Coming soon**, greyed out, is the Player card while Roblox Player support is still being built. See [Roblox Player](#roblox-player).
+
+### Roblox Player
+
+Roblox Player support is not finished, so its button says **Coming soon** and does nothing. Studio is unaffected.
+
+If you want to try it anyway, add `"enable_player_button": true` to `~/.tuxblox/settings.json` and restart the launcher. There is no setting for it in the window on purpose: it turns on something that is not expected to work yet. When Player support ships the button simply becomes live and the setting goes away.
 
 Under each card's name is the Roblox version it will start, such as `0.740.0.7400927`, and which channel it came from. If TuxBlox cannot read a version out of that build it shows the folder name Roblox installed it under instead, which looks like `version-2366ba214ec740ca`.
 

@@ -38,11 +38,11 @@ TuxBlox does not check the type for you. It passes whatever you type straight th
 
 ## Using the editor
 
-Open the **FastFlags** tab. It has two lists, **Player** and **Studio**. Each keeps its own separate flags, so a flag you set for Studio does not affect Player. Roblox's allowlist applies to the **Player** list only; anything in the **Studio** list is applied whether it is on the list or not.
+Open the **FastFlags** tab. It keeps two separate lists, **Player** and **Studio**, and the switch along the top picks which one you are editing. The number beside each name is how many flags that list holds. A flag you set for Studio does not affect Player. Roblox's allowlist applies to the **Player** list only; anything in the **Studio** list is applied whether it is on the list or not.
 
 To add a flag:
 
-1. Press **Add flag** above the list you want.
+1. Press **Add flag**.
 2. Type the flag name in the left box, exactly as Roblox spells it. Names are case sensitive.
 3. Type the value in the right box.
 
@@ -50,9 +50,13 @@ To remove one, press the **−** button at the end of its row.
 
 Changes are saved as you type. There is no save button.
 
+### Finding a flag
+
+The search box filters the list you are looking at by flag name, so a long list is still workable. It only changes what is shown — a flag hidden by a search term is still set, still counted, and still applied when you launch. Clear the box to see everything again.
+
 ### Importing many flags at once
 
-If you already have your flags as JSON, press **Import JSON** above the list you want, paste them, and press **Import**:
+If you already have your flags as JSON, press the **⋮** button, choose **Import JSON**, paste them, and press **Import**. They go into whichever list the switch is on:
 
 ```json
 {"FFlagExample": "true", "DFIntExample": 30}
@@ -66,7 +70,7 @@ Values can be text, numbers, or `true` and `false`. The **Import** button stays 
 
 ### Duplicates
 
-If two rows set the same flag name, the row marked **duplicate** is telling you the last one wins. Nothing breaks, it is just that only one of them can take effect.
+If two rows set the same flag name, the **last** one is the one that applies. The earlier row is marked **overridden** and its value is greyed out, because that value genuinely does nothing. Nothing breaks — the mark is just telling you which row is being ignored.
 
 ## When flags take effect
 

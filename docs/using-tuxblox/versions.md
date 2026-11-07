@@ -10,45 +10,49 @@ Most people never need it. It is there for when a new Roblox release breaks a pl
 
 Roblox identifies each build with a hash, like `version-a1b2c3d4e5f6789a`. That is what you see everywhere in this tab.
 
-Player and Studio have separate lists, even though they share a folder inside the virtual drive. The tab shows them under two headings.
+Player and Studio have separate lists, even though they share a folder inside the virtual drive. A **Player / Studio** switch along the top picks which list you are looking at.
 
-## The install bar
+## Installing a version
 
-An **Install a version** box along the top:
+**Install a version**, on the right of that switch, opens a small window:
 
 | Control | What it does |
 |---|---|
-| **App** | Whether you are installing for Player or Studio |
-| **Channel** | Roblox's release channel, `live` unless you have a reason. Capital letters are turned into lowercase as you type. See [Channels](#channels) |
-| **Version hash** | A specific `version-…` hash, or leave it blank for the latest |
-| **Install** | Downloads and installs what the fields describe |
-| **Install previous version** | Installs the build immediately before the current latest |
+| **Latest** | The newest build on the channel |
+| **Previous** | The build immediately before the newest one |
+| **Custom** | A specific build, named by its hash |
+| **Channel** | Roblox's release channel, `live` unless you have a reason. See [Channels](#channels) |
+| **Build** | Only shown for **Custom**: the `version-…` hash you want |
 
-**Install previous version** is the one most people want. It is the "Roblox broke something today" button.
+Whichever you pick installs for whichever app the switch is on.
+
+**Previous** is the one most people want. It is the "Roblox broke something today" button.
 
 ### Channels
 
 Roblox publishes its builds to named channels. `live` is the one everybody gets, and it is what the box starts on.
 
-Roblox keeps its other channels private. Asking for the newest build on one of those comes back refused, so **Install** with an empty Version hash box and **Install previous version** both only work on `live`. Roblox also hides the build list for those channels, which is what **Install previous version** reads.
+Roblox keeps its other channels private. Asking for the newest build on one of those comes back refused, so **Latest** and **Previous** both only work on `live`. Roblox also hides the build list for those channels, which is what **Previous** reads.
 
-If you already know the exact hash you want, type the channel name and that hash and TuxBlox will fetch it. Capitals do not matter.
+If you already know the exact hash you want, pick **Custom**, type the channel name and that hash, and TuxBlox will fetch it. Capitals do not matter.
 
 Whether a channel can be reached at all is Roblox's decision, and TuxBlox cannot change it.
 
-While an install runs you get a progress bar and a label telling you which stage it is at: resolving the version, fetching the package list, downloading, then extracting. Studio is made up of more than thirty packages, so downloading takes a while.
+While an install runs you get a progress bar and a label telling you which stage it is at. It stays on the tab itself, so closing the install window does not hide an install that is still going.
+
+Each package is unpacked while the others are still downloading, which makes an install roughly twice as quick as waiting for every download to finish first. Studio is made up of more than thirty packages, so it still takes a moment.
 
 Only one install can run at a time.
 
 ## The version list
 
-Each installed build gets a row showing its hash, and under it the version Roblox reports for itself (such as `0.740.0.7400927`), the channel it came from, and the date it was installed. The version is read out of the build on disk, so a row cannot claim a version that is not the one installed.
+Each installed build gets a row showing its hash, and under it the version Roblox reports for itself (such as `0.740.0.7400927`) and the channel it came from. The version is read out of the build on disk, so a row cannot claim a version that is not the one installed.
 
 | Button | What it does |
 |---|---|
 | **Set active** | Makes that build the one that launches from now on |
-| **Active** | Greyed out label, this is already the active build |
-| **Delete** | Removes that build from the virtual drive, with a confirm step |
+| **ACTIVE** | A label rather than a button, this is already the active build |
+| **Remove** | Behind the **⋮** button on the row: takes that build out of the virtual drive, with a confirm step |
 
 Deleting the active build is allowed. The next launch simply installs Roblox again.
 

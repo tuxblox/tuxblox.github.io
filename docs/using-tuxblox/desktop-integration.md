@@ -63,7 +63,19 @@ If you already have something else set to open Roblox files or `roblox:` links, 
 
 There is one exception, which is not silent: an association still pointing at a program you have since removed opens nothing at all, so TuxBlox treats that as free and claims it.
 
-Installing or updating TuxBlox is different. That is something you asked for directly, so it does set TuxBlox as the default for its own links.
+Updating TuxBlox does not change any of this either. It used to set TuxBlox back as the default for its own links on every install and every update, which quietly undid a choice you had made. It no longer does.
+
+## Links are claimed only once Roblox is installed
+
+TuxBlox asks for a link type only when the Roblox app that opens it is actually in the virtual drive:
+
+| What you have installed | What TuxBlox asks for |
+|---|---|
+| Nothing yet | Nothing |
+| Roblox Player | `roblox:` and `roblox-player:` |
+| Roblox Studio | `roblox-studio:`, `roblox-studio-auth:` and the place and model file types |
+
+A link type whose app is not installed would open nothing, so claiming it would take the association for no benefit. A fresh install that has not downloaded Roblox yet leaves your `roblox:` links exactly where they were already going.
 
 To hand a file type to another program, set it there, or in your desktop's default applications settings. The launcher will not take it back.
 

@@ -1,5 +1,9 @@
 # Privacy
 
+TuxBlox's [Privacy Policy](https://tuxblox.net/privacy) and [Terms of Use](https://tuxblox.net/terms) apply to the features on this page. The launcher says so above them too, and the welcome window offers the same choices the first time you open TuxBlox.
+
+Every one of them is off until you turn it on.
+
 ## Always send crash reports
 
 **Default: off**
