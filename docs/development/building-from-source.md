@@ -36,7 +36,7 @@ cd tuxblox
 
 Do not run this with `sudo`. The script works out which package manager you have and installs anything missing, asking for your password only if it needs to.
 
-It will ask for a version number and a release channel, offering whatever is in the `VERSION` file as the default. Press Enter to accept, or type your own, for example `MyBuild-1.0`.
+It will ask which release channel to build for, offering `experimental` as the default. Press Enter to accept: work is built on experimental until it has been tested, so the other channels are always chosen deliberately. It does not ask for a version number — that is worked out for you once the build is finished.
 
 Then wait. The first build compiles the entire compatibility layer.
 
@@ -119,15 +119,23 @@ This all uses the virtual drive inside `build/` rather than your installed one, 
 
 ## Versioning
 
-The version comes from the `VERSION` file at the repository root: version on line one, channel on line two. That one file is the only place a version is defined, so the launcher, the installer and the compatibility layer can never disagree about which version they are.
+Each part of TuxBlox carries its own version, in a `VERSION` file beside its own sources — the launcher, the installer, the compatibility layer and the rest each have one, and they are expected to differ. A part that did not change keeps the number it already had.
 
-You can skip the prompt by setting it in the environment:
+The version of the whole release is not typed in anywhere. It is worked out when the build is staged, from what each part's version did and from what the channels already publish, so it describes what actually changed. It has four parts:
 
-```bash
-TUXBLOX_BUILD_VERSION=2.4.1 TUXBLOX_CHANNEL=experimental ./build.sh --log --nodebug
+```
+MAJOR . MINOR . BUILD . PATCH
 ```
 
-`build.sh` writes whatever it settled on back into `VERSION`, so the file keeps itself current.
+`BUILD` counts builds. It only ever counts up, nothing resets it, and only a build for the `experimental` channel advances it — moving tested work to `canary` or `stable` is not another build of it. A release that carries nothing but fixes leaves `BUILD` alone and moves `PATCH` instead, so `3.7.7.1` is the first fix released on top of build 7.
+
+The `VERSION` file at the repository root holds three lines — the floor the next release must beat, the build counter, and the channel — and `build.sh` writes all three back once it knows what the release became, so the file keeps itself current.
+
+Working out the release needs `setup.tuxblox.net` to be reachable, because that is where it reads what is already published. If you are building offline, or you want a particular number, set it yourself:
+
+```bash
+TUXBLOX_BUILD_VERSION=3.7.7.1 TUXBLOX_CHANNEL=experimental ./build.sh --log --nodebug
+```
 
 ## When a build fails
 
