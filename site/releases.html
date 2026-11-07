@@ -48,7 +48,6 @@
         }
 
         .dl-hero { padding-top: 48px; padding-bottom: 0; }
-        .dl-hero .hero-subtitle { margin-top: 14px; max-width: 60ch; }
 
         /* ---- terminal alternative ---- */
         .dl-install { margin: 28px 0 8px; max-width: 470px; }
@@ -93,14 +92,6 @@
             border: 1px solid var(--divider);
             color: var(--text-3);
         }
-        .channel-note {
-            margin: -12px 0 24px;
-            font-size: 13.5px;
-            line-height: 1.6;
-            color: var(--text-3);
-            max-width: 68ch;
-        }
-
         /* ---- badges ---- */
         .badge {
             display: inline-flex;
@@ -596,11 +587,6 @@
         <div class="wrap">
             <section class="hero dl-hero">
                 <h1>Download TuxBlox</h1>
-                <p class="hero-subtitle">
-                    Every published build of TuxBlox, newest first. The installer is all you
-                    need &mdash; it downloads and sets up everything else for you.
-                </p>
-
                 <div class="dl-install">
                     <p class="dl-install-label">Alternatively, install the latest stable release from a terminal:</p>
                     <div class="install">
@@ -613,7 +599,6 @@
             </section>
 
             <div class="channels" id="channels" role="tablist" aria-label="Release channel"></div>
-            <p class="channel-note" id="channel-note" hidden></p>
 
             <div id="loader">
                 <div class="skeleton" aria-hidden="true">
@@ -804,28 +789,24 @@
                 label: 'Stable',
                 badge: 'badge-stable',
                 badgeText: 'stable',
-                note: 'Finished, tested builds. Pick this one if you are not sure.',
                 empty: 'No stable builds are published yet.'
             },
             canary: {
                 label: 'Canary',
                 badge: 'badge-canary',
                 badgeText: 'pre-release',
-                note: 'The next release, early. Newer fixes, less testing behind them.',
                 empty: 'No canary builds right now. Try the stable channel.'
             },
             experimental: {
                 label: 'Experimental',
                 badge: 'badge-experimental',
                 badgeText: 'experimental',
-                note: 'Work in progress, published to be tried out. Expect things to break.',
                 empty: 'No experimental builds right now. Try the stable channel.'
             },
             other: {
                 label: 'Other',
                 badge: 'badge-canary',
                 badgeText: 'unstable',
-                note: '',
                 empty: 'Nothing here right now.'
             }
         };
@@ -1330,12 +1311,6 @@
                     writeUrl(state.active, null, true);
                 });
             });
-
-            // The tab names mean nothing on their own, so the selected one
-            // says what it is under the strip.
-            var note = document.getElementById('channel-note');
-            note.textContent = channelMeta(state.active).note || '';
-            note.hidden = !note.textContent;
         }
 
         // Sixteen stable builds is a long list to read through for one version.
