@@ -24,9 +24,11 @@ Development updates are posted in [Discord](https://tuxblox.net/discord).
 
 **Status:** being worked on
 
-Dragging the edge of a panel in Studio can briefly show black or torn areas while the drag is in progress.
+Dragging the edge of a panel in Studio can briefly show black or torn areas along the edge you are dragging, for as long as the drag lasts.
 
-It is cosmetic. Nothing is lost, nothing is drawn wrong once you let go, and Studio itself is unaffected.
+This is the redraw not keeping up with the drag, nothing more. It is cosmetic: nothing is lost, everything is drawn correctly the moment you let go, and Studio itself is unaffected.
+
+It is not the same thing as black squares turning up on their own in a session you are not touching. That was a separate problem in the compatibility layer and it has been fixed. If you see black areas while you are **not** dragging a panel edge, that is worth [reporting](reporting-bugs.md).
 
 ---
 

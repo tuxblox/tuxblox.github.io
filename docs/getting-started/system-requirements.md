@@ -4,14 +4,18 @@ Most computers built in the last ten years will run TuxBlox. Here is the short v
 
 ## Hardware
 
-| | Minimum |
-|---|---|
-| **Processor** | x86-64 with SSE3 or newer |
-| **Memory** | 8 GB of RAM |
-| **Storage** | 6 GB free |
-| **Graphics** | Anything with a working Vulkan driver |
+| | Minimum | Comfortable |
+|---|---|---|
+| **Processor** | x86-64 with SSE3 or newer | |
+| **Memory** | 4 GB of RAM | 8 GB |
+| **Storage** | 4 GB free | 6 GB |
+| **Graphics** | Anything with a working Vulkan driver | |
 
-ARM processors (including Raspberry Pi and Apple Silicon under Asahi Linux) are not supported.
+The minimum is what TuxBlox needs to install and start Studio on a small place. The second column is what a real project wants: Studio's own appetite grows with the place you have open, and the figure that matters is how much is left after your desktop has taken its share.
+
+Storage works the same way. 4 GB covers TuxBlox and one build of Studio. 6 GB leaves room to keep a second build around, which is what the [Versions](../using-tuxblox/versions.md) tab is for, and for Roblox to update itself without you clearing space first.
+
+ARM processors (including Raspberry Pi and Apple Silicon under Asahi Linux) are not supported today. ARM64 is planned, but it is not in a release and there is no date.
 
 ## Software
 

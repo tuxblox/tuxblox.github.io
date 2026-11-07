@@ -37,6 +37,8 @@ That is the third row of the table above, so TuxBlox reads it as though your des
 
 ## Fonts
 
+Studio asks for Segoe UI, which is Windows' own interface font and cannot be shipped with anything else. TuxBlox includes Selawik in its place, which is drawn to the same measurements, so a line of text takes up the width it would on Windows and wraps where it would on Windows. Without a substitute of the same metrics, text that fits a button on Windows is the text that overflows it here.
+
 TuxBlox matches the drive's interface font to your desktop's as well, by family and point size, for the fonts Windows reports for dialogs, menus and status bars. Studio's dialogs then use the font the rest of your desktop uses rather than the compatibility layer's default.
 
 The title bar font is left alone. The title bar is your desktop's to draw, so its font is your desktop's to choose.

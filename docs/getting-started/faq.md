@@ -20,6 +20,8 @@ Studio is not affected. See [Known Issues](../troubleshooting/known-issues.md) f
 
 No. Roblox runs one Player session at a time, and TuxBlox follows that rule rather than working around it.
 
+The Player card's launch button is switched off while [Player support is still being worked on](#does-roblox-player-work), so this is not something a normal install can reach today. The rule below is how it behaves, and it already applies if you have turned the button on by hand with [`enable_player_button`](../using-tuxblox/the-launcher.md).
+
 Starting the Player while a session is already open closes the open one and starts the new session in its place. On the Home screen you do this in two presses, because while a session is open that card's button says Stop instead of Launch; a desktop shortcut or a Roblox link replaces the running session directly.
 
 Roblox Studio is different — it is built to have several sessions open together, and TuxBlox opens as many as you ask for. Its Home card keeps its Launch button for that reason.
@@ -73,6 +75,12 @@ Yes, from the [Versions](../using-tuxblox/versions.md) tab. You can install a sp
 ## Does my controller work?
 
 Yes. Controller vibration is a separate, experimental setting, off-by-default behaviour that varies by pad. See [Settings](../using-tuxblox/settings/controller.md#enable-haptics).
+
+## Can I move Studio's panels around and dock them?
+
+Yes, and this is one of the things TuxBlox was built to get right. Dragging a panel out, docking it against another edge, floating it in its own window, tabbing it together with another panel and saving the result as your layout all behave the way they do on Windows.
+
+The one rough edge is cosmetic, and only while a drag is actually happening: see [Known Issues](../troubleshooting/known-issues.md).
 
 ## Does Studio's Toolbox work? What about the Creator Hub pages?
 

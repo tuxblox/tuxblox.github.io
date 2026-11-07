@@ -38,7 +38,7 @@ A stock Wine or Proton install is built to run thousands of different programs r
 
 - Fixes aimed at Roblox specifically, including ones that change how the layer behaves at a level no setting can reach.
 - Parts of Windows that Roblox uses and Wine had not filled in yet.
-- Removal of the pieces Roblox never touches, which makes the download smaller and startup faster.
+- Removal of the pieces Roblox never touches, which makes the download smaller, startup faster, and the memory a session holds lower than a general purpose layer running the same client.
 - Behaviour matched closely to real Windows in the places Roblox actually checks.
 
 This is also why the layer will not run other software at all: it only starts programs signed by Roblox, and refuses anything else. It was not built for other software.
