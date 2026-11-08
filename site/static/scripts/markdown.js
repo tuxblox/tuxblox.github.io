@@ -199,6 +199,19 @@ const GRAMMARS = {
             ['type', '\\b[A-Z][\\w$]*\\b'],
         ]),
     },
+    c: {
+        aliases: ['h', 'cpp', 'c++', 'cc', 'hpp', 'cxx'],
+        rules: rules([
+            ['comment', '//[^\\n]*|/\\*[\\s\\S]*?\\*/'],
+            ['meta', '^\\s*#\\s*\\w+[^\\n]*'],
+            ['string', 'L?(?:"(?:\\\\[\\s\\S]|[^"\\\\])*"|\'(?:\\\\[\\s\\S]|[^\'\\\\])*\')'],
+            ['keyword', '\\b(?:auto|break|case|const|constexpr|continue|default|do|else|enum|extern|for|goto|if|inline|register|restrict|return|sizeof|static|struct|switch|typedef|union|volatile|while|class|namespace|template|typename|public|private|protected|virtual|override|new|delete|this|using|try|catch|throw|operator|explicit|friend|mutable|noexcept|nullptr_t)\\b'],
+            ['type', '\\b(?:void|char|short|int|long|float|double|signed|unsigned|bool|size_t|ssize_t|wchar_t|int8_t|int16_t|int32_t|int64_t|uint8_t|uint16_t|uint32_t|uint64_t|intptr_t|uintptr_t|FILE|va_list|BOOL|BYTE|WORD|DWORD|QWORD|UINT|ULONG|ULONG64|LONG64|HANDLE|HMODULE|NTSTATUS|WCHAR|CHAR|LPVOID|LPCSTR|LPCWSTR)\\b'],
+            ['literal', '\\b(?:true|false|NULL|nullptr)\\b'],
+            ['number', '\\b(?:0[xX][\\da-fA-F\']+|0[bB][01\']+|\\d[\\d\']*(?:\\.[\\d\']+)?(?:[eE][+-]?\\d+)?)(?:[uUlLfF]*)\\b'],
+            ['title function_', '\\b[A-Za-z_]\\w*(?=\\s*\\()'],
+        ]),
+    },
     python: {
         aliases: ['py', 'py3'],
         rules: rules([

@@ -53,6 +53,23 @@ test('a shell keyword stays a keyword', () => {
 });
 
 // the rule the user set: fences yes, backticks no
+// the docs carry C for the ntdll exports, so the grammar has to cover the
+// preprocessor and the Windows typedefs those snippets are written against
+test('C highlights directives, keywords, types and strings', () => {
+    const c = body => renderMarkdown('```c\n' + body + '\n```\n');
+    assert.ok(token(c('#include <windows.h>'), 'meta', '#include &lt;windows.h&gt;'));
+    assert.ok(token(c('int main(void) { return 0; }'), 'type', 'int'));
+    assert.ok(token(c('int main(void) { return 0; }'), 'keyword', 'return'));
+    assert.ok(token(c('HMODULE ntdll = 0;'), 'type', 'HMODULE'));
+    assert.ok(token(c('printf("hi");'), 'string', '&quot;hi&quot;'));
+    assert.ok(token(c('if (!version) return 0;'), 'keyword', 'if'));
+});
+
+test('a C comment is a comment, not code', () => {
+    const c = body => renderMarkdown('```c\n' + body + '\n```\n');
+    assert.ok(token(c('// not a keyword: return'), 'comment', '// not a keyword: return'));
+});
+
 test('inline code is never tokenised', () => {
     const html = renderMarkdown('Run `pkill TuxBloxLauncher` and `distrobox enter`.\n');
     assert.ok(!html.includes('hljs'));
