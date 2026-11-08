@@ -33,6 +33,8 @@ The dropdown lists every card TuxBlox can see, numbered, so two cards of the sam
 
 Picking a card sets the standard Linux graphics offload variables for you, so you do not have to know which ones your driver wants. On NVIDIA that is the PRIME render offload set, and on AMD and Intel it is the Mesa device selection variables.
 
+On a machine with more than one card, TuxBlox also takes the cards you did not pick out of the running, rather than only asking for the one you did. Roblox chooses a card for itself out of whatever it is offered, and it leans towards the more powerful one, so asking is not enough on its own: a laptop told to use its built-in chip would go on rendering on the separate card regardless. TuxBlox now hides an NVIDIA card you did not choose and points Roblox's list of graphics drivers at the card you did.
+
 > [!TIP]
 > If your laptop runs Studio on the wrong card and the picker does not fix it, you can override it by hand in **Environment variables** below. Anything you type there wins over the picker.
 
