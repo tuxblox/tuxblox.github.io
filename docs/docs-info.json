@@ -209,6 +209,11 @@
     "Title": "Roblox Version Tracker",
     "Sort": 4,
     "Icon": "git-branch"
+   },
+   "identifying-tuxblox": {
+    "Title": "Identifying TuxBlox",
+    "Sort": 5,
+    "Icon": "fingerprint"
    }
   }
  }
