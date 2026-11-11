@@ -65,7 +65,7 @@ Starting the Player again while a session is open closes that session and starts
 At the bottom of the tab is a status strip:
 
 - On the left, the release you are running and the channel it came from. That is not always the channel you are set to follow: switching channels in Settings changes what you will get next, and this changes when that update lands.
-- On the right, the update state (`Up to date`, `Checking…`, `Out of date`, `Updating`, `Update check failed`), and an **Update** button when there is one to install.
+- On the right, the update state (`Up to date`, `Checking…`, `Updating`, `Update check failed`). When an update is waiting the strip says nothing: the download button in the title bar is the prompt instead.
 
 TuxBlox checks for an update as soon as it opens. The cards stay where they are while it does, so there is nothing to wait for before pressing a button. The screen is only given over to a progress bar when an update is actually being installed.
 
@@ -107,11 +107,11 @@ If you are reporting a bug, the version number here is the one to quote.
 
 ## Update notifications
 
-When an update is available and **Automatic updates** is off, TuxBlox opens a window titled **Update available**. It names the release you would move to and lists which parts of TuxBlox change, each as `Launcher 3.5.0 → Launcher 3.5.1`, so you can see what is actually in it before deciding. It asks whether you would like to update, with **Update** and **Not now**.
+When an update is available and **Automatic updates** is off, an amber download button appears in the title bar, just to the left of the minimise, maximise and close buttons. It is there on every tab, for as long as the update is, and hovering it says **Update available**. Nothing interrupts you.
 
-The bottom right of the Home page reads `Out of date` with an **Update** button beside it, which does the same thing.
+Clicking it opens a window titled **Update available**. It names the release you would move to and lists which parts of TuxBlox change, each as `Launcher 3.5.0 → Launcher 3.5.1`, so you can see what is actually in it before deciding. It asks whether you would like to update, with **Update** and **Not now**.
 
-**Not now** leaves you on your current version and leaves the button where it is, so you can start the update later from the Home page. The window appears once per release offered, not on every check. With automatic updates on, you never see it, the update just installs.
+**Not now** leaves you on your current version and leaves the button in the title bar, so you can start the update whenever you like. With automatic updates on, you never see the button: the update just installs.
 
 > [!NOTE]
 > If TuxBlox is missing its compatibility layer entirely, rather than just having an old one, it updates immediately whatever this setting says. There would be nothing to launch otherwise.

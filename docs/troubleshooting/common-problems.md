@@ -177,3 +177,25 @@ In escalating order:
 2. **Wipe the prefix.** Settings, Danger zone, Wipe prefix. This resets Roblox completely and keeps your settings.
 3. **Reinstall TuxBlox.** Uninstall from Settings, then install again.
 4. **Ask.** [Discord](https://tuxblox.net/discord) with your log file attached, or open an issue. See [Reporting Bugs](reporting-bugs.md).
+
+## A feature behaving differently from someone else's TuxBlox
+
+Some of TuxBlox's features are switched on and off from our server, so that one that
+turns out to be faulty can be switched back off without everyone having to install an
+update. Two installs on the same version can therefore behave slightly differently, and
+an install that has been offline since it was installed uses whatever it was built with.
+
+**Support may ask you to create a `flags.json`.** It goes in your TuxBlox folder — the
+same one as `settings.json`, usually `~/.tuxblox` — and it overrides those switches on
+your machine only:
+
+```json
+{
+    "tbxFlagDisableUpdater": true
+}
+```
+
+TuxBlox never creates or edits this file; if it exists, a person put it there. Delete it
+to go back to normal. Only use names support gives you: a name TuxBlox does not know is
+ignored, and a value of the wrong kind is ignored too, so a typo quietly does nothing
+rather than breaking anything.

@@ -4,6 +4,27 @@ How the launcher itself looks and behaves. Changes save the moment you make them
 
 Settings are stored in a file on disk, which [Files and Folders](../../advanced/files-and-folders.md#settingsjson) describes if you would rather edit it by hand.
 
+## Language
+
+**Default: System language**
+
+The language TuxBlox's own windows are written in. Roblox is unaffected: it has its own language setting, and TuxBlox never touches it.
+
+| Option | What you get |
+|---|---|
+| System language | Follows your desktop. TuxBlox reads the usual locale settings and uses the closest language it ships; English if it ships none of them. |
+| English | |
+| Português (Brasil) | |
+| Español | |
+
+Each language is listed in its own language, so you can find yours without being able to read the current one.
+
+The choice applies the next time TuxBlox starts, so the window you are looking at stays in the language it opened in. The installer and the window that updates Roblox follow the same choice.
+
+Not everything is translated yet. Anything a language has no translation for is shown in English rather than left blank, so a part-finished language is usable rather than broken.
+
+> If you would like to see TuxBlox in a language it does not have yet, the translations are ordinary `.po` files and a new one is all it takes. [Contributing](../../development/contributing.md) has the details.
+
 ## Launcher theme
 
 **Default: System theme**
@@ -16,8 +37,15 @@ The colours TuxBlox uses. Roblox looks exactly the same whichever you pick.
 | Dark | The dark TuxBlox colours, whatever your desktop is set to. |
 | Grey | The plain grey TuxBlox wore before it took the colours from tuxblox.net. |
 | Light | The light TuxBlox colours, whatever your desktop is set to. |
+| Christmas | The dark colours taken deeper and made see-through, with snow falling behind the window. Only offered until 6 January. |
 
 The launcher changes the moment you pick one, so there is nothing to close and reopen. The installer and the window that updates Roblox follow your choice too, from the next time each one opens.
+
+### Christmas
+
+Christmas is a one-off for this winter. It appears in the list from 9 November 2026 until the end of 6 January 2027, and it is never turned on for you -- you pick it like any other theme.
+
+Once the season is over the option disappears from the list. If you were using it, TuxBlox goes back to **System theme** on its own, so nothing looks broken. The snow is drawn behind the window's contents and stops entirely while the launcher is minimised or hidden.
 
 ### Window buttons
 

@@ -27,6 +27,29 @@ The authoritative guide is [`CONTRIBUTING.md`](https://github.com/cherrypath0/tu
 
 Every source file that is TuxBlox's own code needs the project copyright header. That means everything outside `compat/`, plus `compat/tuxblox/` and `compat/webkitgtk/bundle/`. Never add it anywhere else under `compat/`, since that code carries its own licensing and its own upstream header conventions.
 
+## Translations
+
+TuxBlox's own windows are translated with ordinary gettext catalogues, in `shared/translations/`. Adding a language means adding one `.po` file there and nothing else: the build finds it, and the launcher offers it.
+
+Start from `tuxblox.pot` in that folder, which lists every string TuxBlox shows, and save it as your language's tag -- `fr.po`, `de.po`, `pt_PT.po`. Three headers matter:
+
+```
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Native-Name: Français\n"
+```
+
+`X-Native-Name` is what the language picker shows, written in the language itself. `Plural-Forms` is your language's own rule, and TuxBlox uses it as written rather than assuming English's.
+
+A few things to keep right:
+
+- Leave every placeholder exactly as it is: `{0}`, `{1}` and `{}` are filled in with names, numbers and paths. A translation that drops one fails the build.
+- Leave a string you are unsure of empty. An empty entry is shown in English, so a part-finished catalogue is usable rather than broken, and you can send it in before it is complete.
+- Product names stay as they are: TuxBlox, Roblox, Roblox Player, Roblox Studio, FastFlags, Discord, Vulkan, OpenGL, DirectX 11.
+- Do not translate paths, URLs, environment variable names or FastFlag names, even where one appears inside a sentence.
+
+Poedit, Weblate and any other gettext tool will open these files. You do not need to build TuxBlox to write one.
+
 ## Licensing
 
 By opening a merge or pull request you agree your contribution is licensed the same way the component you are contributing to is: GPLv3 for TuxBlox's own code, LGPLv2.1 for `compat/`.
