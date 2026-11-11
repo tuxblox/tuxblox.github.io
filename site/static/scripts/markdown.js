@@ -140,8 +140,16 @@ function renderInline(text, softBreaks = false) {
 
     // line handling. done here, while inline code is still parked, so a
     // newline inside `code` is never turned into a <br>
+    //
+    // A single newline is a space, not a line break. The .md sources are hard
+    // wrapped to keep them readable as text, and breaking the rendered page
+    // wherever the source happens to wrap put a line break every eight or nine
+    // words. A break the author meant is written the way Markdown writes one:
+    // two trailing spaces, or a trailing backslash.
     text = softBreaks
-        ? text.replace(/[ \t]*\n/g, '<br>\n')
+        ? text.replace(/(?: {2,}|\\)\n/g, '<br>\n')
+              .replace(/[ \t]*\n[ \t]*/g, ' ')
+              .replace(/[ \t]+$/, '')
         : text.replace(/\s*\n\s*/g, ' ');
 
     // restore inline code
@@ -667,7 +675,10 @@ function renderMarkdown(markdown, options = {}) {
         }
 
         // accumulate into paragraph
-        paragraphBuf.push(line.trim());
+        // Leading indentation only: two trailing spaces are how Markdown asks for a
+        // line break, so trimming the end here would throw that request away before
+        // renderInline() ever sees it.
+        paragraphBuf.push(line.replace(/^[ \t]+/, ''));
         i++;
     }
     flushParagraph();
