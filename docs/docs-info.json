@@ -153,7 +153,7 @@
     "Sort": 3,
     "Icon": "folder"
    },
-   "feature-switches": {
+   "tuxblox-flags": {
     "Title": "TuxBlox Flags",
     "Sort": 4,
     "Icon": "flag",

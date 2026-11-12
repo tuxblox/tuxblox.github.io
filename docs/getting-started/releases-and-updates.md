@@ -64,7 +64,7 @@ If you follow `canary` or `experimental`, TuxBlox takes a release from a **more 
 
 This does leave the launcher naming the wrong thing. It reports the channel the **build** came from, so while you are running a release taken from `stable`, the bottom of the Home tab and the About screen say `stable` even though Settings still says `canary`. Your setting is what decides what you are offered next; the label is describing the build you have, and it goes back to agreeing with your setting as soon as your own channel publishes again.
 
-This is one of [TuxBlox's flags](../advanced/feature-switches/updates.md), so it can be turned off without a release.
+This is one of [TuxBlox's flags](../advanced/tuxblox-flags/updates.md), so it can be turned off without a release.
 
 ## What changed in a release
 
