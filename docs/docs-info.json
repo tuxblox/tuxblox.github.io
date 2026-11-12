@@ -154,9 +154,23 @@
     "Icon": "folder"
    },
    "feature-switches": {
-    "Title": "Feature Switches",
+    "Title": "TuxBlox Flags",
     "Sort": 4,
-    "Icon": "flag"
+    "Icon": "flag",
+    "Content": {
+     "how-flags-work": {
+      "Title": "How Flags Work",
+      "Sort": 1
+     },
+     "launcher": {
+      "Title": "Launcher Flags",
+      "Sort": 2
+     },
+     "updates": {
+      "Title": "Update and Download Flags",
+      "Sort": 3
+     }
+    }
    }
   }
  },

@@ -185,6 +185,4 @@ turns out to be faulty can be switched back off without everyone having to insta
 update. Two installs on the same version can therefore behave slightly differently, and
 an install that has been offline since it was installed uses whatever it was built with.
 
-[Feature switches](../advanced/feature-switches.md) explains which features work this
-way, what the request contains, and how to override one on your own machine with a
-`flags.json` — which is what support will ask you for if a switch is the thing to try.
+[TuxBlox Flags](../advanced/feature-switches/how-flags-work.md) explains which features work this way, what the request contains, and how to set one on your own machine with a `flags.json` — which is what support will ask you for if a flag is the thing to try.
