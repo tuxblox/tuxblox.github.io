@@ -34,6 +34,14 @@ Dismissing the notification hides it for that run only. It is not a decision tha
 
 If you do not want to wait for the launcher to ask, the [download page](https://tuxblox.net/releases) always shows what each channel is on, and installing from there works at any time.
 
+## What an update downloads
+
+All of TuxBlox, every time — around 400 MB, most of it the compatibility layer. An update is not a patch and does not download only the parts that changed.
+
+That is the price of every part of TuxBlox being able to name the release it belongs to: each release carries its own copy of every part, with the release written inside it, so no two releases share a file. It is what makes `--version` the same answer everywhere and makes a half-applied update something the launcher can see and repair.
+
+The download page lists each release's size, so you can check before you start one.
+
 ## Which channel gets it, and when
 
 Every release is published to exactly one channel, so the channel you follow decides not only how tested your TuxBlox is but how soon you see anything at all.
@@ -47,6 +55,27 @@ Every release is published to exactly one channel, so the channel you follow dec
 A channel sits wherever its own last release left it, so `canary` is not automatically ahead of `stable` — a quiet stretch on `canary` and a couple of stable releases will leave it behind. What each channel is currently on is on the [download page](https://tuxblox.net/releases), and the channel your own copy came from is at the bottom of the launcher's Home tab.
 
 [Update channel](../using-tuxblox/settings/updates.md#update-channel) covers what switching does, including the part where moving to a channel on an older release moves you back onto it.
+
+### A build from a more tested channel
+
+If you follow `canary` or `experimental`, TuxBlox takes a release from a **more tested** channel when
+that release is ahead of your own channel's. Somebody on `canary` is given a `stable` release
+published ahead of canary, and follows canary again the moment canary publishes something newer.
+It only ever looks that way round: following `canary` never hands you an `experimental` build, and
+`stable` never looks anywhere else, so an install on `stable` makes no extra check at all.
+
+**Your channel setting does not change.** The build moves, not the channel you follow, so the next
+check asks your own channel again — and because `experimental` is the only channel that counts a
+build, an install following it is on its own channel nearly all the time.
+
+This does leave the launcher naming the wrong thing. It reports the channel the **build** came from,
+so while you are running a release taken from `stable`, the bottom of the Home tab and the About
+screen say `stable` even though Settings still says `canary`. Your setting is what decides what you
+are offered next; the label is describing the build you have, and it goes back to agreeing with your
+setting as soon as your own channel publishes again.
+
+This is one of the [feature switches](../advanced/feature-switches.md), so it can be turned off
+without a release.
 
 ## What changed in a release
 

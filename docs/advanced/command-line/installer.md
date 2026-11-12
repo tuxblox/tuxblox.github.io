@@ -20,7 +20,7 @@ Usage: TuxBloxInstaller [options]
   --channel <name>   Release channel to install from (default: stable).
   --latest           Install the newest release on the channel
                      instead of this installer's own version.
-  --version          Show the build version and exit.
+  --version          Show the release it installs and exit.
   -h, --help         Show this help and exit.
 ```
 
@@ -30,9 +30,9 @@ Unknown options are an error rather than being ignored, so a typo cannot quietly
 
 ## Which version gets installed
 
-An installer installs the version it was built for — the one `--version` prints. You get exactly the TuxBlox that came with the installer you downloaded, no matter how long ago you downloaded it, and keeping up to date stays the launcher's job.
+An installer installs the release it was published in — the one `--version` prints. You get exactly the TuxBlox that came with the installer you downloaded, no matter how long ago you downloaded it, and keeping up to date stays the launcher's job.
 
-`--latest` installs the newest release on your channel instead. If the installer's own version is not published on the channel you picked, it says so and points you at `--latest` rather than quietly installing something else.
+`--latest` installs the newest release on your channel instead. If the installer's own release is not published on the channel you picked, it says so and points you at `--latest` rather than quietly installing something else.
 
 ## Examples
 

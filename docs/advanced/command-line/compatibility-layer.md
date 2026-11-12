@@ -19,7 +19,7 @@ Arguments:
 
 Options go before the executable. Anything after it is passed to the program being run, not read by the layer.
 
-`--version` prints `2.8.0-stable`: the version, then the update channel that build came from. Every TuxBlox program answers the same way.
+`--version` prints `3.9.11.0`: the release this copy of the layer was published in, which is the number on the download page rather than a version of the layer's own. Every TuxBlox program answers the same way.
 
 It needs to be told where the virtual drive is, through `TUXBLOX_PREFIX`:
 

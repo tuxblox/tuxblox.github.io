@@ -651,9 +651,10 @@
         // not know about, which the server has no directory for and would only ever answer 404.
         var PUBLISHED_CHANNELS = ['stable', 'canary', 'experimental'];
 
-        // What a component is called in the Files table, and the file it is published as. The CDN
-        // path is client/{component}/{version}/{arch}/{file} -- no "components" segment, so
-        // "releases" is a reserved name there.
+        // What a component is called in the Files table, and the file it is published as. A
+        // release publishes its own copy of every component and says where each one is, so the
+        // path below is only for releases from before it did -- client/{component}/{version}/
+        // {arch}/{file}, with no "components" segment, which is why "releases" is reserved there.
         var COMPONENTS = {
             launcher: { label: 'Launcher', file: 'TuxBloxLauncher' },
             installer: { label: 'Installer', file: 'TuxBloxInstaller' },
@@ -721,10 +722,15 @@
                 if (!entry || !entry.version) return;
                 var bytes = entry.arch && entry.arch.x86_64;
                 if (!bytes) return;   // null means not published for this architecture, not zero bytes
+                // Where the release says its own bytes are. A release published before each one
+                // carried its own copy of every component says nothing, and its components sit
+                // where a single copy served every release that named them.
+                var path = typeof bytes.path === 'string' && bytes.path
+                    ? bytes.path
+                    : name + '/' + entry.version + '/x86_64/' + COMPONENTS[name].file;
                 content.push({
                     name: COMPONENTS[name].label,
-                    pointer: CDN + '/client/' + name + '/' + entry.version + '/x86_64/' +
-                             COMPONENTS[name].file,
+                    pointer: CDN + '/client/' + path,
                     storage: humanSize(bytes.size)
                 });
             });

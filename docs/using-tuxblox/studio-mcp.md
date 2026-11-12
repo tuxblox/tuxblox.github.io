@@ -171,4 +171,4 @@ You can start it directly to see what it says:
 
 It will then sit there waiting for MCP messages on standard input, which is not useful on its own. Any error it prints before that point is the thing to act on.
 
-`~/.tuxblox/studio-mcp --version` prints the TuxBlox version it was built from, and `--help` prints a short summary.
+`~/.tuxblox/studio-mcp --version` prints the TuxBlox release it was published in, and `--help` prints a short summary.

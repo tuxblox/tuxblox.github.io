@@ -43,8 +43,8 @@ The version is **compiled into the library**. Nothing on disk and no setting dec
 
 It is the compatibility layer's own version, not a release number, and it carries no channel. Both of those are deliberate:
 
-- One build of the layer ships in **several releases**. A release number compiled into the binary would be correct for the first release that carried it and wrong for every one after.
-- A component version is **shared by every channel**. The same layer build serves stable, canary and experimental, which is why one copy of it is published rather than three, so a channel compiled in would be wrong the moment a build is promoted.
+- The layer's own version is the one thing this interface can state as fact about the library itself. Which release the copy on disk belongs to is a separate question, and `compat/main --version` answers that one.
+- A component version is **shared by every channel**. The same layer version serves stable, canary and experimental, so a channel compiled in would be wrong the moment a build is promoted.
 
 The kernel and architecture come from `uname` on the host.
 
