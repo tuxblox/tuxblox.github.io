@@ -152,6 +152,11 @@
     "Title": "Files and Folders",
     "Sort": 3,
     "Icon": "folder"
+   },
+   "feature-switches": {
+    "Title": "Feature Switches",
+    "Sort": 4,
+    "Icon": "flag"
    }
   }
  },

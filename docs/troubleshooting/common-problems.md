@@ -185,17 +185,6 @@ turns out to be faulty can be switched back off without everyone having to insta
 update. Two installs on the same version can therefore behave slightly differently, and
 an install that has been offline since it was installed uses whatever it was built with.
 
-**Support may ask you to create a `flags.json`.** It goes in your TuxBlox folder — the
-same one as `settings.json`, usually `~/.tuxblox` — and it overrides those switches on
-your machine only:
-
-```json
-{
-    "tbxFlagDisableUpdater": true
-}
-```
-
-TuxBlox never creates or edits this file; if it exists, a person put it there. Delete it
-to go back to normal. Only use names support gives you: a name TuxBlox does not know is
-ignored, and a value of the wrong kind is ignored too, so a typo quietly does nothing
-rather than breaking anything.
+[Feature switches](../advanced/feature-switches.md) explains which features work this
+way, what the request contains, and how to override one on your own machine with a
+`flags.json` — which is what support will ask you for if a switch is the thing to try.

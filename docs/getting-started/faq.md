@@ -20,7 +20,7 @@ Studio is not affected. See [Known Issues](../troubleshooting/known-issues.md) f
 
 No. Roblox runs one Player session at a time, and TuxBlox follows that rule rather than working around it.
 
-The Player card's launch button is switched off while [Player support is still being worked on](#does-roblox-player-work), so this is not something a normal install can reach today. The rule below is how it behaves, and it already applies if you have turned the button on by hand with [`enable_player_button`](../using-tuxblox/the-launcher.md).
+The Player card's launch button is switched off while [Player support is still being worked on](#does-roblox-player-work), so this is not something a normal install can reach today. The rule below is how it behaves, and it already applies if you have [turned the button on by hand](../using-tuxblox/the-launcher.md).
 
 Starting the Player while a session is already open closes the open one and starts the new session in its place. On the Home screen you do this in two presses, because while a session is open that card's button says Stop instead of Launch; a desktop shortcut or a Roblox link replaces the running session directly.
 

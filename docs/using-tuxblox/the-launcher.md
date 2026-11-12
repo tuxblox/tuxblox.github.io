@@ -42,7 +42,7 @@ The button on each card tells you what state that app is in:
 
 Roblox Player support is not finished, so its button says **Coming soon** and does nothing. Studio is unaffected.
 
-If you want to try it anyway, add `"enable_player_button": true` to `~/.tuxblox/settings.json` and restart the launcher. There is no setting for it in the window on purpose: it turns on something that is not expected to work yet. When Player support ships the button simply becomes live and the setting goes away.
+If you want to try it anyway, add `"tbxFlagDisablePlayerButton": false` to `~/.tuxblox/flags.json` and restart the launcher — see [a feature behaving differently from someone else's TuxBlox](../troubleshooting/common-problems.md) for what that file is. There is no setting for it in the window on purpose: it turns on something that is not expected to work yet. When Player support ships the button becomes live for everybody at once, without anyone having to install anything.
 
 Under each card's name is the Roblox version it will start, such as `0.740.0.7400927`, and which channel it came from. If TuxBlox cannot read a version out of that build it shows the folder name Roblox installed it under instead, which looks like `version-2366ba214ec740ca`.
 
