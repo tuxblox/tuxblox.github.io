@@ -21,6 +21,7 @@ Nothing is installed system wide, and nothing needs root. TuxBlox will in fact r
 ├── compat/                the compatibility layer
 ├── libtuxblox/            libraries the launcher and the update window need
 ├── logs/                  session logs
+├── roblox/                the Roblox builds you have installed
 ├── runtime/               the virtual drive
 ├── RobloxPlayer/          Roblox's own downloaded installer
 └── RobloxStudio/          the same, for Studio
@@ -86,6 +87,39 @@ Roblox's own logs from the same session are appended to the end of the file, so 
 
 Installing a TuxBlox update empties this folder, since by then every log in it describes a version you are no longer running. Nothing else removes them, so clear them out yourself if the folder gets large between updates.
 
+### roblox/
+
+Everything Roblox keeps for itself: the builds you have installed, its own settings, and its logs. Inside the virtual drive this is `C:\users\<your account>\AppData\Local\Roblox`, which is where Roblox looks for it and the only place Roblox ever sees it.
+
+It sits here, outside the drive, so that rebuilding the drive does not take a few gigabytes of installed Roblox with it. Older installs kept it the other way around, with the folder inside the drive and a shortcut here pointing in; the first launch after this arrives moves it out, and nothing you have installed is lost.
+
+Nothing you have made lives here, so deleting it loses nothing — but the next launch downloads and installs Roblox again, which takes about as long as your first launch did.
+
+#### Keeping it where your desktop keeps things
+
+Roblox puts everything in one folder because that is how Windows programs do it. Linux desktops split the same thing three ways, and TuxBlox can follow that instead. It is off by default and experimental, so turn it on only if you want it:
+
+```json
+{
+    "tbxFlagEnableExperimentalLinuxIntegration": true
+}
+```
+
+in `~/.tuxblox/flags.json` — see [a feature behaving differently from someone else's TuxBlox](../troubleshooting/common-problems.md) for what that file is. With it on, the next launch moves everything into these:
+
+| What | Where it goes |
+| --- | --- |
+| Roblox's logs, and which scripts you had open in each place | `$XDG_STATE_HOME/roblox`, normally `~/.local/state/roblox` |
+| Downloaded plugins, update backups, capture scratch files, the default place templates | `$XDG_CACHE_HOME/roblox`, normally `~/.cache/roblox` |
+| Everything else, the installed Roblox builds among it | `$XDG_DATA_HOME/roblox`, normally `~/.local/share/roblox` |
+
+`~/.tuxblox/roblox` goes away while this is on, since the data is no longer there — everything that needs it follows the folder inside the virtual drive, which is where Roblox looks for it too. Roblox is told none of this: inside the drive it still sees one ordinary folder at `C:\users\<your account>\AppData\Local\Roblox`, with those folders inside it.
+
+Turning it off again moves everything back on the next launch and `~/.tuxblox/roblox` returns. Nothing is lost in either direction, and if a folder cannot be moved it is left where it is and TuxBlox says so in the log.
+
+> [!NOTE]
+> Uninstalling TuxBlox does not remove these three folders while this is on, because they are outside the TuxBlox folder. Delete them yourself if you want them gone.
+
 ---
 
 ## The virtual drive
@@ -105,7 +139,7 @@ runtime/
 └── tracked_files       which files TuxBlox owns, as opposed to Roblox
 ```
 
-Roblox itself installs into `pfx/drive_c/users/<your account>/`, with one directory per installed build.
+Roblox's own data, the builds you have installed among it, is reached at `pfx/drive_c/users/<your account>/AppData/Local/Roblox` inside the drive and kept in [`roblox/`](#roblox) outside it, so it survives the drive being rebuilt.
 
 The account folder inside the drive is named after your own account, so it is `cherry` for a user called cherry, the same way Windows names it. Drives built by TuxBlox 2.7.4 and earlier used a folder called `user` instead; those are renamed the first time you launch 2.8.0, and everything inside them, including your installed Roblox and your login, comes along.
 
@@ -128,6 +162,10 @@ Six folders inside the drive point straight at the matching ones in your home fo
 | `C:\users\<your account>\Videos` | `~/Videos` |
 
 If your desktop uses translated folder names, those are followed — TuxBlox reads the names your desktop recorded rather than assuming the English ones. A folder you do not have is simply not shared, and TuxBlox never creates one.
+
+Folders inside the shared six are shared with them, however deep. Saving to `~/Downloads/Projects/Maps/town.rbxm` puts the file there, and Roblox records it as `C:\users\<your account>\Downloads\Projects\Maps\town.rbxm`, so reopening it from Roblox's own list of recent files works.
+
+A window for choosing a file opens on the real folder too. When Roblox asks for one of these, or for Roblox's own folder, the window opens on your own Documents, your own Downloads and so on, named the way you know them rather than as a path inside the virtual drive. When Roblox asks for a folder that really is inside the drive — `C:\`, `C:\windows`, `C:\users` or your account folder itself — the window opens on your home folder instead, since there is nothing in those worth picking.
 
 The first time you launch after this arrived, anything already sitting in those folders inside the drive is moved out to the matching folder in your home, so a place file you saved in the drive's Documents turns up in your real Documents. Nothing is ever written over: if a name is already taken in your home folder, that folder keeps its own copy inside the drive instead and TuxBlox says so in the log.
 
@@ -171,9 +209,9 @@ How sharp text looks inside the virtual drive -- Studio's menus and panels most 
 
 ### Resetting it
 
-**Wipe prefix** in Settings deletes the whole thing. The next launch rebuilds it and reinstalls Roblox, which takes about as long as your first launch did.
+**Wipe prefix** in Settings deletes the whole thing. The next launch rebuilds it, which takes about as long as your first launch did apart from downloading Roblox.
 
-Your settings and FastFlags live outside the drive and survive.
+Your settings and FastFlags live outside the drive and survive, and so do the Roblox builds you have installed, because those are kept in [`roblox/`](#roblox) rather than in the drive.
 
 ---
 
