@@ -1,7 +1,7 @@
 # Building From Source
 
 > [!WARNING]
-> **Most people should not do this.** A first build takes one to two hours and needs 50 GB of disk. Installing normally takes about a minute and gets you the same thing. Build from source only if you want to change something.
+> **Most people should not do this.** A first build takes several hours and needs around 40 GB of disk. Installing normally takes about a minute and gets you the same thing. Build from source only if you want to change something.
 
 Building has its own requirements, separate from the ones needed just to run TuxBlox.
 
@@ -10,11 +10,17 @@ Building has its own requirements, separate from the ones needed just to run Tux
 | | |
 |---|---|
 | **Processor** | A modern x86-64 processor. More cores means a shorter wait. |
-| **Memory** | 16 GB of RAM or more |
-| **Storage** | 50 GB free |
-| **Packages** | `python3`, `podman`, `curl`, `git`, `zstd`, `gcc`, `uidmap` |
+| **Memory** | 16 GB of RAM, and lower `JOBS` to match. See below. |
+| **Storage** | 40 GB free |
+| **Packages** | `make`, `python3`, `podman`, `curl`, `git`, `zstd`, `gcc`, `uidmap` |
 
 Building inside WSL or a virtual machine is not supported.
+
+Most of that disk is not what you built. The clone with its submodules is about 11 GB, what the build produces is about 7 GB on top of it, and podman keeps another 22 GB of container images and caches outside the repository entirely. Over repeated builds the compiler cache grows further, so leave some room.
+
+Memory is the one that bites. Parts of the web panel need 2 to 4 GB of RAM *per parallel job* while compiling, so the right number of jobs depends on how much you have, not how many cores you have. On 32 GB, twelve jobs run out of memory and six do not. If a build dies with no error, or takes the whole machine down with it, that is what happened: lower `JOBS` and start again. Nothing already compiled is lost.
+
+A first build is long because three large things have to be built once — the interface stack, the web panel Roblox signs in through, and the compatibility layer. Each is around an hour or more. Afterwards they are reused, and ordinary rebuilds take minutes.
 
 > [!IMPORTANT]
 > **Podman, not Docker.** Parts of the build run inside a container using `podman run --userns=keep-id`, a rootless flag Docker does not have. Docker is fine for anything else in the repository, but it will not work for these steps.
@@ -28,29 +34,33 @@ git clone https://github.com/cherrypath0/tuxblox
 cd tuxblox
 ```
 
-### 2. Run the build script
+### 2. Build
 
 ```bash
-./build.sh --log --nodebug
+make
 ```
 
-Do not run this with `sudo`. The script works out which package manager you have and installs anything missing, asking for your password only if it needs to.
+Do not run this with `sudo`. The build works out which package manager you have and installs anything missing, asking for your password only if it needs to.
 
-It will ask which release channel to build for, offering `experimental` as the default. Press Enter to accept: work is built on experimental until it has been tested, so the other channels are always chosen deliberately. It does not ask for a version number — that is worked out for you once the build is finished.
+Then wait. The first build compiles the entire compatibility layer, and the web panel Roblox uses for signing in, which is most of the time.
 
-Then wait. The first build compiles the entire compatibility layer.
+### Building one part
 
-### Build options
+Each part is its own target, so you can rebuild just what you changed instead of everything:
 
-| Option | What it does |
+| Command | What it builds |
 |---|---|
-| *(none)* | Full build, with each step's output shown |
-| `--nodebug` | Quieter. Only summaries, not every step's output. |
-| `--log` | Also write everything to `build.log`, and diagnose failures automatically |
-| `--stage-only` | Re-package the existing build without rebuilding it |
-| `--local` | Build and package, upload nothing. Only has an effect for a maintainer with the upload helper; a normal clone has nothing to upload to and skips it either way. |
+| `make` | Everything |
+| `make launcher` | The launcher |
+| `make installer` | The installer |
+| `make studio-mcp` | The Studio helper |
+| `make compat` | The compatibility layer |
+| `make webkitgtk` | The web panel, from scratch. Hours. |
+| `make webkitgtk-host` | Only the small helper that positions the web panel. Minutes. |
+| `make clean` | Delete `build/` |
+| `make distclean` | Also delete the interface stack and the cached sources |
 
-`--log` is worth using every time. Without it there is no build log, so a failure leaves nothing to look at.
+Nothing is rebuilt unless something it depends on actually changed, so running `make` again after a build that already succeeded finishes in seconds.
 
 ### Build-time variables
 
@@ -58,15 +68,23 @@ A few things are set through the environment rather than a flag. These affect th
 
 | Variable | What it does |
 |---|---|
-| `TUXBLOX_MAKE_JOBS` | How many compile jobs to run at once, instead of one per core |
-| `TUXBLOX_DEV_TOOLS` | Include the development tooling in the build |
+| `JOBS` | How many compile jobs to run at once, instead of one per core |
+| `TUXBLOX_RM_DIST` | Delete the compatibility layer's leftover build files afterwards, freeing disk at the cost of a slower next build |
 | `TUXBLOX_HEADLESS_ONLY` | Build the installer without its window, for a machine with no display |
 
 ```bash
-TUXBLOX_MAKE_JOBS=4 ./build.sh --log --nodebug
+make JOBS=4
 ```
 
-There is a fourth, `TUXBLOX_SKIP_DEPS`, but it is not for you to set here: `build.sh` does its own dependency check regardless, and passes this variable down to each component's build script so they do not each repeat it. It only does something if you run a component script such as `./launcher/build.sh` directly.
+Lowering `JOBS` is the fix if a build runs the machine out of memory. The web panel in particular needs roughly 2 to 4 GB per job while compiling, so on a 32 GB machine twelve jobs fail and six do not.
+
+To keep settings without typing them each time, put them in `config.mk` at the repository root. It is ignored by git and read automatically:
+
+```make
+JOBS ?= 6
+```
+
+There is also `TUXBLOX_SKIP_DEPS`, but it is not for you to set: the build does its own dependency check and passes this down to each part so they do not each repeat it. It only matters if you run a part's own script, such as `./launcher/build.sh`, by hand.
 
 ### 3. Install what you built
 
@@ -84,9 +102,9 @@ A build installed this way still gets normal updates, which will replace it. Swi
 
 ## Rebuilding
 
-Later builds are much faster, because TuxBlox reuses what it can. Only what actually changed gets compiled again.
+Later builds are much faster, because TuxBlox reuses what it can. Only what actually changed gets compiled again, and a part whose sources are untouched is not rebuilt at all.
 
-A build wipes and recreates `build/` every time, including the virtual drive underneath it, so anything you put there by hand is gone.
+`build/` is kept between builds, including the virtual drive underneath it, so anything you put there stays. `make clean` removes it when you want a fresh start.
 
 ## Running what you built, in place
 
@@ -129,19 +147,27 @@ MAJOR . MINOR . BUILD . PATCH
 
 `BUILD` counts builds. It only ever counts up, nothing resets it, and only a build for the `experimental` channel advances it — moving tested work to `canary` or `stable` is not another build of it. A release that carries nothing but fixes leaves `BUILD` alone and moves `PATCH` instead, so `3.7.7.1` is the first fix released on top of build 7.
 
-The `VERSION` file at the repository root holds three lines — the floor the next release must beat, the build counter, and the channel — and `build.sh` writes all three back once it knows what the release became, so the file keeps itself current.
+The `VERSION` file at the repository root holds three lines: the floor the next release must beat, the build counter, and the channel. Those are written back when a release is packaged, not when it is built, so an ordinary `make` leaves the file alone.
 
 Working out the release needs `setup.tuxblox.net` to be reachable, because that is where it reads what is already published. If you are building offline, or you want a particular number, set it yourself:
 
 ```bash
-TUXBLOX_BUILD_VERSION=3.7.7.1 TUXBLOX_CHANNEL=experimental ./build.sh --log --nodebug
+TUXBLOX_BUILD_VERSION=3.7.7.1 TUXBLOX_CHANNEL=experimental make
 ```
+
+Building never contacts that server. Only packaging a release does, which is a separate step a normal clone has no reason to run.
 
 ## When a build fails
 
-Re-run with `--log` if you did not already. On a real failure the script searches `build.log` for the last error and prints the surrounding lines, which is usually enough to see what happened.
+The error is printed where it happened. To keep the whole thing for reading afterwards:
 
-If you are stuck, ask in [Discord](https://tuxblox.net/discord) with that section of the log.
+```bash
+make 2>&1 | tee build.log
+```
+
+A build that stops with no error at all, or takes the machine down with it, is almost always out of memory. Lower `JOBS` and try again; nothing already compiled is lost.
+
+If you are stuck, ask in [Discord](https://tuxblox.net/discord) with that part of the output.
 
 ## Changing something
 

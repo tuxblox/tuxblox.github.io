@@ -30,7 +30,7 @@ The two halves are **separate compiled programs that talk to each other while ru
 
 | File | What it is |
 |---|---|
-| `build.sh` | Builds the installer, launcher and compatibility layer, then packages the result |
+| `Makefile` | Builds the installer, launcher and compatibility layer. `make` for everything, or one target for one part. |
 | `VERSION` | The version and channel. One file, read by all three components. |
 | `Containerfile` | The container builds run inside, so they are the same on every machine |
 | `CONTRIBUTING.md` | How to contribute |
