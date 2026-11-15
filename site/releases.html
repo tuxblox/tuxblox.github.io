@@ -1196,15 +1196,18 @@
                 if (!parts.length && !fallback) return;
                 block.setAttribute('data-loaded', '1');
 
-                Promise.all(parts.map(function (part) {
+                // The release's own account of itself, which deploy.sh writes from CHANGELOG.md.
+                var general = fallback ? fetchChangelog(fallback) : Promise.resolve(null);
+                Promise.all([general].concat(parts.map(function (part) {
                     return fetchChangelog(part.url).then(function (text) {
                         return changelogSection(part.label, text);
                     });
-                })).then(function (sections) {
-                    var merged = sections.filter(Boolean).join('\n\n');
-                    // No component publishes one yet, so until they do the release's own file is
-                    // the whole changelog.
-                    return merged || (fallback ? fetchChangelog(fallback) : null);
+                }))).then(function (sections) {
+                    // General first, then a section per component that moved. Whichever of the two
+                    // is missing contributes nothing, so either alone still reads as the changelog.
+                    return sections.filter(function (section) {
+                        return section && String(section).trim();
+                    }).join('\n\n');
                 }).then(function (text) {
                     var body = block.querySelector('.changelog-body');
                     if (!body) return;
