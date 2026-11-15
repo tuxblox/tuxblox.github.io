@@ -71,10 +71,22 @@ A few things are set through the environment rather than a flag. These affect th
 | `JOBS` | How many compile jobs to run at once, instead of one per core |
 | `TUXBLOX_RM_DIST` | Delete the compatibility layer's leftover build files afterwards, freeing disk at the cost of a slower next build |
 | `TUXBLOX_HEADLESS_ONLY` | Build the installer without its window, for a machine with no display |
+| `TUXBLOX_DONT_INCREMENT_BUILD` | Leave the build counter where it is, so the build changes nothing in your checkout |
+| `NODIST` | Compile the compatibility layer without assembling it, as a quick check that a change still builds |
 
 ```bash
 make JOBS=4
 ```
+
+**Building the project as it is, with no changes of your own? Use this:**
+
+```bash
+TUXBLOX_DONT_INCREMENT_BUILD=1 make
+```
+
+Every build advances the build counter, which is line 2 of the `VERSION` file at the repository root, and that number is baked into each program as part of the release it reports. It is what makes two builds of the same sources tell themselves apart, which is worth having while you are changing something and not worth having when you are not: without it, `git status` shows `VERSION` modified after every build, and `git pull` has something to complain about.
+
+Held that way, building the same commit twice produces the same files, byte for byte. The build takes its dates from the commit rather than the clock, and nothing it writes carries the machine it was built on.
 
 Lowering `JOBS` is the fix if a build runs the machine out of memory. The web panel in particular needs roughly 2 to 4 GB per job while compiling, so on a 32 GB machine twelve jobs fail and six do not.
 
@@ -88,7 +100,15 @@ There is also `TUXBLOX_SKIP_DEPS`, but it is not for you to set: the build does 
 
 ### 3. Install what you built
 
-Everything lands in `build/`. To use it:
+Everything lands in `build/`. The repository has a script that installs it into `~/.tuxblox` for you:
+
+```bash
+./stage.sh
+```
+
+It copies the five parts across, refuses while a launcher from there is running, and leaves the virtual drive alone so your installed Roblox versions, logs and settings survive. `--fresh-prefix` deletes that drive instead, and `--carry-prefix` replaces it with the one under `build/`.
+
+The manual equivalent, if you would rather see what it does:
 
 ```bash
 mkdir -p ~/.tuxblox
@@ -96,9 +116,9 @@ cp -a build/* ~/.tuxblox/
 ~/.tuxblox/TuxBloxLauncher
 ```
 
-This does not set up desktop shortcuts or link handlers, so add those yourself if you want them.
+Either way, no desktop shortcuts or link handlers are set up, so add those yourself if you want them.
 
-A build installed this way still gets normal updates, which will replace it. Switch to the `experimental` channel, or skip updates, if you want to keep your own build.
+**A build of your own is not replaced by an update.** An install whose release, or any one of whose parts, is ahead of what its channel publishes was built rather than downloaded, so TuxBlox leaves it alone: it is neither updated nor repaired, and the window says **TuxBlox (Internal)** so you can tell at a glance which one you are looking at. It goes back to following the channel once the channel catches up.
 
 ## Rebuilding
 
@@ -145,9 +165,11 @@ The version of the whole release is not typed in anywhere. It is worked out when
 MAJOR . MINOR . BUILD . PATCH
 ```
 
-`BUILD` counts builds. It only ever counts up, nothing resets it, and only a build for the `experimental` channel advances it — moving tested work to `canary` or `stable` is not another build of it. A release that carries nothing but fixes leaves `BUILD` alone and moves `PATCH` instead, so `3.7.7.1` is the first fix released on top of build 7.
+`BUILD` counts builds, and the build is what counts them: `make` advances it once per run, before anything is compiled, so every part of one build carries the same number. It only ever counts up and nothing resets it. Packaging a release does not advance it again; moving tested work to `canary` or `stable` is not another build of it, and a release carrying nothing but fixes keeps the same `BUILD` and moves `PATCH` instead, so `3.7.7.1` is the first fix released on top of build 7.
 
-The `VERSION` file at the repository root holds three lines: the floor the next release must beat, the build counter, and the channel. Those are written back when a release is packaged, not when it is built, so an ordinary `make` leaves the file alone.
+The `VERSION` file at the repository root holds three lines: the floor the next release must beat, that build counter, and the channel. Only line 2 moves on its own, and only when you build. Set `TUXBLOX_DONT_INCREMENT_BUILD=1` to hold it still, which is what you want when you are building the project unchanged.
+
+What a program you built answers to `--version` comes from those lines, so it is a real release number rather than a placeholder. `--component-version` answers with that one part's own version instead.
 
 Working out the release needs `setup.tuxblox.net` to be reachable, because that is where it reads what is already published. If you are building offline, or you want a particular number, set it yourself:
 
