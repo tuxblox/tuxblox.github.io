@@ -246,15 +246,15 @@ test('redirect pages point at their target three ways', () => {
 // Reads the real docs/ tree, not a fixture: the order these appear in is the
 // order a reader meets them in the launcher, and a page silently dropped from
 // docs-info.json would otherwise only show up as a missing sidebar row.
-test('the settings subcategory publishes its seven pages in launcher order', () => {
+test('the settings subcategory publishes its eight pages in launcher order', () => {
     const tree = buildDocTree(fileURLToPath(new URL('../docs', import.meta.url)));
     const using = tree.find(s => s.slug === 'using-tuxblox');
     const group = using.items.find(i => i.kind === 'group' && i.slug === 'settings');
     assert.deepEqual(group.pages.map(p => p.slug),
-        ['launcher', 'updates', 'environment', 'controller', 'troubleshooting', 'privacy', 'danger-zone']);
+        ['launcher', 'updates', 'environment', 'controller', 'troubleshooting', 'privacy', 'advanced', 'danger-zone']);
     assert.equal(group.icon, 'settings');
     // only rows directly under a category carry an icon
-    assert.deepEqual(group.pages.map(p => p.icon), Array(7).fill(undefined));
+    assert.deepEqual(group.pages.map(p => p.icon), Array(8).fill(undefined));
 });
 
 // One page per binary a reader can type. The bootstrapper is not one: it is

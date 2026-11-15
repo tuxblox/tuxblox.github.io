@@ -42,13 +42,17 @@ Those files are still readable, they just need you to know which timezone the ma
 
 Each log starts with a header giving your TuxBlox version, how it was started, the exact command, and your kernel and system information. That header alone answers most of the first questions in a bug report.
 
-After the header comes whatever the compatibility layer had to say during the session.
-
-At the end, Roblox's own logs from that same session are appended, each introduced by a line naming the file it came from:
+After the header comes whatever the compatibility layer had to say during the session. TuxBlox writes its own lines the way Roblox writes its, with the same time, elapsed seconds, thread and category, so the whole file reads as one sequence of events rather than two. One of those lines names each log file Roblox creates, at the moment it creates it:
 
 ```
-=== ROBLOX LOG: 0.680.0.6800446_20260912T143107Z_Studio_A1B2C.log ===
+2026-09-12T14:31:07.482Z,1.482913,2e78,6,Info TuxBlox: created logfile: C:\users\you\AppData\Local\Roblox\logs\0.680.0.6800446_20260912T143107Z_Studio_A1B2C.log
 ```
+
+That line is how TuxBlox knows which of Roblox's logs belongs to this session, rather than to another window open beside it.
+
+Lines from the pieces TuxBlox bundles rather than writes itself, such as the graphics layers, carry no stamp of their own and are shown as part of the line above them.
+
+At the end, those same logs are appended as they are, one after another.
 
 Roblox's names follow their own pattern, which is worth being able to read:
 

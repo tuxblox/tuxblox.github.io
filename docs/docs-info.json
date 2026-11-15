@@ -83,9 +83,13 @@
       "Title": "Privacy",
       "Sort": 6
      },
+     "advanced": {
+      "Title": "Advanced",
+      "Sort": 7
+     },
      "danger-zone": {
       "Title": "Danger zone",
-      "Sort": 7
+      "Sort": 8
      }
     }
    },

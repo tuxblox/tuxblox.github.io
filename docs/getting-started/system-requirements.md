@@ -89,6 +89,8 @@ Everything else on this page is a requirement but not something TuxBlox can read
 
 The NVIDIA check only applies if you have NVIDIA's driver. An AMD or Intel machine is not held to it.
 
+If you have reason to think the check is wrong about your machine, `tbxFlagBypassSystemRequirements` makes TuxBlox start anyway. It is a [flag](../advanced/tuxblox-flags/launcher.md) you set on your own machine, we cannot set it for you, and it changes nothing except that one decision: a computer that genuinely cannot run Roblox still will not run it.
+
 ## Checking what you have
 
 Run these in a terminal if you want to confirm before installing:

@@ -18,9 +18,10 @@ Usage: TuxBloxInstaller [options]
   --uninstall        Remove TuxBlox from this system instead of
                      installing it.
   --channel <name>   Release channel to install from (default: stable).
-  --latest           Install the newest release on the channel
+  --latest           Accepted and ignored: installing the newest release
                      instead of this installer's own version.
   --version          Show the release it installs and exit.
+  --component-version Show the installer's own version and exit.
   -h, --help         Show this help and exit.
 ```
 
@@ -30,9 +31,9 @@ Unknown options are an error rather than being ignored, so a typo cannot quietly
 
 ## Which version gets installed
 
-An installer installs the release it was published in — the one `--version` prints. You get exactly the TuxBlox that came with the installer you downloaded, no matter how long ago you downloaded it, and keeping up to date stays the launcher's job.
+An installer installs the newest release on its channel. So an installer you downloaded a month ago installs what is current today, not what it shipped with, and keeping up to date after that stays the launcher's job. `--version` prints the release the installer itself came from, which is no longer the release it installs.
 
-`--latest` installs the newest release on your channel instead. If the installer's own release is not published on the channel you picked, it says so and points you at `--latest` rather than quietly installing something else.
+`--release <ver>` installs a named release instead. If that release is not published on the channel you picked, it says so and tells you to leave `--release` off, rather than quietly installing something else. `--latest` is accepted and ignored: it asks for what already happens, and is still taken so an update handed over by an older launcher keeps working.
 
 ## Examples
 
@@ -43,8 +44,8 @@ An installer installs the release it was published in — the one `--version` pr
 # Install the canary channel
 ./TuxBloxInstaller --channel canary
 
-# Install the newest release instead of this installer's own version
-./TuxBloxInstaller --latest
+# Install a named release instead of the newest
+./TuxBloxInstaller --release 3.9.11.0
 
 # Remove TuxBlox completely
 ~/.tuxblox/TuxBloxInstaller --uninstall

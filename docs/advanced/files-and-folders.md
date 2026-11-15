@@ -75,6 +75,8 @@ Interface libraries the launcher and the window TuxBlox shows while it updates R
 
 It has to stay next to `TuxBloxLauncher`. If it goes missing, the launcher uses your system's own libraries when it has them and cannot start without them. Reinstalling TuxBlox puts the folder back.
 
+It also holds `version.so`, which is there to be asked rather than run: it is how this folder says which release it belongs to, its own version, and the channel that release went to. Every other part of TuxBlox is a program that can be asked the same questions directly, and this folder is libraries, so it carries one small library for the purpose.
+
 ### logs/
 
 One file per Roblox session, named after the app, the start time in UTC, and the process id:
@@ -209,7 +211,7 @@ How sharp text looks inside the virtual drive -- Studio's menus and panels most 
 
 ### Resetting it
 
-**Wipe prefix** in Settings deletes the whole thing. The next launch rebuilds it, which takes about as long as your first launch did apart from downloading Roblox.
+**Wipe** in Settings, under Danger zone, deletes the whole thing. The next launch rebuilds it, which takes about as long as your first launch did apart from downloading Roblox.
 
 Your settings and FastFlags live outside the drive and survive, and so do the Roblox builds you have installed, because those are kept in [`roblox/`](#roblox) rather than in the drive.
 

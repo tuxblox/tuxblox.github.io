@@ -192,6 +192,8 @@ DRI_PRIME=pci-0000_03_00_0 MESA_VK_DEVICE_SELECT=1002:744c
 
 The compatibility layer is Wine underneath, so Wine's variables work, `WINEDEBUG` included. TuxBlox sets sensible values for the ones that matter and will not overwrite one you set yourself.
 
+The one exception is the `rbxlogfile` channel, which TuxBlox adds to whatever `WINEDEBUG` already says. It prints one line for each log file Roblox creates, which is how the launcher tells which log belongs to which window. Put `-rbxlogfile` in your own `WINEDEBUG` to turn it off.
+
 Be careful with `WINEDEBUG`. Verbose channels can slow Roblox to a crawl and produce gigabytes of log.
 
 ---

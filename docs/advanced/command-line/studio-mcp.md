@@ -2,7 +2,7 @@
 
 `~/.tuxblox/studio-mcp`
 
-Runs Roblox's Studio MCP server through the compatibility layer. Takes `--version` and `--help`, and passes anything else it is given to the server.
+Runs Roblox's Studio MCP server through the compatibility layer. Takes `--version`, `--component-version` and `--help`, and passes anything else it is given to the server.
 
 This is what you point an AI client at. Use the absolute path, since most MCP clients will not expand `~`.
 

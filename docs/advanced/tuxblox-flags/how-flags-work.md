@@ -38,6 +38,10 @@ TuxBlox never creates or edits this file; if it exists, a person put it there. D
 
 Only use names support gives you, or the ones on these pages. A name TuxBlox does not know is ignored, and so is a value of the wrong kind, so a typo quietly does nothing rather than breaking anything. A name says what kind of value it takes: `tbxFlag` is true or false, `tbxString` is text, and `tbxInt` is a whole number.
 
-## The one our server cannot set
+## The two our server cannot set
 
-`tbxFlagDisableUpdater` is honoured only on your own machine, and a value for it from our server is thrown away. If we served it wrongly it would stop every install updating, and updating is how that mistake would be corrected. It is the flag to set when you are testing a build and do not want it replaced underneath you.
+Two flags are honoured only on your own machine, and a value for either of them from our server is thrown away.
+
+`tbxFlagDisableUpdater`, because if we served it wrongly it would stop every install updating, and updating is how that mistake would be corrected. It is the flag to set when you are testing a build and do not want it replaced underneath you.
+
+`tbxFlagBypassSystemRequirements`, because whether a particular computer will cope is something only the person sitting at it can judge. TuxBlox also reads it before it has asked us anything at all, which is the other reason an answer from us could not be used for it.

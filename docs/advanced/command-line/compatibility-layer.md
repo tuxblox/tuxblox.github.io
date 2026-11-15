@@ -7,7 +7,8 @@ This is the layer itself. The launcher drives it for you, and you will rarely ca
 ```
 Options:
   --help                  Show this help message
-  --version               Show TuxBlox version
+  --version               Show the TuxBlox release this was published in
+  --component-version     Show the layer's own version
   --immediate             Run TuxBlox without draining the prefix, must be
                           used with the "run" argument
   --destroy               Destroys the prefix
@@ -19,7 +20,9 @@ Arguments:
 
 Options go before the executable. Anything after it is passed to the program being run, not read by the layer.
 
-`--version` prints `3.9.11.0`: the release this copy of the layer was published in, which is the number on the download page rather than a version of the layer's own. Every TuxBlox program answers the same way.
+`--version` prints `3.9.11.0`: the release this copy of the layer was published in, which is the number on the download page rather than a version of the layer's own. Every TuxBlox program answers the same way, and every one of them carries that number inside itself, so an install says what it is through its own parts rather than through anything written beside them.
+
+`--component-version` prints the other number, `3.11.0`: the layer's own, which moves when the layer changes rather than when a release is cut. The About screen lists these.
 
 It needs to be told where the virtual drive is, through `TUXBLOX_PREFIX`:
 
@@ -35,7 +38,7 @@ TUXBLOX_PREFIX=~/.tuxblox/runtime ~/.tuxblox/compat/main --version
 
 ## --destroy
 
-Deletes the virtual drive. Same effect as **Wipe prefix** in the launcher's settings, which is the friendlier way to do it.
+Deletes the virtual drive. Same effect as **Wipe** in the launcher's settings, under Danger zone, which is the friendlier way to do it.
 
 ## A trap worth knowing
 

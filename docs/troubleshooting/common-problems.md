@@ -174,7 +174,7 @@ distrobox create --name tuxblox --image ubuntu:24.04 \
 In escalating order:
 
 1. **Clear your FastFlags.** They are the most common cause of unexplainable behaviour.
-2. **Wipe the prefix.** Settings, Danger zone, Wipe prefix. This resets Roblox completely and keeps your settings.
+2. **Wipe the virtual drive.** Settings, Danger zone, Wipe. This resets Roblox completely and keeps your settings.
 3. **Reinstall TuxBlox.** Uninstall from Settings, then install again.
 4. **Ask.** [Discord](https://tuxblox.net/discord) with your log file attached, or open an issue. See [Reporting Bugs](reporting-bugs.md).
 

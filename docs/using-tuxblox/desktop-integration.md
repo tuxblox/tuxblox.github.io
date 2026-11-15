@@ -18,9 +18,15 @@ TuxBlox creates the Roblox entries itself as soon as Roblox is installed, so the
 
 The first time a Roblox program is installed, TuxBlox also puts an icon for it on your desktop. It opens whichever version you have at the time, so it keeps working after Roblox updates.
 
-It is put there **once**. Updating Roblox does not bring it back, so if you delete it, it stays deleted. It is also kept out of your applications menu and search, because the entry described above already covers those and you would otherwise be offered the same program twice.
+It is put there **once**. Updating TuxBlox does not bring it back, so if you delete it, it stays deleted. The exception is Roblox writing itself a new desktop shortcut, which is a fresh request for an icon and is translated as described below. It is also kept out of your applications menu and search, because the entry described above already covers those and you would otherwise be offered the same program twice.
 
 Removing TuxBlox takes these icons away again. It only removes the ones it wrote: an icon you made yourself is left alone, even if it has the same name.
+
+### Shortcuts Roblox puts there itself
+
+Roblox creates a Windows shortcut for itself on the desktop, which arrives as a `.lnk` file your desktop cannot open. TuxBlox turns it into the icon described above and removes the shortcut file, so what you are left with is one icon that works rather than two files, one of which does nothing.
+
+The shortcut file comes off your desktop as soon as Roblox writes it, and the icon replacing it appears the next time the launcher opens or a session ends, so for the rest of that session the desktop simply has neither. A shortcut to anything other than Roblox Player or Studio is left exactly where it is. Set [`tbxFlagTranslateWindowsShortcuts`](../advanced/tuxblox-flags/launcher.md) to `false` to leave all of them alone.
 
 Either way the entries are routed back through the launcher rather than at a fixed location, which is what lets them keep working after Roblox updates itself — they always start whichever version you have installed.
 
