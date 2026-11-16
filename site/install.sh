@@ -47,16 +47,25 @@ fetch() {
 # Read out of the release file rather than built here: a release publishes its own copy of every
 # component, so the release is part of the address and this script cannot know it. Matched on the
 # path's own text, which no other component's shares, so the file's layout is not load-bearing.
+#
+# Newest shape first, and tried in that order rather than taken from wherever it appears in the
+# file, so a release that still publishes both addresses is fetched from the one it prefers. The
+# first is a directory per release holding bytes and nothing else; the second is where the component
+# version was in the address as well.
 resolve_installer_artifact() {
-    local release body path
+    local release body path pattern
     release="$(fetch "client/releases/$CHANNEL/latest" | tr -d '[:space:]')" || return 1
     [[ -n "$release" ]] || return 1
     body="$(fetch "client/releases/$CHANNEL/$release.json")" || return 1
-    path="$(printf '%s' "$body" \
-        | grep -o "\"installer/[^\"]*/$ARCH/TuxBloxInstaller\"" \
-        | tr -d '"' | head -n 1)"
-    [[ -n "$path" ]] || return 1
-    printf 'client/%s' "$path"
+    for pattern in "\"releases/[^\"]*/$ARCH/installer\"" \
+                   "\"installer/[^\"]*/$ARCH/TuxBloxInstaller\""; do
+        path="$(printf '%s' "$body" | grep -oE "$pattern" | tr -d '"' | head -n 1)"
+        if [[ -n "$path" ]]; then
+            printf 'client/%s' "$path"
+            return 0
+        fi
+    done
+    return 1
 }
 
 ARTIFACT="$(resolve_installer_artifact || true)"
