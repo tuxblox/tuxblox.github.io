@@ -677,7 +677,9 @@
         }
 
         function getJson(url) {
-            return fetch(url + '?source=browserjs&time=' + Date.now(), {
+            // No cache-busting time: a channel listing is served no-cache and a release file never
+            // changes, so a stable URL is one the browser and the CDN can both keep.
+            return fetch(url + '?source=browserjs', {
                 headers: { 'Accept': 'application/json' }
             }).then(function (r) {
                 if (!r.ok) throw new Error('Server returned ' + r.status);
@@ -1507,7 +1509,7 @@
             loadFromClientLayout()
             .then(function (fromClient) {
                 if (Object.keys(fromClient).length) return fromClient;
-                return fetch(RELEASES_URL + '?source=browserjs&time=' + Date.now(), {
+                return fetch(RELEASES_URL + '?source=browserjs', {
                     headers: { 'Accept': 'application/json' }
                 })
                 .then(function (r) {
