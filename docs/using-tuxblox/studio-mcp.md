@@ -40,19 +40,28 @@ Roblox supports these clients:
 
 ## The command
 
-Whatever your client, this is what you point it at:
+Whatever your client, you point it at one program: `studio-mcp`, inside your TuxBlox folder. **Copy the path rather than typing it**, because TuxBlox does not always live in the same place and a wrong path fails as "the server would not start" with nothing to say why.
+
+In the launcher, open **Settings**, then **Advanced**, and use **Copy MCP Gateway Location**. The **Copy** button puts the full path on your clipboard and shows you what it copied, so you can paste it straight into your client's configuration.
+
+If the row says there is nothing to copy, the Studio helper is not installed; update TuxBlox and look again.
+
+<details>
+<summary>What the path looks like, and why it is worth copying</summary>
+
+A normal install gives you this, with `YOURNAME` being your username:
 
 ```
 /home/YOURNAME/.tuxblox/studio-mcp
 ```
 
-Replace `YOURNAME` with your username. Use the full path, not `~`. Most MCP clients do not expand a tilde and will simply fail to start the server.
+That is only the default, though. `~/.tuxblox` is where the installer puts TuxBlox, not a fixed location: an install unpacked somewhere else, such as `/opt/tuxblox`, works perfectly well and keeps `studio-mcp` beside the rest of itself wherever that is. Copying the path from Settings is right in every case.
 
-To get the exact path for your machine:
+Use the full path, not `~`. Most MCP clients do not expand a tilde and will simply fail to start the server.
 
-```bash
-echo ~/.tuxblox/studio-mcp
-```
+</details>
+
+The commands below assume the default location. If yours is elsewhere, paste what you copied in place of `~/.tuxblox/studio-mcp`.
 
 ## Claude Code
 

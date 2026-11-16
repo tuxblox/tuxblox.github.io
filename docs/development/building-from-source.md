@@ -16,7 +16,28 @@ Building has its own requirements, separate from the ones needed just to run Tux
 
 Building inside WSL or a virtual machine is not supported.
 
+A full `make` also builds the AppImage and the Flatpak at the end, and those need two more things. Neither is needed for TuxBlox itself, so install them only if you want the packaged forms, and otherwise set `TUXBLOX_NO_PACKAGES=1` to skip them:
+
+| For | Also needs |
+|---|---|
+| The AppImage | `appimagetool`, `squashfs-tools` |
+| The Flatpak | `flatpak`, `flatpak-builder` |
+
+`appimagetool` is not in most distributions' repositories. It comes from the [AppImage project's own releases](https://github.com/AppImage/appimagetool/releases), and on Arch it is the `appimagetool-bin` package in the AUR. Without it the build still assembles the AppImage's contents and tells you how to run them in place, rather than failing, so you can skip it unless you want the single file.
+
+Without `flatpak-builder` the Flatpak step stops and says so; `flatpak install flathub org.flatpak.Builder` is the other way to get it if your distribution does not package it.
+
+The Flatpak build also pulls its runtime from Flathub the first time, which is a download of its own:
+
+```bash
+flatpak install flathub org.freedesktop.Platform//26.08 org.freedesktop.Sdk//26.08
+```
+
+See [Packaging builds](#packaging-builds) for what each one produces and the extensions the Flatpak needs before it will run.
+
 Most of that disk is not what you built. The clone with its submodules is about 11 GB, what the build produces is about 7 GB on top of it, and podman keeps another 22 GB of container images and caches outside the repository entirely. Over repeated builds the compiler cache grows further, so leave some room.
+
+Building the packaged forms adds to that: about 700 MB inside `build/`, and roughly 2.5 GB of Flatpak runtime, SDK and extensions outside the repository, which Flatpak shares with any other Flatpak you have.
 
 Memory is the one that bites. Parts of the web panel need 2 to 4 GB of RAM *per parallel job* while compiling, so the right number of jobs depends on how much you have, not how many cores you have. On 32 GB, twelve jobs run out of memory and six do not. If a build dies with no error, or takes the whole machine down with it, that is what happened: lower `JOBS` and start again. Nothing already compiled is lost.
 
@@ -54,6 +75,8 @@ Each part is its own target, so you can rebuild just what you changed instead of
 | `make launcher` | The launcher |
 | `make installer` | The installer |
 | `make studio-mcp` | The Studio helper |
+| `make appimage` | The installer as an AppImage. See [Packaging builds](#packaging-builds). |
+| `make flatpak` | The whole of TuxBlox as a Flatpak. See [Packaging builds](#packaging-builds). |
 | `make compat` | The compatibility layer |
 | `make webkitgtk` | The web panel, from scratch. Hours. |
 | `make webkitgtk-host` | Only the small helper that positions the web panel. Minutes. |
@@ -72,6 +95,7 @@ A few things are set through the environment rather than a flag. These affect th
 | `TUXBLOX_RM_DIST` | Delete the compatibility layer's leftover build files afterwards, freeing disk at the cost of a slower next build |
 | `TUXBLOX_HEADLESS_ONLY` | Build the installer without its window, for a machine with no display |
 | `TUXBLOX_DONT_INCREMENT_BUILD` | Leave the build counter where it is, so the build changes nothing in your checkout |
+| `TUXBLOX_NO_PACKAGES` | Skip the AppImage and the Flatpak that a full `make` builds at the end |
 | `NODIST` | Compile the compatibility layer without assembling it, as a quick check that a change still builds |
 
 ```bash
@@ -100,23 +124,40 @@ There is also `TUXBLOX_SKIP_DEPS`, but it is not for you to set: the build does 
 
 ### 3. Install what you built
 
-Everything lands in `build/`. The repository has a script that installs it into `~/.tuxblox` for you:
+The programs land in `build/native/`. **Use the repository's own script to install them**, rather than copying anything by hand:
 
 ```bash
 ./stage.sh
 ```
 
-It copies the five parts across, refuses while a launcher from there is running, and leaves the virtual drive alone so your installed Roblox versions, logs and settings survive. `--fresh-prefix` deletes that drive instead, and `--carry-prefix` replaces it with the one under `build/`.
+It copies the five parts into `~/.tuxblox`, refuses while a launcher from there is running, and leaves the virtual drive alone so your installed Roblox versions, logs and settings survive. `--fresh-prefix` deletes that drive instead, and `--carry-prefix` replaces it with the one under `build/`.
 
-The manual equivalent, if you would rather see what it does:
+Copying by hand is the thing to avoid here. Only `build/native/` is yours to install: the rest of `build/` is the compiler's working space, tens of gigabytes of it, alongside the virtual drive, which can hold Roblox session cookies and does not belong in a copy of anything. `stage.sh` names the five parts one by one for that reason.
 
-```bash
-mkdir -p ~/.tuxblox
-cp -a build/* ~/.tuxblox/
-~/.tuxblox/TuxBloxLauncher
+When it finishes it prints where the install is, how to start it, and anything else the build produced that it did not stage, with the command for each:
+
+```
+Staged /home/you/.tuxblox
+  Version:   3.12.14.0
+  Prefix:    kept
+  Run:       /home/you/.tuxblox/TuxBloxLauncher
+  Installer: /home/you/.tuxblox/TuxBloxInstaller
+
+Also built not staged, each installs its own way
+  Flatpak:   flatpak install --user /home/you/tuxblox/build/flatpak/repo net.tuxblox.TuxBlox
+  AppImage:  /home/you/tuxblox/build/appimage/TuxBloxInstaller.AppImage
 ```
 
-Either way, no desktop shortcuts or link handlers are set up, so add those yourself if you want them.
+The `Flatpak` and `AppImage` lines appear only when you actually built those, and the Flatpak one is the whole command: see [Packaging builds](#packaging-builds) for what that install is and the 32-bit extensions it needs first.
+
+**If all you want is to run the installer you built**, rather than staging, you do not need `stage.sh` at all. Either of these works straight out of the build, and both install TuxBlox into `~/.tuxblox` the ordinary way, so you end up with a normal install:
+
+```bash
+./build/native/TuxBloxInstaller
+./build/appimage/TuxBloxInstaller.AppImage
+```
+
+No desktop shortcuts or link handlers are set up by staging, so add those yourself if you want them, or run the installer, which does it for you.
 
 **A build of your own is not replaced by an update.** An install whose release, or any one of whose parts, is ahead of what its channel publishes was built rather than downloaded, so TuxBlox leaves it alone: it is neither updated nor repaired, and the window says **TuxBlox (Internal)** so you can tell at a glance which one you are looking at. It goes back to following the channel once the channel catches up.
 
@@ -128,19 +169,19 @@ Later builds are much faster, because TuxBlox reuses what it can. Only what actu
 
 ## Running what you built, in place
 
-`build/` has the same shape as an install, and every part of TuxBlox looks for the others next to itself, so you can just run the launcher out of it:
+`build/native/` has the same shape as an install, and every part of TuxBlox looks for the others next to itself, so you can just run the launcher out of it:
 
 ```bash
-./build/TuxBloxLauncher
+./build/native/TuxBloxLauncher
 ```
 
-It uses `build/runtime` as its virtual drive and `build/logs` for its logs, leaving any real install at `~/.tuxblox` alone.
+It uses `build/runtime` as its virtual drive and `build/native/logs` for its logs, leaving any real install at `~/.tuxblox` alone. The virtual drive and the downloaded Roblox sit at `build/` itself rather than inside `build/native`, because they are the machine's state rather than any one build's output: each flavour links to them instead of keeping a second copy, and a virtual drive is well over a gigabyte.
 
 To skip the launcher and start a program through the compatibility layer yourself:
 
 ```bash
 TUXBLOX_PREFIX="$PWD/build/runtime" \
-  ./build/compat/main run \
+  ./build/native/compat/main run \
   "$PWD/build/runtime/pfx/drive_c/users/<your account>/AppData/Local/Roblox/Versions/version-<id>/RobloxStudioBeta.exe"
 ```
 
@@ -154,6 +195,52 @@ Two things will cost you an afternoon if you do not know them:
 - Read the program's output in the terminal. Redirecting it to a file leaves the program with no output to write to, and you get an empty file.
 
 This all uses the virtual drive inside `build/` rather than your installed one, so experiments cannot damage a working install.
+
+## Packaging builds
+
+A full `make` also builds two packaged forms at the end, and each has its own target:
+
+| Command | What it produces |
+|---|---|
+| `make appimage` | The installer as a single AppImage file, in `build/appimage/` |
+| `make flatpak` | The whole of TuxBlox as a Flatpak, in `build/flatpak/` |
+| `make packages` | Both |
+
+Set `TUXBLOX_NO_PACKAGES=1` to leave them out of a full build.
+
+Both need a complete `make` first, because they package what that produced rather than compiling it themselves. They say so and stop if something is missing. The Flatpak also needs `flatpak-builder`, either from your distribution or as `flatpak install flathub org.flatpak.Builder`.
+
+> [!IMPORTANT]
+> **The normal install is the one to use.** These are for people who want to build or test them. A normal install updates itself, part by part, as soon as a release is published; it can reach anywhere in your home folder, so a place you save somewhere unusual still works; and it is what almost everyone runs, so it is far better tested. Nothing below is a better way to get TuxBlox, only a different one.
+
+### The Flatpak
+
+`make flatpak` writes a repository at `build/flatpak/repo` and prints the command to install from it. **It is not published anywhere**, so there is no Flathub entry and nothing to install from the internet; the only way to get it today is to build it yourself.
+
+```bash
+flatpak install --user ./build/flatpak/repo net.tuxblox.TuxBlox
+```
+
+The `./` matters. Given a bare `build/flatpak/repo`, Flatpak reads it as the name of a remote rather than a folder and fails with `'build' is not a valid name`. An absolute path works too, which is the form `stage.sh` prints.
+
+It needs 32-bit libraries to run, because the virtual drive contains 32-bit programs and so does the compatibility layer. The graphics one will not download itself:
+
+```bash
+flatpak install flathub org.freedesktop.Platform.Compat.i386//26.08
+flatpak install flathub org.freedesktop.Platform.GL32.default//26.08
+```
+
+The Flatpak carries a **different launcher**, built from the same sources with the parts that cannot work from a read-only `/app` left out: there is no update channel, no automatic updates toggle and no uninstall button, because `flatpak update` and `flatpak uninstall` do those jobs instead. It still updates Roblox itself. On first run it downloads the compatibility layer into its own data folder, the same way it downloads Roblox, rather than carrying a gigabyte that Flatpak could not update piece by piece.
+
+It asks for your Desktop, Documents, Downloads, Music, Pictures and Videos folders rather than your whole home folder, so a place saved outside those is not reachable from inside the sandbox. Its settings and its virtual drive live in `~/.var/app/net.tuxblox.TuxBlox/`, entirely separate from a normal install at `~/.tuxblox`, so the two do not share anything and installing one does not disturb the other.
+
+Roblox Studio runs under the sandbox. Roblox Player support is still in progress everywhere, not only here, so the Flatpak is no further behind on it than a normal install.
+
+`make flatpak` leaves `build/native/TuxBloxLauncher` untouched, so the launcher that `stage.sh` installs is still the ordinary one.
+
+### The AppImage
+
+`make appimage` packages the installer, not TuxBlox itself: you run the AppImage, it installs TuxBlox into `~/.tuxblox` exactly as the ordinary installer does, and what you end up with is a normal install. It keeps itself out of your applications menu, since the thing you want in the menu is TuxBlox rather than its installer. Building it needs `appimagetool` and `squashfs-tools`.
 
 ## Versioning
 

@@ -1,6 +1,6 @@
 # Advanced
 
-One button, for looking inside the virtual drive. Nothing here changes how Roblox runs.
+Two buttons: one for looking inside the virtual drive, one for setting up an AI client. Nothing here changes how Roblox runs.
 
 ## Open Registry Editor
 
@@ -14,3 +14,11 @@ Nothing needs this for ordinary use. It is here for following a troubleshooting 
 > TuxBlox writes parts of the registry itself every time Roblox starts, so a value it manages can be written back over an edit you made by hand.
 
 Until the virtual drive exists the button says so, since the drive is built the first time you start Roblox.
+
+## Copy MCP Gateway Location
+
+Puts the full path of the Studio MCP gateway on your clipboard, and shows you what it copied.
+
+That path is the one thing an AI client needs in order to talk to Roblox Studio, and it is the step people most often get wrong, because TuxBlox does not always live in the same folder: `~/.tuxblox` is where the installer puts it by default, not a fixed location. Copying the path means never guessing at it. See [Studio MCP](../studio-mcp.md) for what to paste it into.
+
+If it says there is nothing to copy, the gateway is not installed. Updating TuxBlox installs it.
